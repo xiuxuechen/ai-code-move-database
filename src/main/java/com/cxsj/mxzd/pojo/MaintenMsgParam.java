@@ -3,7 +3,7 @@ package com.cxsj.mxzd.pojo;
 
 import lombok.Data;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
 @Data
