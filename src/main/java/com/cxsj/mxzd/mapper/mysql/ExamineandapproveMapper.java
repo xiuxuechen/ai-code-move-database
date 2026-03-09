@@ -1,7 +1,7 @@
 package com.cxsj.mxzd.mapper.mysql;
 
 import com.cxsj.mxzd.pojo.ExamHisEntuty;
-import com.cxsj.mxzd.pojo.ExamineandapproveParam;
+import com.cxsj.mxzd.pojo.spl.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.PersonalCenter;
 import com.cxsj.mxzd.pojo.SqlModelTypeParam;
 import com.cxsj.mxzd.pojo.WorkItemEntity;

@@ -1,8 +1,8 @@
 package com.cxsj.mxzd.mapper.pg;
 
-import com.cxsj.mxzd.pojo.ExamineandapproveParam;
+import com.cxsj.mxzd.pojo.spl.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.MaintenMsgParam;
-import com.cxsj.mxzd.pojo.ModelBasisFacade;
+import com.cxsj.mxzd.pojo.pro.ModelBasisFacade;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
