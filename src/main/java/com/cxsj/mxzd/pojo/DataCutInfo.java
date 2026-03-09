@@ -1,0 +1,40 @@
+/**
+ * Copyright (C), 2015-2021, XXX有限公司
+ * FileName: AuditFindDataBase
+ * Author:   DELL
+ * Date:     2021/7/6 16:13
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * 作者姓名           修改时间           版本号              描述
+ */
+package com.cxsj.mxzd.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * 审计能力支撑下方数据资产管理返回实体类-数据接入需求
+ */
+
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DataCutInfo {
+
+    private Integer id;
+    //审计模型编号
+    private String auditModelNumber;
+    //数据内容描述(数据接入需求)
+    private String dataContentDescriptionXq;
+    //涉及系统
+    private String involvedSystem;
+    //数据范围(数据接入需求)
+    private String scopeOfDataXq;
+
+    private Integer isdel;
+
+
+}
