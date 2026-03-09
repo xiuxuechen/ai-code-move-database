@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: mxzd-audit-system
+
+  # PostgreSQL 数据源配置
+  datasource:
+    postgresql:
+      jdbc-url: jdbc:postgresql://localhost:5432/mxzd_audit
+      username: mxzd_user
+      password: mxzd_pass
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+    # MySQL 数据源配置
+    mysql:
+      jdbc-url: jdbc:mysql://localhost:3306/mxzd_audit?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: mxzd_user
+      password: mxzd_pass
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+# MyBatis 配置
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+  type-aliases-package: com.cxsj.mxzd.entity
+
+# 日志配置
+logging:
+  level:
+    com.cxsj.mxzd.mapper: DEBUG
+    org.springframework.jdbc: DEBUG
