@@ -7,13 +7,12 @@ import com.cxsj.mxzd.pojo.AuditElementsParam;
 import com.cxsj.mxzd.pojo.DataSupportInfo;
 import com.cxsj.mxzd.pojo.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.ExportDateSupportExcel;
-import com.cxsj.mxzd.pojo.List;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.ModAssetsParam;
 import com.cxsj.mxzd.pojo.ModelAssetsPojo;
 import com.cxsj.mxzd.pojo.ModelOrderParam;
 import com.cxsj.mxzd.pojo.SupportInCutInfo;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,37 +46,37 @@ public interface DataSupportCapabilityMapper {
     /**
      * SELECT 操作: getDropdownAuditPointName
      */
-    Map getDropdownAuditPointName(Map param);
+    Map<String, Object> getDropdownAuditPointName(Map<String, Object> param);
 
     /**
      * SELECT 操作: getDropdownAuditModelName
      */
-    Map getDropdownAuditModelName(Map param);
+    Map<String, Object> getDropdownAuditModelName(Map<String, Object> param);
 
     /**
      * SELECT 操作: selectModelNameToPointName
      */
-    Map selectModelNameToPointName(List param);
+    Map<String, Object> selectModelNameToPointName(@Param("list") List<String> list);
 
     /**
      * SELECT 操作: selectGlMsg
      */
-    ASuppInParam selectGlMsg(String param);
+    ASuppInParam selectGlMsg(@Param("auditModelNumber") String auditModelNumber);
 
     /**
      * SELECT 操作: getdataDockPeopleList
      */
-    Map getdataDockPeopleList(Map param);
+    Map<String, Object> getdataDockPeopleList(Map<String, Object> param);
 
     /**
      * SELECT 操作: getDropdownboxNo1TableNew
      */
-    Map getDropdownboxNo1TableNew(Map param);
+    Map<String, Object> getDropdownboxNo1TableNew(Map<String, Object> param);
 
     /**
      * SELECT 操作: getDropdownboxMo2TableNew
      */
-    Map getDropdownboxMo2TableNew(Map param);
+    Map<String, Object> getDropdownboxMo2TableNew(Map<String, Object> param);
 
     /**
      * SELECT 操作: selectByAuditModelNumberSupport

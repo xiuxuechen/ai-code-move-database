@@ -4,10 +4,9 @@ import com.cxsj.mxzd.pojo.AuditElementInfo;
 import com.cxsj.mxzd.pojo.AuditElementSheetPojo;
 import com.cxsj.mxzd.pojo.AuditFindDataBase;
 import com.cxsj.mxzd.pojo.AuditHandoverModel;
-import com.cxsj.mxzd.pojo.List;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.ParamData;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

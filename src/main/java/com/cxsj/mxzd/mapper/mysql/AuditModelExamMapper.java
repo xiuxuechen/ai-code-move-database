@@ -4,7 +4,6 @@ import com.cxsj.mxzd.pojo.ExamModelPojo;
 import com.cxsj.mxzd.pojo.ExamParam;
 import com.cxsj.mxzd.pojo.ExamPojp;
 import com.cxsj.mxzd.pojo.ExamineandapproveParam;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.PersonalCenter;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -1,10 +1,10 @@
 package com.cxsj.mxzd.mapper.pg;
 
 import com.cxsj.mxzd.pojo.HisExamineEntuty;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.PersonalCenter;
 import com.cxsj.mxzd.pojo.SqlModelTypeParam;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

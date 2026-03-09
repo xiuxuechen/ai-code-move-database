@@ -2,9 +2,9 @@ package com.cxsj.mxzd.mapper.mysql;
 
 import com.cxsj.mxzd.pojo.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.MaintenMsgParam;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.ModelBasisFacade;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

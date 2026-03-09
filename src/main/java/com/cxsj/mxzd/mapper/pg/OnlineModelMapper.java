@@ -3,11 +3,11 @@ package com.cxsj.mxzd.mapper.pg;
 import com.cxsj.mxzd.pojo.AuditElementCaseEntity;
 import com.cxsj.mxzd.pojo.AuditElementInfo;
 import com.cxsj.mxzd.pojo.AuditElementsParam;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.OnlineModelPojo;
 import com.cxsj.mxzd.pojo.OnlineModelVo;
 import com.cxsj.mxzd.pojo.ParamData;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

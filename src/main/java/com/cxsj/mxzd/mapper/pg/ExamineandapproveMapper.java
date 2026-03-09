@@ -2,7 +2,6 @@ package com.cxsj.mxzd.mapper.pg;
 
 import com.cxsj.mxzd.pojo.ExamHisEntuty;
 import com.cxsj.mxzd.pojo.ExamineandapproveParam;
-import com.cxsj.mxzd.pojo.Map;
 import com.cxsj.mxzd.pojo.PersonalCenter;
 import com.cxsj.mxzd.pojo.SqlModelTypeParam;
 import com.cxsj.mxzd.pojo.WorkItemEntity;
