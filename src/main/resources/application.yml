@@ -35,7 +35,7 @@ mybatis:
     map-underscore-to-camel-case: true
     default-fetch-size: 100
     default-statement-timeout: 30
-  type-aliases-package: com.cxsj.mxzd.entity
+  type-aliases-package: com.cxsj.mxzd.pojo
 
 # 日志配置
 logging:

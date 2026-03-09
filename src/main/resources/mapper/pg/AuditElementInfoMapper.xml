@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.pg.AuditElementInfoMapper">
+
+
+    <sql id="AuditElementInfoVo">
+        select id,
+               audit_point_number,
+               audit_point_name,
+               audit_model_number,
+               audit_model_name,
+               audit_model_describe,
+               information_supplement,
+               information_sources,
+               remark,
+               audit_business_logic,
+               primary_business_process,
+               expected_risks,
+               expected_data_requirements,
+               expected_data_covers_unit_demand,
+               requirements_involve_the_system,
+               subordinate_to_system,
+               model_code,
+               secondary_business_process
+        from hpeapm.audit_elements_info
+    </sql>
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementInfo" id="AuditElementInfoMap">
+        <result property="id" column="id"/>
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="auditModelDescribe" column="audit_model_describe"/>
+        <result property="informationSupplement" column="information_supplement"/>
+        <result property="informationSources" column="information_sources"/>
+        <result property="remark" column="remark"/>
+        <result property="auditBusinessLogic" column="audit_business_logic"/>
+        <result property="primaryBusinessProcess" column="primary_business_process"/>
+        <result property="expectedRisks" column="expected_risks"/>
+        <result property="expectedDataRequirements" column="expected_data_requirements"/>
+        <result property="expectedDataCoversUnitDemand" column="expected_data_covers_unit_demand"/>
+        <result property="requirementsInvolveTheSystem" column="requirements_involve_the_system"/>
+        <result property="subordinateToSystem" column="subordinate_to_system"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="secondaryBusinessProcess" column="secondary_business_process"/>
+        <result property="auditModelBusinessLogic" column="audit_model_business_logic"/>
+        <result property="createTime" column="create_time"/>
+        <result property="writeTime" column="write_time"/>
+        <result property="shareUnit" column="share_unit"/>
+        <result property="secondModelNumber" column="second_model_number"/>
+        <result property="shareUnitName" column="shareUnitName"/>
+        <result property="secondModelName" column="secondModelName"/>
+    </resultMap>
+
+    <!--基础信息 -->
+    <select id="selectAuditElementInfo" resultMap="AuditElementInfoMap"
+            parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
+        <include refid="AuditElementInfoVo"/>
+        <where>
+            <if test="id != null ">and id like CONCAT('%', #{id}, '%')</if>
+            <if test="auditPointNumber != null ">and audit_point_number like CONCAT('%', #{auditPointNumber}, '%')</if>
+            <if test="auditPointName != null  and auditPointName != ''">and audit_point_name like CONCAT('%', #{auditPointName}, '%')
+            </if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">and audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+            </if>
+            <if test="auditModelName != null  and auditModelName != ''">and audit_model_name like CONCAT('%', #{auditModelName}, '%')
+            </if>
+            <if test="auditModelDescribe != null ">and audit_model_describe like CONCAT('%', #{auditModelDescribe}, '%')</if>
+            <if test="informationSupplement != null ">and information_supplement like CONCAT('%', #{informationSupplement}, '%')</if>
+            <if test="informationSources != null ">and information_sources like CONCAT('%', #{informationSources}, '%')</if>
+            <if test="remark != null ">and remark like CONCAT('%', #{remark}, '%')</if>
+            <if test="auditBusinessLogic != null ">and audit_business_logic like CONCAT('%', #{auditBusinessLogic}, '%')</if>
+            <if test="primaryBusinessProcess != null ">and primary_business_process like CONCAT('%', #{primaryBusinessProcess}, '%')</if>
+            <if test="expectedRisks != null ">and expected_risks like CONCAT('%', #{expectedRisks}, '%')</if>
+            <if test="expectedDataRequirements != null and expectedDataRequirements != ''">
+                and expected_data_requirements like CONCAT('%', #{expectedDataRequirements}, '%')
+            </if>
+            <if test="expectedDataCoversUnitDemand != null ">and expected_data_covers_unit_demand like CONCAT('%', #{expectedDataCoversUnitDemand}, '%')
+            </if>
+            <if test="requirementsInvolveTheSystem != null ">and requirements_involve_the_system like CONCAT('%', #{requirementsInvolveTheSystem}, '%')
+            </if>
+            <if test="subordinateToSystem != null ">and subordinate_to_system like CONCAT('%', #{subordinateToSystem}, '%')</if>
+            <if test="modelCode != null ">and model_code like CONCAT('%', #{modelCode}, '%')</if>
+            <if test="secondaryBusinessProcess != null ">and secondary_business_process like CONCAT('%', #{secondaryBusinessProcess}, '%')
+            </if>
+
+        </where>
+    </select>
+
+
+    <!--插入审计库内容-->
+    <insert id="insertAuditElementInfo" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into hpeapm.audit_elements_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="auditPointNumber != null">audit_point_number,</if>
+            <if test="auditPointName != null and auditPointName != ''">audit_point_name,</if>
+            <if test="auditModelNumber != null and auditModelNumber != ''">audit_model_number,</if>
+            <if test="auditModelName != null and auditModelName != ''">audit_model_name,</if>
+            <if test="auditModelDescribe != null">audit_model_describe,</if>
+            <if test="informationSupplement != null and informationSupplement != ''">information_supplement,</if>
+            <if test="informationSources != null and informationSources != ''">information_sources,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="auditBusinessLogic != null and auditBusinessLogic != ''">audit_business_logic,</if>
+            <if test="primaryBusinessProcess != null and primaryBusinessProcess != ''">primary_business_process,</if>
+            <if test="expectedRisks != null and expectedRisks != ''">expected_risks,</if>
+            <if test="expectedDataRequirements != null and expectedDataRequirements != ''">
+                expected_data_requirements,
+            </if>
+            <if test="expectedDataCoversUnitDemand != null and expectedDataCoversUnitDemand != ''">
+                expected_data_covers_unit_demand,
+            </if>
+            <if test="requirementsInvolveTheSystem != null and requirementsInvolveTheSystem != ''">
+                requirements_involve_the_system,
+            </if>
+            <if test="subordinateToSystem != null and subordinateToSystem != ''">subordinate_to_system,</if>
+            <if test="modelCode != null and modelCode != ''">model_code,</if>
+            <if test="secondaryBusinessProcess != null and secondaryBusinessProcess != ''">
+                secondary_business_process,
+            </if>
+            <if test="auditModelBusinessLogic != null">audit_model_business_logic,</if>
+            <if test="supportRemark != null">support_remark,</if>
+            <if test="executionLogic != null">execution_logic,</if>
+            create_time,
+            <if test="existingDataOfModelId != null">existing_data_of_model,</if>
+            <if test="isSyn != null">is_syn,</if>
+            <if test="synUrl != null">syn_url,</if>
+            <if test="isOnline != null">is_online,</if>
+            <if test="offline != null">offline,</if>
+            <if test="businessArea != null">business_area,</if>
+            <if test="sourceDomain != null">source_domain,</if>
+            <if test="runningMode != null">running_mode,</if>
+            <if test="qualityRating != null">quality_rating,</if>
+            <if test="offModelLibrary != null">off_model_library,</if>
+            <if test="isShare != null">is_share,</if>
+            <if test="shareUnit != null and shareUnit != ''">share_unit,</if>
+            <if test="secondModelNumber != null and secondModelNumber != ''">second_model_number,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="auditPointNumber != null">#{auditPointNumber},</if>
+            <if test="auditPointName != null and auditPointName != ''">#{auditPointName},</if>
+            <if test="auditModelNumber != null and auditModelNumber != ''">#{auditModelNumber},</if>
+            <if test="auditModelName != null and auditModelName != ''">#{auditModelName},</if>
+            <if test="auditModelDescribe != null and auditModelDescribe != ''">#{auditModelDescribe},</if>
+            <if test="informationSupplement != null and informationSupplement != ''">#{informationSupplement},</if>
+            <if test="informationSources != null and informationSources != ''">#{informationSources},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="auditBusinessLogic != null and auditBusinessLogic != ''">#{auditBusinessLogic},</if>
+            <if test="primaryBusinessProcess != null and primaryBusinessProcess != ''">#{primaryBusinessProcess},</if>
+            <if test="expectedRisks != null and expectedRisks != ''">#{expectedRisks},</if>
+            <if test="expectedDataRequirements != null and expectedDataRequirements != ''">
+                #{expectedDataRequirements},
+            </if>
+            <if test="expectedDataCoversUnitDemand != null and expectedDataCoversUnitDemand != ''">
+                #{expectedDataCoversUnitDemand},
+            </if>
+            <if test="requirementsInvolveTheSystem != null and requirementsInvolveTheSystem != ''">
+                #{requirementsInvolveTheSystem},
+            </if>
+            <if test="subordinateToSystem != null and subordinateToSystem != ''">#{subordinateToSystem},</if>
+            <if test="modelCode != null and modelCode != ''">#{modelCode},</if>
+            <if test="secondaryBusinessProcess != null and secondaryBusinessProcess != ''">
+                #{secondaryBusinessProcess},
+            </if>
+            <if test="auditModelBusinessLogic != null">#{auditModelBusinessLogic},</if>
+            <if test="supportRemark != null">#{supportRemark},</if>
+            <if test="executionLogic != null">#{executionLogic},</if>
+            current_timestamp,
+            <if test="existingDataOfModelId != null">#{existingDataOfModelId},</if>
+            <if test="isSyn != null">#{isSyn},</if>
+            <if test="synUrl != null">#{synUrl},</if>
+            <if test="isOnline != null">#{isOnline},</if>
+            <if test="offline != null">#{offline},</if>
+            <if test="businessArea != null">#{businessArea},</if>
+            <if test="sourceDomain != null">#{sourceDomain},</if>
+            <if test="runningMode != null">#{runningMode},</if>
+            <if test="qualityRating != null">#{qualityRating},</if>
+            <if test="offModelLibrary != null">#{offModelLibrary},</if>
+            <if test="isShare != null">#{isShare},</if>
+            <if test="shareUnit != null and shareUnit != ''">#{shareUnit},</if>
+            <if test="secondModelNumber != null and secondModelNumber != ''">#{secondModelNumber},</if>
+        </trim>
+    </insert>
+
+    <!--修改-->
+    <update id="updateAuditElementInfostatue1">
+        UPDATE hpeapm.audit_elements_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="auditPointName!= null ">audit_point_name=#{auditPointName},</if>
+            <if test="auditModelName!= null ">audit_model_name=#{auditModelName},</if>
+            <if test="auditModelDescribe != null ">audit_model_describe=#{auditModelDescribe},</if>
+            <if test="informationSupplement != null ">information_supplement=#{informationSupplement},</if>
+            <if test="auditBusinessLogic != null ">audit_business_logic=#{auditBusinessLogic},</if>
+            <if test="expectedRisks != null ">expected_risks=#{expectedRisks},</if>
+            <if test="expectedDataRequirements != null ">expected_data_requirements=#{expectedDataRequirements},</if>
+            <if test="expectedDataCoversUnitDemand != null ">
+                expected_data_covers_unit_demand=#{expectedDataCoversUnitDemand},
+            </if>
+            <if test="requirementsInvolveTheSystem != null ">
+                requirements_involve_the_system=#{requirementsInvolveTheSystem},
+            </if>
+            <if test="executionLogic != null ">execution_logic=#{executionLogic},</if>
+            <if test="subordinateToSystem != null ">subordinate_to_system=#{subordinateToSystem},</if>
+            <if test="modelCode != null ">model_code=#{modelCode},</if>
+            <if test="secondaryBusinessProcess != null ">secondary_business_process=#{secondaryBusinessProcess},</if>
+            <if test="auditModelBusinessLogic != null ">audit_model_business_logic=#{auditModelBusinessLogic},</if>
+            <if test="offModelLibrary != null ">off_model_library=#{offModelLibrary},</if>
+            <if test="modelCodeFileId != null and modelCodeFileId == '-1'">model_code_file_id= null,</if>
+            <if test="modelCodeFileId != null and modelCodeFileId != '-1'">model_code_file_id=#{modelCodeFileId},</if>
+            <if test="qualityRating != null ">quality_rating=#{qualityRating},</if>
+            <if test="runningMode != null ">running_mode=#{runningMode},</if>
+            <if test="isShare != null ">is_share=#{isShare},</if>
+            <if test="shareUnit != null ">share_unit=#{shareUnit},</if>
+            <if test="secondModelNumber != null ">second_model_number=#{secondModelNumber},</if>
+        </trim>
+        where audit_model_number = #{auditModelNumber}
+    </update>
+
+
+    <update id="updateAuditElementInfo">
+        UPDATE hpeapm.audit_elements_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="auditModelName!= null ">audit_model_name=#{auditModelName},</if>
+            <if test="auditModelDescribe != null ">audit_model_describe=#{auditModelDescribe},</if>
+            <if test="informationSupplement != null ">information_supplement=#{informationSupplement},</if>
+            information_sources=#{informationSources},
+            remark=#{remark},
+            <if test="auditBusinessLogic != null ">audit_business_logic=#{auditBusinessLogic},</if>
+            <if test="expectedRisks != null ">expected_risks=#{expectedRisks},</if>
+            <if test="expectedDataRequirements != null ">expected_data_requirements=#{expectedDataRequirements},</if>
+            <if test="expectedDataCoversUnitDemand != null ">
+                expected_data_covers_unit_demand=#{expectedDataCoversUnitDemand},
+            </if>
+            <if test="requirementsInvolveTheSystem != null ">
+                requirements_involve_the_system=#{requirementsInvolveTheSystem},
+            </if>
+            <if test="subordinateToSystem != null ">subordinate_to_system=#{subordinateToSystem},</if>
+            <if test="modelCode != null ">model_code=#{modelCode},</if>
+            <if test="secondaryBusinessProcess != null ">secondary_business_process=#{secondaryBusinessProcess},</if>
+            <if test="auditModelBusinessLogic != null ">audit_model_business_logic=#{auditModelBusinessLogic},</if>
+            <if test="isSyn != null ">is_syn=#{isSyn},</if>
+            <if test="synUrl != null ">syn_url=#{synUrl},</if>
+            <if test="offModelLibrary != null ">off_model_library=#{offModelLibrary},</if>
+            <if test="modelCodeFileId != null and modelCodeFileId == '-1'">model_code_file_id= null,</if>
+            <if test="modelCodeFileId != null and modelCodeFileId != '-1'">model_code_file_id=#{modelCodeFileId},</if>
+            <if test="runningMode != null ">running_mode=#{runningMode},</if>
+            <if test="qualityRating != null ">quality_rating=#{qualityRating},</if>
+            <if test="isShare != null ">is_share=#{isShare},</if>
+            <if test="shareUnit != null ">share_unit=#{shareUnit},</if>
+            <if test="secondModelNumber != null ">second_model_number=#{secondModelNumber},</if>
+        </trim>
+        where audit_model_number = #{auditModelNumber}
+    </update>
+
+    <select id="selectByAuditModelNumber" parameterType="java.lang.String" resultMap="AuditElementInfoMap">
+        SELECT
+            _abc.*,
+            cc."name" AS "shareUnitName",
+            bb."ModelName" AS "secondModelName"
+        FROM
+            hpeapm.audit_elements_info _abc
+            LEFT JOIN hpeapm."xbpj_company_model" bb
+        ON _abc."second_model_number"= bb."ModelNo"
+            LEFT JOIN (
+            (SELECT DISTINCT
+            CONCAT(busiUnitCode, orgCode) AS id,
+            CONCAT(provinceName, '-', orgName) AS "name"
+            FROM
+            hpmgr."bonc_union_orginfos"
+            WHERE "busiUnitCode" = 'CM000')
+            UNION
+            ALL
+            (SELECT DISTINCT
+            "busiUnitCode" AS id,
+            "provinceName" AS "name"
+            FROM
+            hpmgr."bonc_union_orginfos"
+            WHERE "busiUnitCode" != 'CM000'
+            ORDER BY "busiUnitCode")
+            ) cc
+            ON _abc.share_unit = cc."id"
+        WHERE audit_model_number = #{auditModelNumber};
+    </select>
+    <select id="selectWriteTime" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT write_time
+        FROM hpeapm.audit_elements_operation_steps
+        WHERE audit_model_number = #{auditModelNumber}
+          AND status = 2
+          and delete_status = 1
+    </select>
+
+    <update id="updateModelEvaluationInfo">
+        UPDATE hpeapm.audit_elements_info
+        set model_code=#{modelCode},
+            subordinate_to_system=#{subordinateToSystem}
+        where audit_model_number = #{auditModelNumber}
+    </update>
+
+    <update id="updatedockeMobleByAuditModelNumber">
+        UPDATE hpeapm.audit_elements_operation_steps
+        set dock_phone=#{dockPhone}
+        where audit_model_number = #{auditModelNumber}
+          AND status = 2
+          and delete_status = 1
+    </update>
+
+
+    <select id="selectDockerPhoneByAuditNumnber" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT dock_phone AS "dockPhone"
+        FROM hpeapm.audit_elements_operation_steps
+        WHERE audit_model_number = #{auditModelNumber}
+          AND status = 2
+          AND delete_status = 1
+    </select>
+
+
+    <!--根据模型编号修改step表当中的审计模型名称以及审计点名称-->
+    <update id="updateModelStepTableModelMsgByModelNumber" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
+        UPDATE
+            hpeapm."audit_elements_operation_steps" a
+        SET a."audit_point_name" = #{auditPointName},
+            a."audit_model_name" = #{auditModelName}
+        WHERE a."audit_model_number" = #{auditModelNumber}
+    </update>
+
+
+    <!--根据模型编号修改model_type表当中的审计模型名称以及审计点名称-->
+    <update id="updateModelTypeTableByModelNumber" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
+        UPDATE
+            hpeapm."spl_model_type" a
+        SET a."audit_point_name" = #{auditPointName},
+            a."audit_model_name" = #{auditModelName}
+        WHERE a."audit_model_number" = #{auditModelNumber}
+    </update>
+
+
+</mapper>

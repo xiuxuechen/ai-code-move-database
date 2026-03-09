@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="examineandapprove">
+
+
+    <select id="selectNowExamineadapprove" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT
+        examine_type AS "type"
+        FROM
+        "spl_business_examine"
+        WHERE is_complete = '0'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="examinID != null and examinID !=''">
+            AND id!=like CONCAT('%', #{examinID}, '%')
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="getSqlUser" resultType="java.lang.String">
+        SELECT user_id AS "user_id"
+        FROM spl_sp_user
+    </select>
+
+
+    <select id="selectWorkIdById" resultType="com.cxsj.mxzd.pojo.spl.ExamHisEntuty" parameterType="java.lang.String">
+        SELECT a."examine_id" examinID,
+               a."ope_type"   opeType
+        FROM "spl_workitem_his" a
+        WHERE a."work_id" = like CONCAT('%', #{workId}, '%')
+    </select>
+
+
+    <select id="selectUserHisMsg" resultType="com.cxsj.mxzd.pojo.spl.ExamHisEntuty" parameterType="java.util.Map">
+        SELECT a."examine_id" examinID,
+               a."ope_type"   opeType
+        FROM "spl_workitem_his" a
+        WHERE a."examine_id" = like CONCAT('%', #{examineId}, '%')
+          AND a."ope_user_id" = like CONCAT('%', #{userId}, '%')
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="getModelCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(audit_model_number) AS num
+        FROM "audit_elements_info" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="selctSubmitUser" resultType="com.cxsj.mxzd.pojo.PersonalCenter" parameterType="java.lang.String">
+        SELECT a."dock_people" AS dockPeople,
+               a."dock_deputy" AS defExamUserDept,
+               a."dock_dept"   AS dockDepartment
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="selectModelName" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT audit_model_name AS modelName
+        FROM audit_elements_info
+        WHERE 1 = 1
+          AND audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="selectDyModelName" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT audit_model_name AS modelName
+        FROM "spl_model_type"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取审批人员信息-->
+    <select id="selectAuditExamineId" resultType="java.util.Map">
+        SELECT id         AS cgId,
+               examine_id AS examineId
+        FROM "spl_model_type"
+        WHERE 1 = 1
+          AND audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取登陆人信息-->
+    <select id="selectDeputyMsg" resultType="java.util.Map">
+        SELECT loginId   AS userId,
+               loginName AS userName
+        FROM hpmgr.bonc_union_userinfos
+        WHERE deputyAccountNumber = like CONCAT('%', #{deputyAccountNumber}, '%') LIMIT 1
+    </select>
+
+
+    <!--获取默认审批人员信息-->
+    <select id="getSpDefaultMsg" resultType="java.util.Map">
+        SELECT b."loginId"             AS userId,
+               b."deputyAccountNumber" AS deputyAccountNumber,
+               b."userName"            AS userName,
+               b.busiUnitCode          AS busiUnitCode
+        FROM "spl_model_type" a
+                 LEFT JOIN hpmgr."bonc_union_userinfos" b
+                           ON a.def_exam_userDept = b."deputyAccountNumber"
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+
+    <!--获取默认审批人员信息-->
+    <select id="getUnitSpDefaultMsg" resultType="java.util.Map">
+        SELECT
+            b."loginId" AS userId,
+            b."deputyAccountNumber" AS deputyAccountNumber,
+            b."userName" AS userName,
+            b.busiUnitCode AS busiUnitCode
+        FROM
+            "spl_model_type" a
+                LEFT JOIN hpmgr."bonc_union_userinfos" b
+                          ON a."def2_exam_userdepy" = b."deputyAccountNumber"
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--根据模型编号擦-->
+    <select id="selectModelMsgByModelNubmer" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT *
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--新增第一步增加一条信息 -->
+    <insert id="insertModelMessage" parameterType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
+        INSERT INTO "spl_model_type" (id,
+                                             audit_point_number,
+                                             audit_point_name,
+                                             audit_model_number,
+                                             audit_model_name,
+                                             type_of_information,
+                                             dock_people,
+                                             dock_deputy,
+                                             dock_dept,
+                                             write_time,
+                                             audit_model_type,
+                                             model_owner,
+                                             model_owner_depy,
+                                             continue_to_enter,
+                                             creat_time,
+                                             online_type) VALUES (like CONCAT('%', #{examinID}, '%'),like CONCAT('%', #{auditPointNumber}, '%'), like CONCAT('%', #{auditPointName}, '%'), like CONCAT('%', #{auditModelNumber}, '%'), like CONCAT('%', #{auditModelName}, '%'),
+            like CONCAT('%', #{typeOfInformation}, '%'), like CONCAT('%', #{dockPeople}, '%'), like CONCAT('%', #{dockDeputy}, '%'), like CONCAT('%', #{deckDept}, '%'),like CONCAT('%', #{writeTime}, '%'), like CONCAT('%', #{auditModelType}, '%'),like CONCAT('%', #{modelOwner}, '%'),like CONCAT('%', #{modelOwnerDepy}, '%'), like CONCAT('%', #{continueToEnter}, '%'),CURRENT_TIMESTAMP,like CONCAT('%', #{onlineType}, '%'))
+    </insert>
+
+
+    <!--新增第五步 说明审批已经通过，模型已经上线-->
+    <update id="updateModelStatus" parameterType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
+        UPDATE
+        "spl_model_type"
+        SET
+        creat_time=CURRENT_TIMESTAMP
+        <if test="auditModelType != null and  auditModelType !=''">
+            ,audit_model_type = like CONCAT('%', #{auditModelType}, '%')
+        </if>
+        <if test="dockDeputy != null and  dockDeputy !=''">
+            ,dock_deputy = like CONCAT('%', #{dockDeputy}, '%')
+        </if>
+        <if test="dockPeople != null and  dockPeople !=''">
+            ,dock_people = like CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="deckDept != null and  deckDept !=''">
+            ,dock_dept = like CONCAT('%', #{deckDept}, '%')
+        </if>
+        <if test="writeTime != null and  writeTime !=''">
+            ,write_time = like CONCAT('%', #{writeTime}, '%')
+        </if>
+        <if test="typeOfInformation != null and  typeOfInformation !=''">
+            ,type_of_information = like CONCAT('%', #{typeOfInformation}, '%')
+        </if>
+        <if test="continueToEnter != null and  continueToEnter !=''">
+            ,continue_to_enter = like CONCAT('%', #{continueToEnter}, '%')
+        </if>
+        <if test="defExamUser != null and  defExamUser !=''">
+            ,def_exam_user = like CONCAT('%', #{defExamUser}, '%')
+        </if>
+        <if test="defExamUserDept != null and  defExamUserDept !=''">
+            ,def_exam_userDept = like CONCAT('%', #{defExamUserDept}, '%')
+        </if>
+        <if test="def2ExamUser != null and  def2ExamUser !=''">
+            ,def2_exam_user = like CONCAT('%', #{def2ExamUser}, '%')
+        </if>
+        <if test="def2ExamUserDepy != null and  def2ExamUserDepy !=''">
+            ,def2_exam_userdepy = like CONCAT('%', #{def2ExamUserDepy}, '%')
+        </if>
+        <if test="shareUser != null and  shareUser !=''">
+            ,share_user = like CONCAT('%', #{shareUser}, '%')
+        </if>
+        <if test="shareUserDepy != null and  shareUserDepy !=''">
+            ,share_user_depy = like CONCAT('%', #{shareUserDepy}, '%')
+        </if>
+        <if test="onlineType != null and  onlineType !=''">
+            ,online_type = like CONCAT('%', #{onlineType}, '%')
+        </if>
+        <if test="modelOwner != null and  modelOwner !=''">
+            ,model_owner = like CONCAT('%', #{modelOwner}, '%')
+        </if>
+        <if test="modelOwnerDepy != null and  modelOwnerDepy !=''">
+            ,model_owner_depy = like CONCAT('%', #{modelOwnerDepy}, '%')
+        </if>
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <!--向审批业务表当中插入审批数据-->
+    <insert id="insertSubmitMessage" parameterType="java.util.Map">
+        INSERT INTO "spl_business_examine"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and  id !=''">id,</if>
+            <if test="process_instId != null and  process_instId !=''">process_instId,</if>
+            <if test="activity_instId != null and  activity_instId !=''">activity_instId,</if>
+            <if test="workItem_Id != null and  workItem_Id !=''">workItem_Id,</if>
+            <if test="audit_model_number != null and  audit_model_number !=''">audit_model_number,</if>
+            <if test="submit_user != null  and submit_user != ''">submit_user,</if>
+            <if test="sub_depy != null  and sub_depy != ''">sub_depy,</if>
+            <if test="submit_time != null  and submit_time != ''">submit_time,</if>
+            <if test="submit_remarks != null  and submit_remarks != ''">submit_remarks,</if>
+            <if test="examine_user != null  and examine_user != ''">examine_user,</if>
+            <if test="exam_depy != null  and exam_depy != ''">exam_depy,</if>
+            <if test="examine_dept != null">examine_dept,</if>
+            <if test="examine_time != null">examine_time,</if>
+            <if test="examine_type != null">examine_type,</if>
+            <if test="examine_result != null  and createPerson != ''">examine_result,</if>
+            <if test="examine_message_id != null  and examine_message_id != ''">examine_message_id,</if>
+            <if test="is_complete != null  and is_complete != ''">is_complete,</if>
+            <if test="examine_category != null  and examine_category != ''">examine_category,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and  id !=''">like CONCAT('%', #{id}, '%'),</if>
+            <if test="process_instId != null and  process_instId !=''">like CONCAT('%', #{process_instId}, '%'),</if>
+            <if test="activity_instId != null and  activity_instId !=''">like CONCAT('%', #{activity_instId}, '%'),</if>
+            <if test="workItem_Id != null and  workItem_Id !=''">like CONCAT('%', #{workItem_Id}, '%'),</if>
+            <if test="audit_model_number != null and  audit_model_number !=''">like CONCAT('%', #{audit_model_number}, '%'),</if>
+            <if test="submit_user != null  and submit_user != ''">like CONCAT('%', #{submit_user}, '%'),</if>
+            <if test="sub_depy != null  and sub_depy != ''">like CONCAT('%', #{sub_depy}, '%'),</if>
+            <if test="submit_time != null  and submit_time != ''">like CONCAT('%', #{submit_time}, '%'),</if>
+            <if test="submit_remarks != null  and submit_remarks != ''">like CONCAT('%', #{submit_remarks}, '%'),</if>
+            <if test="examine_user != null  and examine_user != ''">like CONCAT('%', #{examine_user}, '%'),</if>
+            <if test="exam_depy != null  and exam_depy != ''">like CONCAT('%', #{exam_depy}, '%'),</if>
+            <if test="examine_dept != null  and examine_dept != ''">like CONCAT('%', #{examine_dept}, '%'),</if>
+            <if test="examine_time != null">like CONCAT('%', #{examine_time}, '%'),</if>
+            <if test="examine_type != null">like CONCAT('%', #{examine_type}, '%'),</if>
+            <if test="examine_result != null  and createPerson != ''">like CONCAT('%', #{examine_result}, '%'),</if>
+            <if test="examine_message_id != null  and examine_message_id != ''">like CONCAT('%', #{examine_message_id}, '%'),</if>
+            <if test="is_complete != null  and is_complete != ''">like CONCAT('%', #{is_complete}, '%'),</if>
+            <if test="examine_category != null  and examine_category != ''">like CONCAT('%', #{examine_category}, '%'),</if>
+            CURRENT_TIMESTAMP
+        </trim>
+    </insert>
+
+
+    <!--更改审批流程当中的信息-->
+    <update id="UpdateReplyMessage" parameterType="java.util.Map">
+        UPDATE
+        "spl_business_examine"
+        <set>
+            <if test="audit_model_number != null and  audit_model_number !=''">,audit_model_number =
+                like CONCAT('%', #{audit_model_number}, '%')
+            </if>
+            <if test="submit_user != null and  submit_user !=''">,submit_user = like CONCAT('%', #{submit_user}, '%')</if>
+            <if test="sub_depy != null and  sub_depy !=''">,sub_depy = like CONCAT('%', #{sub_depy}, '%')</if>
+            <if test="submit_time != null and  submit_time !=''">,submit_time = like CONCAT('%', #{submit_time}, '%')</if>
+            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks = like CONCAT('%', #{submit_remarks}, '%')</if>
+            <if test="examine_type != null and  examine_type !=''">,examine_type = like CONCAT('%', #{examine_type}, '%')</if>
+            <if test="submit_user != null and  submit_user !=''">,submit_user = like CONCAT('%', #{submit_user}, '%')</if>
+            <if test="submit_time != null and  submit_time !=''">,submit_time = like CONCAT('%', #{submit_time}, '%')</if>
+            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks = like CONCAT('%', #{submit_remarks}, '%')</if>
+            <if test="exam_depy != null  and exam_depy != ''">,exam_depy=like CONCAT('%', #{exam_depy}, '%')</if>
+            <if test="examine_user != null and  examine_user !=''">,examine_user = like CONCAT('%', #{examine_user}, '%')</if>
+            <if test="process_instId != null and  process_instId !=''">,process_instId = like CONCAT('%', #{process_instId}, '%')</if>
+            <if test="workItem_Id != null and  workItem_Id !=''">,workItem_Id = like CONCAT('%', #{workItem_Id}, '%')</if>
+            <if test="examine_dept != null and  examine_dept !=''">,examine_dept = like CONCAT('%', #{examine_dept}, '%')</if>
+            <if test="examine_time != null and  examine_time !=''">,examine_time = like CONCAT('%', #{examine_time}, '%')</if>
+            <if test="examine_result != null and  examine_result !=''">,examine_result = like CONCAT('%', #{examine_result}, '%')</if>
+            <if test="examine_message_id != null and  examine_message_id !=''">,examine_message_id =
+                like CONCAT('%', #{examine_message_id}, '%')
+            </if>
+            <if test="is_complete != null and  is_complete !=''">,is_complete = like CONCAT('%', #{is_complete}, '%')</if>
+            <if test="now_category != null and  now_category !=''">,now_category = like CONCAT('%', #{now_category}, '%')</if>
+            <if test="examine_category != null and  examine_category !=''">,examine_category = like CONCAT('%', #{examine_category}, '%')</if>
+        </set>
+        where
+        id=like CONCAT('%', #{id}, '%')
+    </update>
+
+
+    <update id="updateDyTypeByDyProId" parameterType="java.lang.String">
+        UPDATE
+            "spl_business_dy" a
+        SET a."is_del" = '0'
+        WHERE a."pro_id" = like CONCAT('%', #{dyProId}, '%')
+    </update>
+
+
+    <!--个人中心信息新增维度信息 -->
+    <insert id="insertsplMessageBf" parameterType="java.util.Map">
+        INSERT INTO "spl_message_bf"
+        VALUES (like CONCAT('%', #{id}, '%'), like CONCAT('%', #{examine_type}, '%'), like CONCAT('%', #{audit_model_number}, '%'), like CONCAT('%', #{examine_message}, '%'), like CONCAT('%', #{examine_node}, '%'))
+    </insert>
+
+
+    <!--基础信息 -->
+    <select id="getModelMessage" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT audit_point_number,
+               audit_point_name,
+               audit_model_number,
+               audit_model_name
+        FROM audit_elements_info
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="getExamUser" resultType="java.util.Map">
+        SELECT user_name AS "value",
+               user_name AS "label"
+        FROM "spl_sp_user"
+        WHERE "default" = '1'
+    </select>
+
+
+    <select id="getModelShangxianType" resultType="java.lang.String">
+        SELECT COALESCE(is_syn, 0) AS isSyn
+        FROM "audit_elements_info"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="selectModelJcMsg" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT *
+        FROM "audit_elements_info"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
+    </select>
+
+
+    <!--在模型基础信息表当中将模型的状态修改为已经上线-->
+    <update id="updateAuditModelShangxian" parameterType="java.lang.String">
+        UPDATE
+            audit_elements_info
+        SET is_online = '1'
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <!--更新模型最新的审批流id-->
+    <update id="updateexamineandId" parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam">
+        UPDATE
+            "spl_model_type"
+        SET examine_id =like CONCAT('%', #{examinID}, '%')
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+    <!--新建模型将原有删除的模型清除-->
+    <delete id="deleteModelYuanyou" parameterType="java.lang.String">
+        DELETE
+        FROM "spl_model_type"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </delete>
+
+
+    <update id="updateMaintenDbType" parameterType="java.lang.String">
+        UPDATE "spl_mainten_db"
+        SET is_tx='0'
+        WHERE model_no = like CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <delete id="delSplMaintenDb" parameterType="java.lang.String">
+        DELETE
+        FROM "spl_mainten_db"
+        WHERE model_no = like CONCAT('%', #{auditModelNumber}, '%')
+    </delete>
+
+
+    <!--根据审批流ID信息查询审批流基本信息 -->
+    <select id="selectExaminMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT *
+        FROM spl_business_examine
+        WHERE id = like CONCAT('%', #{examinID}, '%')
+    </select>
+
+
+    <!--根据模型录入人查询该模型对应的用户信息 -->
+    <select id="selectDockPeopleMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a.deputyAccountNumber AS deputyAccountNumber,
+               b.busiUnitCode        AS busiUnitCode,
+               b.provinceName        AS provinceName,
+               b.deptname            AS deptname,
+               a.userId              AS userId,
+               a."userName"          AS userName
+        FROM hpmgr."bonc_union_userinfos" a
+                 LEFT JOIN hpmgr."bonc_union_orginfos" b
+                           ON a."busiUnitCode" = b."busiUnitCode"
+        WHERE 1 = 1
+          AND userName = like CONCAT('%', #{dockDepartment}, '%') LIMIT 1
+    </select>
+
+
+    <!--根据审批审计模型ID查询审计模型国信草稿ID -->
+    <select id="selectModelId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT "id" AS id
+        FROM "spl_model_type"
+        where audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取当前审计模型个数-->
+    <select id="selectModelMessage" resultType="java.lang.String">
+        SELECT COUNT(*) AS a
+        FROM "spl_model_type"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--根据审计模型编号查询当前审计模型最新的删除审批信息-->
+    <select id="selectModelExminMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT id                 AS examinID,
+               submit_remarks     AS remarks,
+               audit_model_number AS auditModelNumber
+        FROM "spl_business_examine"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+          AND is_complete = '0'
+    </select>
+
+
+    <!--查询审计模型的上线状态以及节点步骤信息-->
+    <update id="updateModelMrSpUser" parameterType="java.util.Map">
+        UPDATE
+        "spl_model_type"
+        SET
+        <if test="def2ExamUser != null and  def2ExamUser !=''">
+            def2_exam_user = like CONCAT('%', #{def2ExamUser}, '%'),
+        </if>
+        <if test="def2ExamUserDepy != null and  def2ExamUserDepy !=''">
+            def2_exam_userdepy = like CONCAT('%', #{def2ExamUserDepy}, '%'),
+        </if>
+        def_exam_user = like CONCAT('%', #{defExamUser}, '%'),
+        def_exam_userDept=like CONCAT('%', #{defExamUserDept}, '%')
+        WHERE 1=1
+        <if test="auditModelNumbers != null and auditModelNumbers.size > 0">
+            and audit_model_number in
+            <foreach collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")"
+                     separator=",">
+                like CONCAT('%', #{auditModelNumber}, '%')
+            </foreach>
+        </if>
+    </update>
+
+
+    <!--查询审计模型的上线状态以及节点步骤信息-->
+    <select id="getModelTypeAndDept" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT type_of_information AS "step",
+               audit_model_type    AS type
+        FROM "spl_model_type"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--根据审计模型编号查询审计模型数据审批状态信息-->
+    <select id="getModelTypeExam" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT audit_model_type AS modelTypeExam
+        FROM "spl_model_type"
+        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="selectSourceData" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT GROUP_(c.name) data_content_description
+        FROM audit_elements_data_support_v2 c
+        WHERE 1 = 1
+          AND c.audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+          AND c.isdel = 1
+    </select>
+
+
+    <insert id="insertModelChaoshi" parameterType="java.util.Map">
+        INSERT INTO "xbpj_operation_flow" (business1,
+                                                  business2,
+                                                  source,
+                                                  business_area,
+                                                  "field",
+                                                  AuditpointNo,
+                                                  AuditpointName,
+                                                  ModelNo,
+                                                  ModelName,
+                                                  model_type,
+                                                  bonc_audit_point,
+                                                  source_domain,
+                                                  model_online_time,
+                                                  audit_scope,
+                                                  model_url,
+                                                  model_OnlineJi_Time,
+                                                  model_logic,
+                                                  home_system,
+                                                  data_source,
+                                                  datastart_time,
+                                                  modelrunning_frequency,
+                                                  is_cured,
+                                                  "order",
+                                                  cmwa_export_path,
+                                                  cmca_file_type,
+                                                  cmca_subject_id,
+                                                  source_code,
+                                                  belong_cmwa,
+                                                  version,
+                                                  allow_down) VALUE
+            ( like CONCAT('%', #{business1}, '%'),like CONCAT('%', #{business2}, '%'),like CONCAT('%', #{source}, '%'),like CONCAT('%', #{businessArea}, '%'),like CONCAT('%', #{field}, '%'),like CONCAT('%', #{auditPointNo}, '%'),like CONCAT('%', #{auditPointName}, '%'),like CONCAT('%', #{modelNo}, '%'),like CONCAT('%', #{modelName}, '%'),like CONCAT('%', #{model_type}, '%'),like CONCAT('%', #{auditCode}, '%'),like CONCAT('%', #{source_domain}, '%'),
+            like CONCAT('%', #{model_online_time}, '%'),like CONCAT('%', #{audit_scope}, '%'),like CONCAT('%', #{model_url}, '%'),like CONCAT('%', #{model_OnlineJi_Time}, '%'),like CONCAT('%', #{model_logic}, '%'),like CONCAT('%', #{home_system}, '%'),like CONCAT('%', #{data_source}, '%'),like CONCAT('%', #{datastart_time}, '%'),
+            like CONCAT('%', #{modelrunning_frequency}, '%'),like CONCAT('%', #{is_cured}, '%'),like CONCAT('%', #{order}, '%'),like CONCAT('%', #{cmwaExportPath}, '%'),
+            like CONCAT('%', #{cmcaFileType}, '%'),like CONCAT('%', #{cmcaSubjectId}, '%'),like CONCAT('%', #{sourceCode}, '%'),like CONCAT('%', #{belongCmwa}, '%'),like CONCAT('%', #{version}, '%'),like CONCAT('%', #{allowDown}, '%')
+            )
+    </insert>
+
+
+    <!--根据登录用户id查询审批用户详细信息 -->
+    <select id="selectLoginUserMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a.deputyAccountNumber AS deputyAccountNumber,
+               b.busiUnitCode        AS busiUnitCode,
+               b.provinceName        AS provinceName,
+               b.deptname            AS deptname,
+               a.userId              AS userId,
+               a."userName"          AS userName,
+               c.login_id            as loginId
+        FROM hpmgr."bonc_union_userinfos" a
+                 LEFT JOIN hpmgr."bonc_union_orginfos" b
+                           ON a."busiUnitCode" = b."busiUnitCode"
+                 LEFT JOIN hpmgr.bonc_user_role_info as c
+                           on a.deputyAccountNumber = c.deputy_accountNumber
+        WHERE 1 = 1
+          AND a.deputyAccountNumber = like CONCAT('%', #{deputyAccountNumber}, '%')
+        ORDER BY orgLevel DESC LIMIT 1
+    </select>
+
+
+    <select id="getIsSupperUser" resultType="java.lang.Integer" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        SELECT COUNT(*) AS num
+        FROM "audit_show_qx" a
+        WHERE a."userDepy" = like CONCAT('%', #{defExamUser}, '%')
+    </select>
+
+
+    <insert id="insertWorkItem" parameterType="com.cxsj.mxzd.pojo.spl.WorkItemEntity">
+        insert into spl_workitem_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workId != null">
+                work_id,
+            </if>
+            <if test="examineId != null">
+                examine_id,
+            </if>
+            <if test="roleName != null">
+                role_name,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="opeType != null">
+                ope_type,
+            </if>
+            <if test="opeUser != null">
+                ope_user,
+            </if>
+            <if test="opeUserId != null">
+                ope_user_id,
+            </if>
+            <if test="opeTime != null">
+                ope_time,
+            </if>
+            <if test="nextUserId != null">
+                next_user_id,
+            </if>
+            <if test="nextUser != null">
+                next_user,
+            </if>
+            <if test="reolyType != null">
+                reoly_type,
+            </if>
+            <if test="reolyRemarks != null">
+                reoly_remarks,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workId != null">
+                like CONCAT('%', #{workId,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="examineId != null">
+                like CONCAT('%', #{examineId,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="roleName != null">
+                like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="deptName != null">
+                like CONCAT('%', #{deptName,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="opeType != null">
+                like CONCAT('%', #{opeType,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="opeUser != null">
+                like CONCAT('%', #{opeUser,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="opeUserId != null">
+                like CONCAT('%', #{opeUserId,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="opeTime != null">
+                like CONCAT('%', #{opeTime}, '%'),
+            </if>
+            <if test="nextUserId != null">
+                like CONCAT('%', #{nextUserId,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="nextUser != null">
+                like CONCAT('%', #{nextUser,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="reolyType != null">
+                like CONCAT('%', #{reolyType,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="reolyRemarks != null">
+                like CONCAT('%', #{reolyRemarks,jdbcType=VARCHAR}, '%'),
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateInsertWorkItem" parameterType="com.cxsj.mxzd.pojo.spl.WorkItemEntity">
+        update spl_workitem_his
+        <set>
+            <if test="reolyType != null">
+                reoly_type = like CONCAT('%', #{reolyType,jdbcType=VARCHAR}, '%'),
+            </if>
+            <if test="reolyRemarks != null">
+                reoly_remarks = like CONCAT('%', #{reolyRemarks,jdbcType=VARCHAR}, '%'),
+            </if>
+        </set>
+        where work_id = like CONCAT('%', #{workId,jdbcType=VARCHAR}, '%')
+    </update>
+
+
+</mapper>

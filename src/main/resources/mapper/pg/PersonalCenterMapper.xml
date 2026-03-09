@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.cxsj.mxzd.mapper.pg.PersonalCenterMapper">
+
+    <resultMap type="com.cxsj.mxzd.pojo.PersonalCenter" id="PersonalCenterMap">
+        <result property="dockPhone" column="dock_phone"/>
+        <result property="dockPeople" column="dock_people"/>
+        <result property="writeTime" column="write_time"/>
+        <result property="dockDepartment" column="dock_department"/>
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="informationType" column="information_type"/>
+        <result property="typeOfInformation" column="type_of_information"/>
+        <result property="status" column="status"/>
+        <result property="continueToEnter" column="continue_to_enter"/>
+        <result property="currentInput" column="current_input"/>
+    </resultMap>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam" id="SqlModelTypeMap">
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="typeOfInformation" column="type_of_information"/>
+        <result property="dockPeople" column="dock_people"/>
+        <result property="dockDeputy" column="dock_deputy"/>
+        <result property="deckDept" column="dock_dept"/>
+        <result property="writeTime" column="write_time"/>
+        <result property="examineUser" column="examine_user"/>
+        <result property="examDepy" column="exam_depy"/>
+        <result property="examineDept" column="examine_dept"/>
+        <result property="auditModelType" column="audit_model_type"/>
+        <result property="continueToEnter" column="continue_to_enter"/>
+        <result property="isExamine" column="isExamine"/>
+        <result property="remarks" column="remarks"/>
+        <result property="defExamUser" column="def_exam_user"/>
+        <result property="defExamUserDept" column="def_exam_userDept"/>
+    </resultMap>
+
+
+    <!--查询个人中心相关信息-->
+    <select id="getAuditPointNameList" resultType="java.util.Map">
+        SELECT audit_point_name AS id,
+               audit_point_name AS "name"
+        FROM hpeapm."audit_elements_info"
+    </select>
+
+    <select id="selectPersonalMessage" parameterType="java.util.Map" resultMap="SqlModelTypeMap">
+        SELECT
+        a.*,
+        cc.modeling_method AS modelingMethod,
+        b.examine_user AS examine_user,
+        b.examine_dept AS examine_dept,
+        b.submit_remarks AS remarks
+        FROM
+        (
+        select
+        *,
+        '0' AS isExamine
+        from
+        (
+        SELECT
+        *
+        FROM
+        "hpeapm"."spl_model_type"
+        WHERE 1=1
+        <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
+            AND dock_deputy like '%' || #{deputyAccountNumber} || '%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND audit_point_number like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test="auditPointName!= null and auditPointName!= '' ">
+            AND audit_point_name like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND audit_model_number like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND audit_model_name like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND write_time like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND audit_model_type like '%' || #{auditModelType} || '%'
+        </if>
+        ORDER BY creat_time DESC
+        ) a
+        <if test="page!= null and size != null ">
+            LIMIT #{size} OFFSET #{page}
+        </if>
+        ) a
+        LEFT JOIN "hpeapm"."audit_elements_model_evaluation" cc
+        ON a.audit_model_number = cc.audit_model_number
+        and cc.is_deleted = 0
+        LEFT JOIN
+        (
+        SELECT
+        *
+        FROM
+        "hpeapm"."spl_business_examine"
+        ) b
+        ON a.examine_id = b.id
+    </select>
+
+
+
+    <!--查询个人中心相关信息总条数-->
+    <select id="selectPersonalMessageCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(*) as "count"
+        FROM
+        "hpeapm"."spl_model_type"
+        WHERE 1=1
+        <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
+            AND "dock_deputy" like '%' || #{deputyAccountNumber} || '%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND "audit_point_number" like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND "audit_point_name" like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND "audit_model_number" like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND "audit_model_name" like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND "write_time" like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND "audit_model_type" like '%' || #{auditModelType} || '%'
+        </if>
+    </select>
+
+
+
+    <!--查询待办事项-->
+    <select id="selectDbMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
+        SELECT
+        a."db_id" as "dbYbId",
+        a."db_type" as "dbType",
+        b."audit_point_name" AS "auditPointName",
+        b."audit_point_number" AS "auditPointNumber",
+        b."audit_model_number" AS "auditModelNumber",
+        b."audit_model_name" AS "auditModelName",
+        b."type_of_information" AS "typeOfInformation",
+        b."dock_people" AS "dockPeople",
+        b."dock_deputy" AS "dockDeputy",
+        b."dock_dept" AS "deckDept",
+        b."creat_time" AS "writeTime",
+        b."audit_model_type" AS "auditModelType",
+        b."continue_to_enter" AS "continueToEnter",
+        c."examine_user" AS "examineUser",
+        c."exam_depy" AS "examDepy",
+        c."examine_dept" AS "examineDept",
+        '1' AS "isExamine",
+        c."examine_type" AS "sptype",
+        c."submit_remarks" AS "remarks",
+        c."id" AS "examinID"
+        FROM
+        "hpeapm"."spl_business_db" a
+        LEFT JOIN "hpeapm"."spl_model_type" b
+        ON a."model_no" = b."audit_model_number"
+        LEFT JOIN "hpeapm"."spl_business_examine" c
+        ON b."examine_id" = c."id"
+        AND a."exam_id" = c."id"
+        WHERE a."is_del" = '1'
+        <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
+            AND a."db_deputy" like '%' || #{deputyAccountNumber} || '%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b."write_time" like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+        </if>
+        order by b."creat_time" desc
+        <if test="page!= null and size != null ">
+            LIMIT #{size} OFFSET #{page}
+        </if>
+    </select>
+
+    <!--查询待办事项数量-->
+    <select id="selectDbMsgCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*) AS "count"
+        FROM
+        "hpeapm"."spl_business_db" a
+        LEFT JOIN "hpeapm"."spl_model_type" b
+        ON a."model_no" = b."audit_model_number"
+        LEFT JOIN "hpeapm"."spl_business_examine" c
+        ON b."examine_id" = c."id"
+        AND a."exam_id" = c."id"
+        WHERE a."is_del" = '1'
+        <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
+            AND a."db_deputy" like '%' || #{deputyAccountNumber} || '%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b."write_time" like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+        </if>
+    </select>
+
+
+
+    <!--查询待办事项-->
+    <select id="selectMaintenDbMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
+        SELECT
+        a."db_id" as "dbYbId",
+        b."audit_point_name" AS "auditPointName",
+        b."audit_point_number" AS "auditPointNumber",
+        b."audit_model_number" AS "auditModelNumber",
+        b."audit_model_name" AS "auditModelName",
+        b."type_of_information" AS "typeOfInformation",
+        b."dock_people" AS "dockPeople",
+        b."dock_deputy" AS "dockDeputy",
+        b."dock_dept" AS "deckDept",
+        b."creat_time" AS "writeTime",
+        b."audit_model_type" AS "auditModelType",
+        b."continue_to_enter" AS "continueToEnter",
+        c."examine_user" AS "examineUser",
+        c."exam_depy" AS "examDepy",
+        c."examine_dept" AS "examineDept",
+        a."is_tx" AS "examineType",
+        '3' AS "isExamine",
+        c."examine_type" AS "sptype",
+        c."submit_remarks" AS "remarks",
+        c."id" AS "examinID"
+        FROM
+        "hpeapm"."spl_mainten_db" a
+        LEFT JOIN "hpeapm"."spl_model_type" b
+        ON a."model_no" = b."audit_model_number"
+        LEFT JOIN "hpeapm"."spl_business_examine" c
+        ON b."examine_id" = c."id"
+        AND a."exam_id" = c."id"
+        WHERE a."role_id" like '%' || #{dockDeputy} || '%'
+        <if test="txType!= null and  txType !='' ">
+            AND a."is_tx" = '%'||#{txType}||'%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b."write_time" like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+        </if>
+        <if test="page!= null and size != null ">
+            LIMIT #{size} OFFSET #{page}
+        </if>
+    </select>
+
+    <!--查询待办事项数量-->
+    <select id="selectMainTenDbCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*) AS "count"
+        FROM
+        "hpeapm"."spl_mainten_db" a
+        LEFT JOIN "hpeapm"."spl_model_type" b
+        ON a."model_no" = b."audit_model_number"
+        LEFT JOIN "hpeapm"."spl_business_examine" c
+        ON b."examine_id" = c."id"
+        AND a."exam_id" = c."id"
+        WHERE a."role_id" like '%' || #{dockDeputy} || '%'
+        <if test="txType!= null and  txType!='' ">
+            AND a."is_tx" = '%'||#{txType}||'%'
+        </if>
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b."write_time" like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+        </if>
+    </select>
+
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.spl.HisExamineEntuty" id="HisExamineMap">
+        <result property="examinID" column="examinID"/>
+        <result property="auditPointNumber" column="auditPointNumber"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="auditModelName" column="auditModelName"/>
+        <result property="typeOfInformation" column="typeOfInformation"/>
+        <result property="dockPeople" column="dockPeople"/>
+        <result property="dockDeputy" column="dockDeputy"/>
+        <result property="deckDept" column="deckDept"/>
+        <result property="remarks" column="remarks"/>
+        <result property="examineType" column="examineType"/>
+        <result property="examineResult" column="examineResult"/>
+        <result property="writeTime" column="writeTime"/>
+        <result property="auditModelType" column="auditModelType"/>
+        <result property="examineUser" column="examineUser"/>
+        <result property="isExamine" column="isExamine"/>
+        <result property="submitRemarks" column="submitRemarks"/>
+        <collection property="HisList" column="examinID" ofType="com.cxsj.mxzd.pojo.spl.ExamHisEntuty"
+                    javaType="list">
+            <result property="roleName" column="roleName"/>
+            <result property="DeptName" column="DeptName"/>
+            <result property="opeType" column="opeType"/>
+            <result property="opeUser" column="opeUser"/>
+            <result property="newUser" column="newUser"/>
+            <result property="reolyType" column="reolyType"/>
+            <result property="reolyRemarks" column="reolyRemarks"/>
+            <result property="opeTime" column="opeTime"/>
+        </collection>
+    </resultMap>
+
+
+    <!--查询待阅事项-->
+    <select id="selectDyMsg" parameterType="java.util.Map" resultMap="HisExamineMap">
+        SELECT
+        a."id" AS examinID ,
+        b."audit_point_number" AS auditPointNumber,
+        b."audit_point_name" AS auditPointName,
+        b."audit_model_number" AS auditModelNumber,
+        b."audit_model_name" AS auditModelName,
+        b."type_of_information" AS typeOfInformation,
+        a."examine_user" AS examineUser,
+        b."dock_people" AS dockPeople,
+        b."dock_dept" AS deckDept,
+        a."submit_remarks" as remarks,
+        a."examine_result" examineResult,
+        a."examine_type" examineType,
+        b."write_time" AS writeTime,
+        b."audit_model_type" AS auditModelType,
+        '2' AS isExamine,
+        a."submit_remarks" AS submitRemarks,
+        a."examine_result" as examineResult,
+        a."examine_type" as examineType,
+        c."role_name" roleName,
+        c."dept_name" DeptName,
+        c."ope_type" opeType,
+        c."ope_user" opeUser,
+        COALESCE(c."next_user", '无') newUser,
+        c."reoly_type" reolyType,
+        c."reoly_remarks" reolyRemarks,
+        TO_CHAR(c."ope_time", 'YYYY-MM-DD HH24:MI:SS') opeTime
+        FROM
+        hpeapm."spl_business_examine" a
+        LEFT JOIN hpeapm."spl_model_type" b
+        ON a."audit_model_number" = b."audit_model_number"
+        LEFT JOIN hpeapm."spl_workitem_his" c
+        ON a."id" = c."examine_id"
+        where 1=1
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b.audit_point_number like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b.audit_point_name like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b.audit_model_number like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b.audit_model_name like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b.write_time like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b.audit_model_type like '%' || #{auditModelType} || '%'
+        </if>
+        ORDER BY a.submit_time desc,a."create_time" desc,c."ope_time" desc
+        <if test="page!= null and size != null ">
+            LIMIT #{size} OFFSET #{page}
+        </if>
+    </select>
+
+
+    <!--查询待阅事项数量-->
+    <select id="selectDyMsgCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*) AS num
+        FROM
+        hpeapm."spl_business_examine" a
+        LEFT JOIN hpeapm."spl_model_type" b
+        ON a."audit_model_number" = b."audit_model_number"
+        WHERE 1=1
+        <if test="auditPointNumber!= null and  auditPointNumber!= ''">
+            AND b.audit_point_number like '%' || #{auditPointNumber} || '%'
+        </if>
+        <if test=" auditPointName!= null and auditPointName!= '' ">
+            AND b.audit_point_name like '%' || #{auditPointName} || '%'
+        </if>
+        <if test="auditModelNumber!= null  and auditModelNumber!= ''">
+            AND b.audit_model_number like '%' || #{auditModelNumber} || '%'
+        </if>
+        <if test="auditModelName!= null and auditModelName!= '' ">
+            AND b.audit_model_name like '%' || #{auditModelName} || '%'
+        </if>
+        <if test="writeTime!= null and writeTime!= '' ">
+            AND b.write_time like '%' || #{writeTime} || '%'
+        </if>
+        <if test="auditModelType!= null and auditModelType!= '' ">
+            AND b.audit_model_type like '%' || #{auditModelType} || '%'
+        </if>
+    </select>
+
+
+    <!--新增模型信息时候校验此模型的对应节点是否存在-->
+    <select id="selectInformationExistence" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
+            resultType="java.lang.Integer">
+        SELECT COUNT(*) "COUNT"
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE information_type like '%' || #{informationType} || '%'
+          AND audit_model_number like '%'||#{auditModelNumber}||'%'
+          AND delete_status = '1'
+    </select>
+
+    <!--查询模型的的最大完成状态-->
+    <select id="selectBeststatus" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
+            resultType="java.lang.String">
+        SELECT "status" as status
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          and delete_status = '1'
+        ORDER BY "status" DESC LIMIT 1
+    </select>
+
+
+    <!--个人中心信息新增维度信息 -->
+    <insert id="insertPersonalCenterMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        INSERT INTO hpeapm."audit_elements_operation_steps" (dock_phone,
+                                                             dock_people,
+                                                             write_time,
+                                                             dock_department,
+                                                             audit_point_number,
+                                                             audit_point_name,
+                                                             audit_model_number,
+                                                             audit_model_name,
+                                                             information_type,
+                                                             type_of_information,
+                                                             "status",
+                                                             continue_to_enter,
+                                                             current_input,
+                                                             is_import,
+                                                             detailed_time)
+        VALUES (#{dockPhone}, #{dockPeople}, #{writeTime}, #{dockDepartment},
+                #{auditPointNumber}, #{auditPointName}, #{auditModelNumber}, #{auditModelName},
+                #{informationType}, #{typeOfInformation}, #{status}, #{continueToEnter}, #{currentInput}, #{isImport},
+                CURRENT_TIMESTAMP)
+    </insert>
+
+
+    <!--新增的时候修改其他节点的状态值-->
+    <update id="updatePersonalCenterStatue" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        <if test="status == 0 ">
+            UPDATE
+            hpeapm."audit_elements_operation_steps"
+            SET
+            "status" = '0',
+            continue_to_enter = '0',
+            current_input = '0',
+            type_of_information='模型信息预览'
+            WHERE
+            audit_model_number= '%'||#{auditModelNumber}||'%'
+            and delete_status='1'
+        </if>
+        <if test="status != 0">
+            UPDATE
+            hpeapm."audit_elements_operation_steps"
+            SET
+            type_of_information= '%'||#{typeOfInformation}||'%'
+            WHERE
+            audit_model_number= '%'||#{auditModelNumber}||'%'
+            and delete_status='1'
+        </if>
+    </update>
+
+
+    <!--修改节点信息的时候修改信息值-->
+    <update id="updatePersonalCenterMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        UPDATE
+            hpeapm."audit_elements_operation_steps"
+        SET dock_people= '%'||#{dockPeople}||'%',
+            dock_phone= '%'||#{dockPhone}||'%',
+            write_time= '%'||#{writeTime}||'%',
+            dock_department= '%'||#{dockDepartment}||'%'
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          and information_type  like '%'||#{informationType}||'%'
+          and delete_status = '1'
+    </update>
+
+    <!--删除的时候修改删除标识以及复原其他的节点的状态值-->
+    <update id="updateMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        UPDATE
+            hpeapm."audit_elements_operation_steps"
+        SET continue_to_enter = '%'||#{continueToEnter}||'%',
+            "status"           = '%'||#{status}||'%',
+            current_input      = '%'||#{currentInput}||'%'
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          AND delete_status != '0'
+    </update>
+
+    <!--删除的时候修改删除标识以及复原其他的节点的状态值-->
+    <update id="updatePersonalCenterDeleteStatus" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        <if test="status== 0">
+            UPDATE
+            hpeapm."audit_elements_operation_steps"
+            SET
+            "status" =
+            CASE
+            WHEN information_type = '审计模型设计'
+            THEN '1'
+            WHEN information_type = '审计模型来源信息'
+            THEN '2'
+            WHEN information_type = '数据支撑能力'
+            THEN '3'
+            WHEN information_type = '审计模型部署'
+            THEN '4'
+            ELSE '0'
+            END,
+            current_input =
+            CASE
+            WHEN information_type = '审计模型设计'
+            THEN '1'
+            WHEN information_type = '审计模型来源信息'
+            THEN '2'
+            WHEN information_type = '数据支撑能力'
+            THEN '3'
+            WHEN information_type = '审计模型部署'
+            THEN '4'
+            ELSE '0'
+            END,
+            continue_to_enter =
+            CASE
+            WHEN information_type = '审计模型设计'
+            THEN '2'
+            WHEN information_type = '审计模型来源信息'
+            THEN '3'
+            WHEN information_type = '数据支撑能力'
+            THEN '4'
+            WHEN information_type = '审计模型部署'
+            THEN '5'
+            ELSE '0'
+            END,
+            type_of_information= '%'||#{typeOfInformation}||'%'
+            WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+            and delete_status !='0'
+        </if>
+
+        <if test="status != 0">
+            UPDATE
+            hpeapm."audit_elements_operation_steps"
+            SET
+            type_of_information= '%'||#{typeOfInformation}||'%'
+            WHERE
+            audit_model_number= '%'||#{auditModelNumber}||'%'
+            and delete_status='1'
+        </if>
+    </update>
+
+
+    <!--修改删除状态值-->
+    <update id="updatePersonalCenterdeleteStatusJd" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        UPDATE
+            hpeapm."audit_elements_operation_steps"
+        SET delete_status='0'
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          and information_type  like '%'||#{informationType}||'%'
+          and delete_status = '1'
+    </update>
+
+
+    <select id="getWriteTimeByAuditModelNumber" parameterType="java.lang.String" resultMap="PersonalCenterMap">
+        SELECT write_time
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          AND delete_status = '1'
+          and "status" = '2'
+    </select>
+
+
+    <select id="selectStatusCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(*) 'COUNT'
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE delete_status = '1'
+          AND audit_model_number  like '%'||#{pointModelNumber}||'%'
+          AND information_type  like '%'||#{typeOfInformation}||'%'
+    </select>
+
+
+    <select id="selectCenterCount" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
+            resultType="java.lang.String">
+        SELECT COUNT(*) con
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          AND delete_status!=0
+    </select>
+
+
+    <delete id="deleteInfoMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        DELETE
+        FROM hpeapm."audit_elements_info"
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+    </delete>
+
+
+    <update id="updateEndUpdateTime" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        UPDATE
+            hpeapm."audit_elements_operation_steps"
+        SET end_createtime = CURRENT_TIMESTAMP
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+    </update>
+
+
+    <!--修改删除状态值-->
+    <update id="deleteModelMessageSp" parameterType="java.lang.String">
+        UPDATE
+            hpeapm."audit_elements_operation_steps"
+        SET delete_status='0'
+        WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
+          and delete_status = '1'
+    </update>
+
+
+    <select id="selectUser" resultType="java.lang.String">
+        SELECT dock_dept AS "user"
+        FROM hpeapm."spl_model_type"
+        WHERE audit_model_number  like '%'||#{audit_model_number}||'%'
+    </select>
+
+
+    <select id="getUserModel" resultType="com.cxsj.mxzd.pojo.PersonalCenter">
+        SELECT dock_phone      AS dockPhone,
+               dock_people     AS dockPeople,
+               dock_department AS dockDepartment
+        FROM hpeapm."audit_elements_operation_steps"
+        WHERE information_type = '审计模型部署'
+          AND audit_model_number  like '%'||#{auditModelNumber}||'%'
+          AND delete_status != '0'
+    </select>
+
+
+    <select id="selectMaintenPointNames" resultType="java.util.Map">
+        SELECT DISTINCT b."audit_point_name" AS "label",
+                        b."audit_point_name" AS "value"
+        FROM
+            hpeapm.spl_mainten_db a
+                LEFT JOIN hpeapm.audit_elements_info b
+                          ON a."model_no" = b."audit_model_number"
+        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b."audit_point_name" IS NOT NULL
+    </select>
+
+    <select id="selectMaintenmodelNames" resultType="java.util.Map">
+        SELECT DISTINCT b."audit_model_name" AS "auditModelNumber",
+                        b."audit_model_name" AS "auditModelName"
+        FROM hpeapm.spl_mainten_db a
+                 LEFT JOIN hpeapm.audit_elements_info b
+                           ON a."model_no" = b."audit_model_number"
+        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b."audit_point_name" IS NOT NULL
+    </select>
+
+
+
+</mapper>

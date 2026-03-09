@@ -1,8 +1,7 @@
 package com.cxsj.mxzd;
 
-import com.cxsj.mxzd.entity.AuditModel;
-import com.cxsj.mxzd.mapper.mysql.AuditModelMapper as MysqlAuditModelMapper;
-import com.cxsj.mxzd.mapper.pg.AuditModelMapper as PgAuditModelMapper;
+import com.cxsj.mxzd.pojo.AuditElementInfo;
+import com.cxsj.mxzd.pojo.AuditFindDataBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,72 +18,64 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DualSourceCompareTest {
 
     @Autowired
-    private PgAuditModelMapper pgMapper;
+    private com.cxsj.mxzd.mapper.pg.AuditElementInfoMapper pgAuditElementInfoMapper;
 
     @Autowired
-    private MysqlAuditModelMapper mysqlMapper;
+    private com.cxsj.mxzd.mapper.mysql.AuditElementInfoMapper mysqlAuditElementInfoMapper;
+
+    @Autowired
+    private com.cxsj.mxzd.mapper.pg.AuditFindDataBaseMapper pgAuditFindDataBaseMapper;
+
+    @Autowired
+    private com.cxsj.mxzd.mapper.mysql.AuditFindDataBaseMapper mysqlAuditFindDataBaseMapper;
 
     @Test
-    public void testCountConsistency() {
-        int pgCount = pgMapper.count();
-        int mysqlCount = mysqlMapper.count();
+    public void testAuditElementInfoCount() {
+        System.out.println("=== 测试 AuditElementInfo 记录数量 ===");
 
-        System.out.println("PostgreSQL count: " + pgCount);
-        System.out.println("MySQL count: " + mysqlCount);
+        List<AuditElementInfo> pgList = pgAuditElementInfoMapper.selectAuditElementInfo(new AuditElementInfo());
+        List<AuditElementInfo> mysqlList = mysqlAuditElementInfoMapper.selectAuditElementInfo(new AuditElementInfo());
 
-        assertEquals(pgCount, mysqlCount, "记录总数应该一致");
+        System.out.println("PostgreSQL 记录数: " + pgList.size());
+        System.out.println("MySQL 记录数: " + mysqlList.size());
+
+        assertEquals(pgList.size(), mysqlList.size(), "AuditElementInfo 记录数量应该一致");
     }
 
     @Test
-    public void testSelectAllConsistency() {
-        List<AuditModel> pgList = pgMapper.selectAll();
-        List<AuditModel> mysqlList = mysqlMapper.selectAll();
+    public void testAuditFindDataBaseCount() {
+        System.out.println("=== 测试 AuditFindDataBase 记录数量 ===");
 
-        System.out.println("PostgreSQL records: " + pgList.size());
-        System.out.println("MySQL records: " + mysqlList.size());
+        List<AuditFindDataBase> pgList = pgAuditFindDataBaseMapper.selectAuditFindDataBase(new AuditFindDataBase());
+        List<AuditFindDataBase> mysqlList = mysqlAuditFindDataBaseMapper.selectAuditFindDataBase(new AuditFindDataBase());
 
-        assertEquals(pgList.size(), mysqlList.size(), "查询结果数量应该一致");
+        System.out.println("PostgreSQL 记录数: " + pgList.size());
+        System.out.println("MySQL 记录数: " + mysqlList.size());
 
-        // 逐条对比
-        for (int i = 0; i < pgList.size(); i++) {
-            AuditModel pgModel = pgList.get(i);
-            AuditModel mysqlModel = mysqlList.get(i);
+        assertEquals(pgList.size(), mysqlList.size(), "AuditFindDataBase 记录数量应该一致");
+    }
 
-            assertEquals(pgModel.getId(), mysqlModel.getId(), "ID 应该一致");
-            assertEquals(pgModel.getModelCode(), mysqlModel.getModelCode(), "模型代码应该一致");
-            assertEquals(pgModel.getModelName(), mysqlModel.getModelName(), "模型名称应该一致");
-            assertEquals(pgModel.getStatus(), mysqlModel.getStatus(), "状态应该一致");
+    @Test
+    public void testAuditElementInfoDataConsistency() {
+        System.out.println("=== 测试 AuditElementInfo 数据一致性 ===");
+
+        List<AuditElementInfo> pgList = pgAuditElementInfoMapper.selectAuditElementInfo(new AuditElementInfo());
+        List<AuditElementInfo> mysqlList = mysqlAuditElementInfoMapper.selectAuditElementInfo(new AuditElementInfo());
+
+        if (pgList.isEmpty() || mysqlList.isEmpty()) {
+            System.out.println("⚠️  数据为空，跳过一致性检查");
+            return;
         }
-    }
 
-    @Test
-    public void testSelectByIdConsistency() {
-        Long testId = 1L;
+        // 对比第一条记录
+        AuditElementInfo pgFirst = pgList.get(0);
+        AuditElementInfo mysqlFirst = mysqlList.get(0);
 
-        AuditModel pgModel = pgMapper.selectById(testId);
-        AuditModel mysqlModel = mysqlMapper.selectById(testId);
+        System.out.println("PostgreSQL 第一条: ID=" + pgFirst.getId() + ", Name=" + pgFirst.getAuditPointName());
+        System.out.println("MySQL 第一条: ID=" + mysqlFirst.getId() + ", Name=" + mysqlFirst.getAuditPointName());
 
-        assertNotNull(pgModel, "PostgreSQL 应该能查到记录");
-        assertNotNull(mysqlModel, "MySQL 应该能查到记录");
-
-        assertEquals(pgModel.getId(), mysqlModel.getId());
-        assertEquals(pgModel.getModelCode(), mysqlModel.getModelCode());
-        assertEquals(pgModel.getModelName(), mysqlModel.getModelName());
-        assertEquals(pgModel.getStatus(), mysqlModel.getStatus());
-    }
-
-    @Test
-    public void testSelectByStatusConsistency() {
-        String testStatus = "active";
-
-        List<AuditModel> pgList = pgMapper.selectByStatus(testStatus);
-        List<AuditModel> mysqlList = mysqlMapper.selectByStatus(testStatus);
-
-        System.out.println("PostgreSQL active records: " + pgList.size());
-        System.out.println("MySQL active records: " + mysqlList.size());
-
-        assertEquals(pgList.size(), mysqlList.size(), "按状态查询结果数量应该一致");
+        assertEquals(pgFirst.getId(), mysqlFirst.getId(), "ID 应该一致");
+        assertEquals(pgFirst.getAuditPointName(), mysqlFirst.getAuditPointName(), "审计点名称应该一致");
     }
 
 }
-

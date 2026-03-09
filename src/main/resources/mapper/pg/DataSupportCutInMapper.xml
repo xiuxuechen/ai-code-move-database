@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.pg.DataSupportCutInMapper">
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.DataCutInfo" id="AuditCutInMap">
+
+        <result property="id" column="id"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="dataContentDescriptionXq" column="data_content_description_xq"/>
+        <result property="involvedSystem" column="involved_system"/>
+        <result property="scopeOfDataXq" column="scope_of_data_xq"/>
+    </resultMap>
+
+
+    <!-- <resultMap type="com.cxsj.mxzd.pojo.AuditElementIsNotEmpty" id="AuditCutInIsNotMap">
+
+         <result property="id" column="id" />
+         <result property="auditModelNumber" column="audit_model_number" />
+         <result property="existingDataOfModelId" column="existing_data_of_model" />
+         <result property="remark" column="remark" />
+     </resultMap>-->
+
+    <!--获取数据接入需求的数据 -->
+    <select id="getSupportCutIn" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="AuditCutInMap">
+        SELECT *
+        FROM
+        hpeapm.audit_elements_data_cut_in
+        WHERE 1=1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number=like '%'||#{auditModelNumber}||'%'
+        </if>
+        AND isdel=1
+    </select>
+
+
+    <!--获取数据接入需求的数据 -->
+    <!--    <select id="getSupportCutInPojo" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam" resultMap="AuditCutInIsNotMap">
+            SELECT existing_data_of_model,remark
+            FROM
+            hpeapm.audit_elements_data_cut_in
+            WHERE 1=1
+            <if test="auditModelNumber != null and auditModelNumber !=''">
+                AND audit_model_number=like '%'||#{auditModelNumber}||'%'
+            </if>
+            AND isdel=1 AND remark is not null and  remark !=''  limit 1
+        </select>-->
+
+
+    <!--根据模型编号修改数据能力支撑数据资产管理-->
+    <update id="updateAuditCutInDataBase" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        UPDATE hpeapm.audit_elements_data_cut_in
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dataContentDescriptionXq != null  and dataContentDescriptionXq != ''">
+                data_content_description_xq=like '%'||#{dataContentDescriptionXq}||'%',
+            </if>
+            <if test="involvedSystem != null  and involvedSystem != ''">involved_system=like '%'||#{involvedSystem}||'%',</if>
+            <if test="scopeOfDataXq != null  and scopeOfDataXq != ''">scope_of_data_xq=like '%'||#{scopeOfDataXq}||'%',</if>
+            <if test="isdel != null  and isdel != ''">isdel,</if>
+        </trim>
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        </if>
+        <if test="id != null and id !=''">
+            AND id=like '%'||#{id}||'%'
+        </if>
+    </update>
+
+    <!--插入数据能力支撑数据资产管理-->
+    <insert id="insertAuditCutInDataBase" parameterType="com.cxsj.mxzd.pojo.DataCutInfo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into hpeapm.audit_elements_data_cut_in
+        (data_content_description_xq,
+        involved_system,
+        audit_model_number,
+        scope_of_data_xq,
+        isdel)
+        VALUE
+        (like '%'||#{dataContentDescriptionXq}||'%',
+        like '%'||#{involvedSystem}||'%',
+        like '%'||#{auditModelNumber}||'%',
+        like '%'||#{scopeOfDataXq}||'%',
+        1);
+    </insert>
+
+
+    <!--新增，修改，或者删除审计支撑的时候先将审计支撑所有数据状态置位0-->
+    <update id="updateAuditCutInDeleteStatus" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        UPDATE hpeapm.audit_elements_data_cut_in set isdel=0
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        </if>
+    </update>
+
+
+    <!--新增，修改，或者删除审计支撑的时候先将审计支撑所有数据状态置位0-->
+    <delete id="deleteAuditSuppInCut" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+   delete from  hpeapm.audit_supp_in_cut     WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        </if>
+    </delete>
+
+
+    <!--根据模型编号修改数据能力支撑数据资产管理-->
+    <!--  <update id="updateCutInRamk" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+          UPDATE hpeapm.audit_elements_data_cut_in set  remark=like '%'||#{remark}||'%',existing_data_of_model=like '%'||#{existingDataOfModelId}||'%'
+          <if test="auditModelNumber != null and auditModelNumber !=''">
+              WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+          </if>
+        AND isdel=1
+      </update>-->
+
+
+    <!--插入数据能力支撑数据资产管理-->
+    <!--    <insert id="insertAuditCutInData" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+            insert into hpeapm.audit_elements_data_cut_in
+            (data_content_description_xq,
+            involved_system,
+            audit_model_number,
+            scope_of_data_xq,
+            existing_data_of_model,
+            remark,
+            isdel)
+            VALUE
+            (like '%'||#{dataContentDescriptionXq}||'%',
+            like '%'||#{involvedSystem}||'%',
+            like '%'||#{auditModelNumber}||'%',
+            like '%'||#{scopeOfDataXq}||'%',
+            like '%'||#{existingDataOfModelId}||'%',
+            like '%'||#{remark}||'%',1);
+        </insert>-->
+
+
+    <!--插入数据能力支撑数据资产管理和数据接入情况的中间表-->
+    <insert id="insertSupportInCut" parameterType="com.cxsj.mxzd.pojo.SupportInCutInfo" >
+        insert into hpeapm.audit_supp_in_cut
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="suppId != null and suppId !=''">supp_id,</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number,</if>
+            <if test="cutId != null  and cutId != ''">cut_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="suppId != null and suppId !=''">like '%'||#{suppId}||'%',</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%',</if>
+            <if test="cutId != null and cutId !=''">like '%'||#{cutId}||'%',</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateSupportInCut" parameterType="com.cxsj.mxzd.pojo.DataCutInfo">
+        UPDATE hpeapm.audit_supp_in_cut set cut_id=like '%'||#{cutId}||'%'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        </if>
+        <if test="suppId != null and suppId !=''">
+            and supp_id = like '%'||#{suppId}||'%'
+        </if>
+    </update>
+
+
+</mapper>
+
+

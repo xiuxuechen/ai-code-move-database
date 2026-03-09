@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 模型字典审批 -->
+<mapper namespace="auditModelExamMapper">
+
+
+    <!--新增待办-->
+    <insert id="insertDbMsg" parameterType="com.cxsj.mxzd.pojo.spl.ExamModelPojo">
+        INSERT INTO spl_business_db (model_no,
+                                              exam_time,
+                                              exam_id,
+                                              db_deputy,
+                                              db_type) VALUES (like CONCAT('%', #{auditModelNumber}, '%'), CURRENT_TIMESTAMP, like CONCAT('%', #{examinID}, '%'), like CONCAT('%', #{deputyAccountNumber}, '%'),like CONCAT('%', #{dbType}, '%'))
+    </insert>
+
+
+    <!--新增待办-->
+    <insert id="insertsplMaintenDb" parameterType="com.cxsj.mxzd.pojo.spl.ExamModelPojo">
+        INSERT INTO spl_mainten_db (model_no,
+                                             exam_time,
+                                             exam_id,
+                                             role_id) VALUES (like CONCAT('%', #{auditModelNumber}, '%'), CURRENT_TIMESTAMP, like CONCAT('%', #{examinID}, '%'), like CONCAT('%', #{deputyAccountNumber}, '%'))
+    </insert>
+
+    <!--新增待阅-->
+    <insert id="insertDyMsg" parameterType="com.cxsj.mxzd.pojo.spl.ExamModelPojo">
+        INSERT INTO spl_business_dy (model_no,
+                                              dy_time,
+                                              exam_id,
+                                              dy_deputy,
+                                              pro_id) VALUES (like CONCAT('%', #{auditModelNumber}, '%'), CURRENT_TIMESTAMP, like CONCAT('%', #{examinID}, '%'), like CONCAT('%', #{deputyAccountNumber}, '%'),like CONCAT('%', #{proId}, '%'))
+    </insert>
+
+
+    <!--查询模型的所属部门-->
+    <select id="getModelPrvd" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a."busiUnitCode" AS prvd
+        FROM hpmgr."bonc_union_userinfos" a
+        WHERE a."deputyAccountNumber" = like CONCAT('%', #{deputyAccountNumber}, '%')
+    </select>
+
+
+    <!--查询模型的所属部门(待阅)-->
+    <select id="getDyModelPrvd" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT b."prvd_code" AS prvd
+        FROM "spl_model_type" a
+                 LEFT JOIN "map_bonc_gl" b
+                           ON a."dock_dept" = b."prvd_jc"
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="selectDockerPrvd" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        SELECT
+        CASE
+        WHEN a.busiUnitCode = 'CM000'
+        THEN '集团公司'
+        ELSE b.org_name
+        END AS prvd
+        FROM
+        hpmgr.bonc_union_userinfos a
+        LEFT JOIN hpmgr.bonc_cmwa_prvd b
+        ON a.busiUnitCode = b.org_code
+        WHERE a.userName = like CONCAT('%', #{dockPeople}, '%')
+        <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
+            AND like CONCAT('%', #{dockDepartment}, '%') LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+        </if>
+        LIMIT 1
+    </select>
+
+    <select id="selectUserDockerPrvd" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        SELECT CASE
+                   WHEN a.busiUnitCode = 'CM000'
+                       THEN '集团公司'
+                   ELSE b.org_name
+                   END AS prvd
+        FROM hpmgr.bonc_union_userinfos a
+                 LEFT JOIN hpmgr.bonc_cmwa_prvd b
+                           ON a.busiUnitCode = b.org_code
+        WHERE a.userName = like CONCAT('%', #{dockPeople}, '%')
+
+          AND like CONCAT('%', #{dockDepartment}, '%') LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+            LIMIT 1
+    </select>
+
+
+    <select id="selecPrvd" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        aa.busiUnitCode,
+        aa.provinceName,
+        aa.orgCode,
+        aa.orgName
+        FROM
+        hpmgr.bonc_union_orginfos aa
+        WHERE 1 = 1
+        <if test="orgName!=null and orgName!=''">
+            AND aa.orgName LIKE '%' || like CONCAT('%', #{orgName}, '%') || '%'
+        </if>
+        AND like CONCAT('%', #{prvdName}, '%') LIKE '%' || REPLACE(REPLACE(aa.provinceName, '公司', ''), '总部', '') || '%'
+        LIMIT 1
+    </select>
+
+
+    <select id="selectUserMsg" resultType="java.util.Map" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
+        SELECT
+        CASE
+        WHEN a.busiUnitCode = 'CM000'
+        THEN '集团公司'
+        ELSE b.org_name
+        END AS prvd,
+        a.userName,
+        a.userMobile,
+        a.deputyAccountNumber
+        FROM
+        hpmgr.bonc_union_userinfos a
+        LEFT JOIN hpmgr.bonc_cmwa_prvd b
+        ON a.busiUnitCode = b.org_code
+        WHERE a.userName = like CONCAT('%', #{dockPeople}, '%')
+        <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
+            AND like CONCAT('%', #{dockDepartment}, '%') LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <!--查询该模型的所有审批用户-->
+    <select id="selectModelSpUser" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT d."deputyAccountNumber" AS "value",
+               d."userName"            AS "label"
+        FROM "map_role_mapping" a
+                 LEFT JOIN hpmgr."bonc_user_role_info" b
+                           ON a."bonc_role" = b."role_name"
+                 LEFT JOIN hpmgr."bonc_union_userinfos" d
+                           ON b."deputy_accountNumber" = d."deputyAccountNumber"
+        WHERE a."map_role" = like CONCAT('%', #{roleName}, '%')
+          AND d."busiUnitCode" = like CONCAT('%', #{prvd}, '%')
+          and d."deputyAccountNumber" is not null
+    </select>
+
+
+    <!--获取默认审批人的统一用户副账号-->
+    <select id="selectDefaultSpUser" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a."def_exam_userDept" AS defaultUser
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取默认审批人的统一用户副账号-->
+    <select id="selectOneDefaultSpUser" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a."def_exam_userDept" AS defaultUserDepy,
+               a."def_exam_user"     AS defaultUser
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <!--获取默认审批人的统一用户副账号-->
+    <select id="getTwoReplyUserDepy" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a."def2_exam_userdepy" AS default2UserDepy,
+               a."def2_exam_user"     AS default2User
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="selectDefultMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a."def_exam_userDept" AS defaultUserDepy,
+               a."def_exam_user"     AS defaultUser,
+               a."def2_exam_user"       default2User,
+               a."def2_exam_userdepy"   default2UserDepy,
+               a."share_user"        AS shareUser,
+               a."share_user_depy"   AS shareUserDepy
+        FROM "spl_model_type" a
+        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+    </select>
+
+
+    <select id="selectDockerUserDeputy" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a."deputyAccountNumber" AS deputy
+        FROM hpmgr."bonc_union_userinfos" a
+        WHERE a."userName" = like CONCAT('%', #{userName}, '%') LIMIT 1
+    </select>
+
+
+    <!--获取某一个用户的详细信息-->
+    <select id="selectUserDeputyMsg" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT a."userName"            AS userName,
+               a."deputyAccountNumber" AS deputy
+        FROM hpmgr."bonc_union_userinfos" a
+        WHERE deputyAccountNumber = like CONCAT('%', #{defExamUser}, '%')
+    </select>
+
+
+    <!--查询对应角色的所有用户信息-->
+    <select id="selectModelDyUser" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT
+        c."deputyAccountNumber" AS "deputyAccountNumber"
+        FROM
+        "map_role_mapping" a
+        LEFT JOIN hpmgr."bonc_user_role_info" b
+        ON a."bonc_role" = b."role_name"
+        LEFT JOIN hpmgr."bonc_union_userinfos" c
+        ON b."deputy_accountNumber" = c."deputyAccountNumber"
+        WHERE c."deputyAccountNumber" IS NOT NULL
+        and a."map_role" IN
+        <foreach collection="roles" item="role" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{role}, '%')
+        </foreach>
+    </select>
+
+
+    <!--更改待办状态-->
+    <update id="updateDbType" parameterType="java.util.Map">
+        UPDATE
+        "spl_business_db" a
+        SET
+        a."is_del" = '0'
+        WHERE 1=1
+        <if test="auditModelNumber!= null and auditModelNumber !='' ">
+            AND a."model_no" =like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="id!= null and id !='' ">
+            AND a."db_id"=like CONCAT('%', #{id}, '%')
+        </if>
+        <if test="examinID!= null and examinID !='' ">
+            AND a."exam_id"=like CONCAT('%', #{examinID}, '%')
+        </if>
+    </update>
+
+
+    <!--更改待阅状态-->
+    <update id="updateDyType" parameterType="java.util.Map">
+        UPDATE
+        "spl_business_dy" a
+        SET
+        a."is_del" = '0'
+        WHERE 1=1
+        <if test="auditModelNumber!= null and auditModelNumber !='' ">
+            AND a."model_no" =like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="id!= null and id !='' ">
+            AND a."dy_id"=like CONCAT('%', #{id}, '%')
+        </if>
+        <if test="examinID!= null and examinID !='' ">
+            AND a."exam_id"=like CONCAT('%', #{examinID}, '%')
+        </if>
+    </update>
+
+
+    <!--查询一个审计模型发起人用户信息-->
+    <select id="selectModelSubmetUser" resultType="java.lang.String"
+            parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam">
+        SELECT a."sub_depy" AS subDepy
+        FROM "spl_business_examine" a
+        WHERE id = like CONCAT('%', #{examinID}, '%')
+    </select>
+
+
+    <select id="selectModelsExamMsg" resultType="com.cxsj.mxzd.pojo.spl.ExamPojp"
+            parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        SELECT
+        a."db_id" AS dbId,
+        b.id AS examId,
+        b.audit_model_number AS auditModelNumber,
+        b.submit_user AS submitUser,
+        b.sub_depy AS submitUserDepy,
+        b.submit_time AS writeTime,
+        b.submit_remarks AS submitRemarks,
+        b.examine_user AS examineUser,
+        b.exam_depy AS examineUserDepy,
+        b.examine_dept AS examineUserDept,
+        b.examine_time AS examineTime,
+        b.examine_type AS examineType,
+        b.examine_result AS examineResult,
+        b.workItem_Id as workId,
+        b.examine_category AS examineCategory,
+        b.now_category AS nowCategoty
+        FROM
+        "spl_business_db" a
+        LEFT JOIN "spl_business_examine" b
+        ON a."exam_id" = b."id"
+        WHERE a.db_id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+    </select>
+
+
+    <!--更改待办说明-->
+    <update id="updateDbRemarks" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        UPDATE
+        "spl_business_db" a
+        SET
+        a."exam_remarks" = like CONCAT('%', #{remarks}, '%')
+        WHERE a."db_id" in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+
+    </update>
+
+
+    <!--更改待办数据-->
+    <update id="updateYbMsg" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        UPDATE
+        "spl_business_dy" a
+        SET a."dy_remarks"=like CONCAT('%', #{remarks}, '%'),
+        a."is_del"='0'
+        WHERE a."dy_id" in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+
+    </update>
+
+
+    <select id="selectDbCount" resultType="java.lang.Integer" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        SELECT
+        COUNT(*) AS "count"
+        FROM
+        "spl_business_db"
+        WHERE is_del = '0'
+        AND db_id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+    </select>
+
+
+    <select id="selectYbProIds" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        SELECT
+        pro_id
+        FROM
+        "spl_business_dy"
+        WHERE is_del = '1'
+        AND pro_id IS NOT NULL
+        AND dy_id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+    </select>
+
+
+    <select id="selectYbCount" resultType="java.lang.Integer" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
+        SELECT
+        COUNT(*) AS "count"
+        FROM
+        "spl_business_dy"
+        WHERE is_del = '0'
+        AND dy_id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            like CONCAT('%', #{id}, '%')
+        </foreach>
+    </select>
+
+
+</mapper>

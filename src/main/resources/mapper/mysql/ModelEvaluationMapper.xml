@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="ModelEvaluationMapper">
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementInfo" id="AuditElementInfoMap">
+        <result property="id" column="id"/>
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="auditPointNumber" column="auditPointNumber"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="auditModelName" column="auditModelName"/>
+        <result property="dockPeople" column="dockPeople"/>
+        <result property="dockDepartment" column="dockDepartment"/>
+        <result property="primaryBusinessProcess" column="primaryBusinessProcess"/>
+        <result property="secondaryBusinessProcess" column="secondaryBusinessProcess"/>
+        <result property="auditBusinessLogic" column="auditBusinessLogic"/>
+        <result property="subordinateToSystem" column="subordinateToSystem"/>
+        <result property="modelCode" column="modelCode"/>
+        <result property="auditModelDescribe" column="auditModelDescribe"/>
+        <result property="isOnline" column="isOnline"/>
+        <result property="modelingMethod" column="modelingMethod"/>
+        <result property="assessmentResult" column="assessmentResult"/>
+        <result property="modelAssessmentRemarks" column="modelAssessmentRemarks"/>
+        <result property="modelDevelopmentLogic" column="modelDevelopmentLogic"/>
+        <result property="stayDevelopmentContent" column="stayDevelopmentContent"/>
+        <result property="progressTheDevelopment" column="progressTheDevelopment"/>
+        <result property="expectedCompletionTime" column="expectedCompletionTime"/>
+        <result property="conditionsStillLacking" column="conditionsStillLacking"/>
+        <result property="modelDevelopmentRemarks" column="modelDevelopmentRemarks"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="modelState" column="modelState"/>
+        <result property="remark" column="remark"/>
+        <result property="runningMode" column="runningMode"/>
+        <result column="remark" property="remark"/>
+        <result property="typeOfInformation" column="typeOfInformation"/>
+        <result property="detailedTime" column="detailedTime"/>
+        <result property="subordinateToSystem" column="subordinateToSystem"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="primaryBusinessProcess" column="primary_business_process"/>
+        <result property="secondaryBusinessProcess" column="secondary_business_process"/>
+        <result property="writeTime" column="writeTime"/>
+        <result property="dataContentDescription" column="data_content_description"/>
+        <result property="isdel" column="isdel"/>
+        <result property="dataContentDescription" column="data_content_description"/>
+        <result property="auditModelDescribe" column="audit_model_describe"/>
+        <result property="subordinateToSystem" column="subordinate_to_system"/>
+        <result property="modelCode" column="model_code"/>
+        <result property="auditBusinessLogic" column="audit_business_logic"/>
+        <result property="auditModelBusinessLogic" column="audit_model_business_logic"/>
+        <result property="accessTime" column="access_time"/>
+        <result property="typeOfInformation" column="type_of_information"/>
+        <result property="detailedTime" column="detailed_time"/>
+        <result column="assessment_result" property="assessmentResult"/>
+        <result column="model_assessment_remarks" property="modelAssessmentRemarks"/>
+        <result column="model_development_logic" property="modelDevelopmentLogic"/>
+        <result column="stay_development_content" property="stayDevelopmentContent"/>
+        <result column="progress_the_development" property="progressTheDevelopment"/>
+        <result column="expected_completion_time" property="expectedCompletionTime"/>
+        <result column="conditions_still_lacking" property="conditionsStillLacking"/>
+        <result column="model_development_remarks" property="modelDevelopmentRemarks"/>
+        <result column="model_state" property="modelState"/>
+        <result column="is_online" property="isOnline"/>
+        <result column="remark_bz" property="remark"/>
+        <result column="is_syn" property="isSyn"/>
+        <result column="syn_url" property="synUrl"/>
+        <result column="isSyn" property="isSyn"/>
+        <result column="synUrl" property="synUrl"/>
+        <result column="def_exam_user" property="defExamUser"/>
+        <result column="off_model_library" property="offModelLibrary"/>
+        <result column="model_code_file_id" property="modelCodeFileId"/>
+        <result column="isShare" property="isShare"/>
+        <result column="is_share" property="isShare"/>
+    </resultMap>
+
+    <resultMap id="mdelEvaluationPojoMap" type="com.cxsj.mxzd.pojo.ModelEvaluationPojo">
+        <result column="assessment_result" property="assessmentResult"/>
+        <result column="model_assessment_remarks" property="modelAssessmentRemarks"/>
+        <result column="model_development_logic" property="modelDevelopmentLogic"/>
+        <result column="stay_development_content" property="stayDevelopmentContent"/>
+        <result column="progress_the_development" property="progressTheDevelopment"/>
+        <result column="expected_completion_time" property="expectedCompletionTime"/>
+        <result column="conditions_still_lacking" property="conditionsStillLacking"/>
+        <result column="model_development_remarks" property="modelDevelopmentRemarks"/>
+        <result column="model_state" property="modelState"/>
+        <result column="modeling_method" property="modelingMethod"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="audit_model_number" property="auditModelNumber"/>
+        <result column="def_exam_user" property="defExamUser"/>
+    </resultMap>
+
+    <select id="selectCountModel" resultMap="mdelEvaluationPojoMap">
+        SELECT *
+        FROM audit_elements_model_evaluation
+        WHERE 1 = 1
+          AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+          and is_deleted = 0
+    </select>
+
+    <select id="selectWriteTime" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT write_time
+        FROM audit_elements_operation_steps
+        WHERE audit_model_number = CONCAT('%', #{auditModelNumber}, '%')
+          AND information_type = '审计模型部署'
+          and delete_status = 1
+    </select>
+
+    <select id="getModelEvaluationDataByAuditId" resultMap="mdelEvaluationPojoMap">
+        SELECT a.*,
+               b."def_exam_user" AS "def_exam_user"
+        FROM audit_elements_model_evaluation a
+                 LEFT JOIN spl_model_type b
+                           ON a."audit_model_number" = b."audit_model_number"
+        WHERE 1 = 1
+          AND a.audit_model_number = CONCAT('%', #{auditModelNumber}, '%')
+          AND a.is_deleted = 0
+    </select>
+
+
+    <!-- 查询用户基本信息数据   -->
+    <select id="selectInfoAndStepByAuditModelNumber" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="AuditElementInfoMap">
+        SELECT
+        a.*,
+        b."def_exam_user" AS def_exam_user
+        FROM
+        audit_elements_info AS a
+        LEFT JOIN "spl_model_type" b
+        ON a."audit_model_number" = b."audit_model_number"
+        WHERE 1 = 1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND a.audit_model_number=CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+    </select>
+
+    <select id="selectModelEvaluationList" parameterType="com.cxsj.mxzd.commom.ParamData"
+            resultMap="AuditElementInfoMap">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        _abc.auditPointNumber AS auditPointNumber,
+        _abc.auditPointName AS auditPointName,
+        _abc.auditModelNumber AS auditModelNumber,
+        _abc.auditModelName AS auditModelName,
+        _abc.dockPeople AS dockPeople,
+        _abc.dockDepartment AS dockDepartment,
+        _abc.primaryBusinessProcess AS primaryBusinessProcess,
+        _abc.secondaryBusinessProcess AS secondaryBusinessProcess,
+        _abc.auditBusinessLogic,
+        _abc.subordinateToSystem,
+        _abc.modelCode,
+        _abc.runningMode,
+        _abc.auditModelDescribe,
+        _abc.isOnline,
+        _abc.isSyn,
+        _abc.synUrl as synUrl,
+        ba.assessmentResult,
+        ba.modelAssessmentRemarks,
+        ba.modelDevelopmentLogic,
+        ba.stayDevelopmentContent,
+        ba.progressTheDevelopment,
+        ba.expectedCompletionTime,
+        ba.conditionsStillLacking,
+        ba.modelDevelopmentRemarks,
+        ba.modelState,
+        ba.modelingMethod as modelingMethod,
+        _abc.remark AS remark,
+        _abc.typeOfInformation,
+        _abc.detailedTime,
+        _abc.model_code_file_id AS model_code_file_id,
+        _abc.off_model_library AS off_model_library,
+        _abc.isShare as isShare,
+        _abc.writeTime as writeTime
+        FROM
+        (
+        SELECT
+        b.is_syn as isSyn,
+        b.syn_url as synUrl,
+        b.is_online as isOnline,
+        b.audit_model_describe auditModelDescribe,
+        b.audit_business_logic AS auditBusinessLogic,
+        b.subordinate_to_system AS subordinateToSystem,
+        b.model_code AS modelCode,
+        b.running_mode as runningMode,
+        a.write_time as writeTime,
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        b.model_code_file_id AS model_code_file_id,
+        b.off_model_library AS off_model_library,
+        b.is_share as isShare,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        b.remark remark,
+        a.type_of_information as typeOfInformation,
+        a.detailed_time AS detailedTime
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        information_type,
+        type_of_information,
+        detailed_time,
+        write_time
+        FROM
+        audit_elements_operation_steps
+        WHERE
+        delete_status = '1'
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department like CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="informationType != null and informationType!=''">
+            AND information_type =CONCAT('%', #{informationType}, '%')
+        </if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        ) a
+        JOIN (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        audit_point_number,
+        remark remark,
+        primary_business_process,
+        secondary_business_process,
+        audit_business_logic,
+        subordinate_to_system,
+        model_code,
+        audit_model_describe,
+        is_online,
+        is_syn,
+        syn_url,
+        model_code_file_id,
+        off_model_library,
+        is_share,
+        running_mode
+        FROM
+        "audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <!--  <if test="isImport== null"> AND is_online='1'</if>-->
+        <!-- 一级-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process like '%'||CONCAT('%', #{primaryBusinessProcess}, '%'), '%')
+        </if>
+
+        <!-- 二级-->
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            and secondary_business_process like '%'||CONCAT('%', #{secondaryBusinessProcess}, '%'), '%')
+        </if>
+        <!-- 审计点编号-->
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            and audit_point_number like '%'||CONCAT('%', #{auditPointNumber}, '%'), '%')
+        </if>
+        <!-- 审计点名称-->
+        <if test="auditPointName != null and auditPointName!=''">
+            and audit_point_name like '%'||CONCAT('%', #{auditPointName}, '%'), '%')
+        </if>
+
+        <!-- 审计模型编号-->
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            and audit_model_number like '%'||CONCAT('%', #{auditModelNumber}, '%'), '%')
+        </if>
+
+        <!-- 审计模型名称-->
+        <if test="auditModelName != null and auditModelName!=''">
+            and audit_model_name like '%'||CONCAT('%', #{auditModelName}, '%'), '%')
+        </if>
+        ) b ON a.audit_model_number = b.audit_model_number
+        ORDER BY detailedTime DESC
+        ) _abc
+        LEFT JOIN (
+        SELECT
+        audit_model_number,
+        assessment_result assessmentResult,
+        model_assessment_remarks modelAssessmentRemarks,
+        model_development_logic modelDevelopmentLogic,
+        stay_development_content stayDevelopmentContent,
+        progress_the_development progressTheDevelopment,
+        expected_completion_time expectedCompletionTime,
+        conditions_still_lacking conditionsStillLacking,
+        model_development_remarks modelDevelopmentRemarks,
+        model_state modelState,
+        modeling_method as modelingMethod
+        FROM
+        audit_elements_model_evaluation
+        WHERE 1=1 and is_deleted = 0
+        <!-- 模型评估结果-->
+        <if test="assessmentResult != null">
+            and assessment_result= CONCAT('%', #{assessmentResult}, '%')
+        </if>
+        <!-- 模型开发进度-->
+        <if test="progressTheDevelopment != null">
+            and progress_the_development like CONCAT('%', #{progressTheDevelopment}, '%')
+        </if>
+        ) ba ON _abc.auditModelNumber = ba.audit_model_number
+        ) a
+        WHERE
+        1 = 1 ORDER BY
+        a.detailedTime DESC LIMIT #{size} OFFSET #{page}
+    </select>
+
+    <select id="selectModelEvaluationListCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        COUNT(DISTINCT _abc.auditModelNumber) as result
+        FROM
+        (
+        SELECT
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        b.audit_business_logic AS auditBusinessLogic,
+        b.subordinate_to_system AS subordinateToSystem,
+        b.model_code AS modelCode,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        a.detailed_time as detailedTime,
+        b.remark remark
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        type_of_information,
+        detailed_time
+        FROM
+        audit_elements_operation_steps
+        WHERE
+        information_type = '审计模型部署'
+        AND delete_status = '1'
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department like CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        ) a
+        JOIN (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        audit_point_number,
+        remark remark,
+        primary_business_process,
+        secondary_business_process,
+        audit_business_logic,
+        subordinate_to_system,
+        model_code,
+        running_mode
+        FROM
+        "audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <!--  <if test="isImport== null"> AND is_online='1'</if>-->
+        <!-- 一级-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process like CONCAT('%', #{primaryBusinessProcess}, '%')
+        </if>
+
+        <!-- 二级-->
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            and secondary_business_process like CONCAT('%', #{secondaryBusinessProcess}, '%')
+        </if>
+        <!-- 审计点编号-->
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            and audit_point_number like CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        <!-- 审计点名称-->
+        <if test="auditPointName != null and auditPointName!=''">
+            and audit_point_name like CONCAT('%', #{auditPointName}, '%')
+        </if>
+
+        <!-- 审计模型编号-->
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            and audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+
+        <!-- 审计模型名称-->
+        <if test="auditModelName != null and auditModelName!=''">
+            and audit_model_name like CONCAT('%', #{auditModelName}, '%')
+            escape '|'
+        </if>
+
+        ) b ON a.audit_model_number = b.audit_model_number
+
+        ) _abc
+        LEFT JOIN (
+        SELECT
+        audit_model_number,
+        assessment_result assessmentResult,
+        model_assessment_remarks modelAssessmentRemarks,
+        model_development_logic modelDevelopmentLogic,
+        stay_development_content stayDevelopmentContent,
+        progress_the_development progressTheDevelopment,
+        expected_completion_time expectedCompletionTime,
+        conditions_still_lacking conditionsStillLacking,
+        model_development_remarks modelDevelopmentRemarks,
+        model_state modelState
+        FROM
+        audit_elements_model_evaluation
+        WHERE 1=1 and is_deleted ='0'
+        <!-- 模型评估结果-->
+        <if test="assessmentResult != null">
+            and assessment_result= CONCAT('%', #{assessmentResult}, '%')
+        </if>
+        <!-- 模型开发进度-->
+        <if test="progressTheDevelopment != null">
+            and progress_the_development like CONCAT('%', #{progressTheDevelopment}, '%')
+        </if>
+        ) ba ON _abc.auditModelNumber = ba.audit_model_number
+        ) a
+        WHERE
+        1 = 1
+    </select>
+
+    <!-- 录入   -->
+    <insert id="insertModelEvaluation" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        insert into audit_elements_model_evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assessmentResult != null  and assessmentResult != ''">assessment_result,</if>
+            <if test="modelAssessmentRemarks != null  and modelAssessmentRemarks != ''">model_assessment_remarks,</if>
+            <if test="modelDevelopmentLogic != null  and modelDevelopmentLogic != ''">model_development_logic,</if>
+            <if test="stayDevelopmentContent != null  and stayDevelopmentContent != ''">stay_development_content,</if>
+            <if test="progressTheDevelopment != null  and progressTheDevelopment != ''">progress_the_development,</if>
+            <if test="expectedCompletionTime != null and expectedCompletionTime != ''">expected_completion_time,</if>
+            <if test="conditionsStillLacking != null  and conditionsStillLacking != ''">conditions_still_lacking,</if>
+            <if test="modelDevelopmentRemarks != null  and modelDevelopmentRemarks != ''">model_development_remarks,
+            </if>
+            <if test="modelState != null  and modelState != ''">model_state,</if>
+            <if test="modelingMethod != null  and modelingMethod != ''">modeling_method,</if>
+            <if test="isDeleted != null  and isDeleted != ''">is_deleted,</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assessmentResult != null  and assessmentResult != ''">like CONCAT('%', #{assessmentResult}, '%'),</if>
+            <if test="modelAssessmentRemarks != null  and modelAssessmentRemarks != ''">like CONCAT('%', #{modelAssessmentRemarks}, '%'),</if>
+            <if test="modelDevelopmentLogic != null  and modelDevelopmentLogic != ''">like CONCAT('%', #{modelDevelopmentLogic}, '%'),</if>
+            <if test="stayDevelopmentContent != null  and stayDevelopmentContent != ''">like CONCAT('%', #{stayDevelopmentContent}, '%'),</if>
+            <if test="progressTheDevelopment != null  and progressTheDevelopment != ''">like CONCAT('%', #{progressTheDevelopment}, '%'),</if>
+            <if test="expectedCompletionTime != null and expectedCompletionTime != ''">like CONCAT('%', #{expectedCompletionTime}, '%'),</if>
+            <if test="conditionsStillLacking != null  and conditionsStillLacking != ''">like CONCAT('%', #{conditionsStillLacking}, '%'),</if>
+            <if test="modelDevelopmentRemarks != null  and modelDevelopmentRemarks != ''">like CONCAT('%', #{modelDevelopmentRemarks}, '%'),
+            </if>
+            <if test="modelState != null  and modelState != ''">like CONCAT('%', #{modelState}, '%'),</if>
+            <if test="modelingMethod != null  and modelingMethod != ''">like CONCAT('%', #{modelingMethod}, '%'),</if>
+            <if test="isDeleted != null  and isDeleted != ''">like CONCAT('%', #{isDeleted}, '%'),</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">like CONCAT('%', #{auditModelNumber}, '%')</if>
+        </trim>
+    </insert>
+
+    <!--  修改  -->
+    <update id="updateModelEvaluation">
+        UPDATE audit_elements_model_evaluation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assessmentResult != null">
+                assessment_result=CONCAT('%', #{assessmentResult}, '%'),
+            </if>
+            <if test="modelingMethod != null">
+                modeling_method=CONCAT('%', #{modelingMethod}, '%'),
+            </if>
+            <if test="modelAssessmentRemarks != null">
+                model_assessment_remarks=CONCAT('%', #{modelAssessmentRemarks}, '%'),
+            </if>
+            <if test="modelDevelopmentLogic != null">
+                model_development_logic=CONCAT('%', #{modelDevelopmentLogic}, '%'),
+            </if>
+            <if test="stayDevelopmentContent != null">
+                stay_development_content=CONCAT('%', #{stayDevelopmentContent}, '%'),
+            </if>
+            <if test="progressTheDevelopment != null">
+                progress_the_development=CONCAT('%', #{progressTheDevelopment}, '%'),
+            </if>
+            <if test="expectedCompletionTime != null">
+                expected_completion_time=CONCAT('%', #{expectedCompletionTime}, '%'),
+            </if>
+            <if test="conditionsStillLacking != null">
+                conditions_still_lacking=CONCAT('%', #{conditionsStillLacking}, '%'),
+            </if>
+            <if test="modelDevelopmentRemarks != null">
+                model_development_remarks=CONCAT('%', #{modelDevelopmentRemarks}, '%'),
+            </if>
+            <if test="modelState != null">
+                model_state=CONCAT('%', #{modelState}, '%'),
+            </if>
+            <if test="isDeleted != null">
+                is_deleted=CONCAT('%', #{isDeleted}, '%'),
+            </if>
+            <if test="modelingMethod != null">
+                modeling_method=CONCAT('%', #{modelingMethod}, '%'),
+            </if>
+            <if test="auditModelNumber != null">
+                audit_model_number=CONCAT('%', #{auditModelNumber}, '%')
+            </if>
+        </trim>
+        where audit_model_number = CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <!--  删除（修改当前数据的状态）  -->
+    <update id="deleteModelEvaluation">
+        UPDATE audit_elements_model_evaluation
+        set is_deleted = 1
+        where audit_model_number = CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+    <!-- 导出数据   -->
+    <select id="selectDModelEvaluationExportData"
+            parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="com.cxsj.mxzd.pojo.exportParam.ModelEvaluationExportVo">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        _abc.auditPointNumber AS auditPointNumber,
+        _abc.auditPointName AS auditPointName,
+        _abc.auditModelNumber AS auditModelNumber,
+        _abc.auditModelName AS auditModelName,
+        _abc.dockPeople AS dockPeople,
+        _abc.dockDepartment AS dockDepartment,
+        _abc.primaryBusinessProcess AS primaryBusinessProcess,
+        _abc.secondaryBusinessProcess AS secondaryBusinessProcess,
+        _abc.auditBusinessLogic,
+        _abc.subordinateToSystem,
+        _abc.modelCode,
+        _abc.isSyn,
+        _abc.synUrl,
+        _abc.offModelLibrary,
+        _abc.auditModelDescribe,
+        ba.assessmentResult,
+        ba.modelAssessmentRemarks,
+        ba.modelDevelopmentLogic,
+        ba.stayDevelopmentContent,
+        ba.progressTheDevelopment,
+        ba.expectedCompletionTime,
+        ba.conditionsStillLacking,
+        ba.modelDevelopmentRemarks,
+        ba.modelState,
+        ba.modelingMethod modelingMethod,
+        _abc.remark AS remark,
+        _abc.typeOfInformation,
+        _abc.detailedTime
+        FROM
+        (
+        SELECT
+        b.audit_model_describe auditModelDescribe,
+        b.audit_business_logic AS auditBusinessLogic,
+        b.subordinate_to_system AS subordinateToSystem,
+        b.model_code AS modelCode,
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        b.remark remark,
+        a.type_of_information as typeOfInformation,
+        a.detailed_time AS detailedTime,
+        b.is_syn as isSyn,
+        b.syn_url as synUrl,
+        b.off_model_library as offModelLibrary
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        information_type,
+        type_of_information,
+        detailed_time
+        FROM
+        audit_elements_operation_steps
+        WHERE
+        delete_status = '1' AND information_type ='审计模型部署'
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department like CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="informationType != null and informationType!=''">
+            AND information_type =CONCAT('%', #{informationType}, '%')
+        </if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        ) a
+        JOIN (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        audit_point_number,
+        remark remark,
+        primary_business_process,
+        secondary_business_process,
+        audit_business_logic,
+        subordinate_to_system,
+        model_code,
+        audit_model_describe,
+        CASE
+        WHEN off_model_library='O'
+        THEN ''
+        ELSE if( off_model_library='Y','是','否')
+        END AS off_model_library,
+        is_syn,
+        syn_url
+        FROM
+        "audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <!-- 一级-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process like CONCAT('%', #{primaryBusinessProcess}, '%')
+        </if>
+
+        <!-- 二级-->
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            and secondary_business_process like CONCAT('%', #{secondaryBusinessProcess}, '%')
+        </if>
+        <!-- 审计点编号-->
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            and audit_point_number like CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        <!-- 审计点名称-->
+        <if test="auditPointName != null and auditPointName!=''">
+            and audit_point_name like CONCAT('%', #{auditPointName}, '%')
+        </if>
+
+        <!-- 审计模型编号-->
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            and audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+
+        </if>
+
+        <!-- 审计模型名称-->
+        <if test="auditModelName != null and auditModelName!=''">
+            and audit_model_name like CONCAT('%', #{auditModelName}, '%')
+        </if>
+        ) b ON a.audit_model_number = b.audit_model_number
+        ORDER BY detailedTime DESC
+        ) _abc
+        LEFT JOIN (
+        SELECT
+        audit_model_number,
+        assessment_result assessmentResult,
+        model_assessment_remarks modelAssessmentRemarks,
+        model_development_logic modelDevelopmentLogic,
+        stay_development_content stayDevelopmentContent,
+        progress_the_development progressTheDevelopment,
+        expected_completion_time expectedCompletionTime,
+        conditions_still_lacking conditionsStillLacking,
+        model_development_remarks modelDevelopmentRemarks,
+        model_state modelState,
+        modeling_method as modelingMethod
+        FROM
+        audit_elements_model_evaluation
+        WHERE 1=1 and is_deleted = 0
+        <!-- 模型评估结果-->
+        <if test="assessmentResult != null and assessmentResult != ''">
+            and assessment_result= CONCAT('%', #{assessmentResult}, '%')
+        </if>
+        <!-- 模型开发进度-->
+        <if test="progressTheDevelopment != null and progressTheDevelopment != ''">
+            and progress_the_development like '%'||#{}, '%'),like CONCAT('%', #{progressTheDevelopment}, '%'),like '%'||#{}, '%')
+        </if>
+        ) ba ON _abc.auditModelNumber = ba.audit_model_number
+        ) a
+        WHERE
+        1 = 1 ORDER BY
+        a.detailedTime DESC
+    </select>
+
+
+    <!--更改模型状态为已下线-->
+    <update id="updateModelOfflineType" parameterType="java.lang.String">
+        UPDATE
+            "audit_elements_info" a
+        SET a."offline" = '1'
+        WHERE a."audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <!--更改模型状态为上线-->
+    <update id="updateModelNoOfflineType" parameterType="java.lang.String">
+        UPDATE
+            "audit_elements_info" a
+        SET a."offline" = '0'
+        WHERE a."audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')
+    </update>
+
+
+    <select id="selectByModelNumbers" resultType="java.util.Map" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        SELECT
+        a."model_code" AS modelCode,
+        a."model_code_file_id" AS modelCodeFileId,
+        a."audit_model_name" AS auditModelName,
+        a."audit_model_number" AS auditModelNumber
+        FROM
+        "audit_elements_info" a
+        <where>
+            <if test="auditModelNumberList != null and auditModelNumberList.size() > 0">
+                a."audit_model_number" IN
+                <foreach item="item" index="index" collection="auditModelNumberList"
+                         open="(" separator="," close=")">
+                    like CONCAT('%', #{item}, '%')
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>
+
+

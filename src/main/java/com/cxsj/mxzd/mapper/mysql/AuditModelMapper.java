@@ -1,39 +1,39 @@
 package com.cxsj.mxzd.mapper.mysql;
 
-import com.cxsj.mxzd.entity.AuditModel;
+import com.cxsj.mxzd.pojo.AuditModel;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
- * MySQL 审计模型 Mapper
+ * AuditModelMapper Mapper 接口
+ * 自动生成 - 请勿手动修改
  */
 @Mapper
 public interface AuditModelMapper {
 
     /**
-     * 查询所有审计模型
+     * SELECT 操作: selectAll
      */
     List<AuditModel> selectAll();
 
     /**
-     * 根据 ID 查询
+     * SELECT 操作: selectById
      */
-    AuditModel selectById(@Param("id") Long id);
+    List<AuditModel> selectById();
 
     /**
-     * 根据模型代码查询
+     * SELECT 操作: selectByModelCode
      */
-    AuditModel selectByModelCode(@Param("modelCode") String modelCode);
+    List<AuditModel> selectByModelCode();
 
     /**
-     * 根据状态查询
+     * SELECT 操作: selectByStatus
      */
-    List<AuditModel> selectByStatus(@Param("status") String status);
+    List<AuditModel> selectByStatus();
 
     /**
-     * 统计总数
+     * SELECT 操作: count
      */
     int count();
 
