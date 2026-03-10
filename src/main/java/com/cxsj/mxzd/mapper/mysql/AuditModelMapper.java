@@ -1,6 +1,6 @@
 package com.cxsj.mxzd.mapper.mysql;
 
-import com.cxsj.mxzd.pojo.AuditModel;
+import com.cxsj.mxzd.entity.AuditModel;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
