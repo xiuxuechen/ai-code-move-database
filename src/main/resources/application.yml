@@ -5,7 +5,7 @@ spring:
   # PostgreSQL 数据源配置
   datasource:
     postgresql:
-      jdbc-url: jdbc:postgresql://localhost:5432/mxzd_audit
+      jdbc-url: jdbc:postgresql://localhost:5432/hpeapm
       username: mxzd_user
       password: mxzd_password
       driver-class-name: org.postgresql.Driver
@@ -18,7 +18,7 @@ spring:
 
     # MySQL 数据源配置
     mysql:
-      jdbc-url: jdbc:mysql://localhost:3306/mxzd_audit?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+      jdbc-url: jdbc:mysql://localhost:3306/mxzd_db_mysql?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
       username: mxzd_user
       password: mxzd_password
       driver-class-name: com.mysql.cj.jdbc.Driver
