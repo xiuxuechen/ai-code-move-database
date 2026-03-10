@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.pg.PgAuditHandoverModelMapper">
+
+
+    <sql id="AuditHandoverModelVo">
+        select id,
+               audit_point,
+               audit_prospective_point,
+               audit_system_name,
+               audit_system_content,
+               audit_confirmation_findings,
+               audit_model_name_send,
+               audit_model_logic,
+               audit_model_number,
+               create_person,
+               create_time,
+               update_person,
+               update_time,
+               isdel
+        from hpeapm.audit_elements_handover_model
+    </sql>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditHandoverModel" id="AuditHandoverModelMap">
+        <result property="id" column="id"/>
+        <result property="auditPoint" column="audit_point"/>
+        <result property="auditProspectivePoint" column="audit_prospective_point"/>
+        <result property="auditSystemName" column="audit_system_name"/>
+        <result property="auditSystemContent" column="audit_system_content"/>
+        <result property="auditConfirmationFindings" column="audit_confirmation_findings"/>
+        <result property="auditModelNameSend" column="audit_model_name_send"/>
+        <result property="auditModelLogic" column="audit_model_logic"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="createPerson" column="create_person"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updatePerson" column="update_person"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isdel" column="isdel"/>
+
+
+    </resultMap>
+
+
+    <!--查询审计发现库 -->
+    <select id="selectAuditHandoverModel" resultMap="AuditHandoverModelMap">
+        <include refid="AuditHandoverModelVo"/>
+        <where>
+            <if test="id != null ">and id = like '%'||#{id}||'%'</if>
+            <if test="auditPoint != null ">and audit_point like '%' || like '%'||#{auditPoint}||'%' || '%'</if>
+            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">and audit_prospective_point like
+                '%' || like '%'||#{auditProspectivePoint}||'%' || '%'
+            </if>
+            <if test="auditSystemName != null  and auditSystemName != ''">and audit_system_name = like '%'||#{auditSystemName}||'%'
+            </if>
+            <if test="auditSystemContent != null  and auditSystemContent != ''">and audit_system_content like
+                '%' || like '%'||#{auditSystemContent}||'%' || '%'
+            </if>
+            <if test="auditConfirmationFindings != null ">and audit_confirmation_findings =
+                like '%'||#{auditConfirmationFindings}||'%'
+            </if>
+            <if test="auditModelNameSend != null ">and audit_model_name_send = like '%'||#{auditModelNameSend}||'%'</if>
+            <if test="auditModelLogic != null ">and audit_model_logic = like '%'||#{auditModelLogic}||'%'</if>
+            <if test="auditModelNumber != null ">and audit_model_number = like '%'||#{auditModelNumber}||'%'</if>
+            <if test="createPerson != null ">and create_person = like '%'||#{createPerson}||'%'</if>
+            <if test="createTime != null ">and create_time = like '%'||#{createTime}||'%'</if>
+            <if test="updatePerson != null ">and update_person = like '%'||#{updatePerson}||'%'</if>
+            <if test="updateTime != null ">and update_time = like '%'||#{updateTime}||'%'</if>
+            and isdel =1
+        </where>
+    </select>
+
+
+    <!--插入审计库内容-->
+    <insert id="insertAuditHandoverModel" parameterType="com.cxsj.mxzd.pojo.AuditFindDataBase" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into hpeapm.audit_elements_handover_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="auditPoint != null ">audit_point,</if>
+            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">audit_prospective_point,</if>
+            <if test="auditSystemName != null  and auditSystemName != ''">audit_system_name,</if>
+            <if test="auditSystemContent != null  and auditSystemContent != ''">audit_system_content,</if>
+            <if test="auditConfirmationFindings != null">audit_confirmation_findings,</if>
+            <if test="auditModelNameSend != null">audit_model_name_send,</if>
+            <if test="auditModelLogic != null  and auditModelLogic != ''">audit_model_logic,</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number,</if>
+            <if test="createPerson != null  and createPerson != ''">create_person,</if>
+            <!--<if test="createTime != null  and createTime != ''">create_time,</if>-->
+            CURRENT_TIMESTAMP as create_time,
+            <if test="updatePerson != null  and updatePerson != ''">update_person,</if>
+            <!--<if test="updateTime != null  and updateTime != ''">update_time,</if>-->
+            CURRENT_TIMESTAMP as update_time,
+            <if test="isdel != null  and isdel != ''">isdel,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="auditPoint != null ">like '%'||#{auditPoint}||'%',</if>
+            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">like '%'||#{auditProspectivePoint}||'%',</if>
+            <if test="auditSystemName != null  and auditSystemName != ''">like '%'||#{auditSystemName}||'%',</if>
+            <if test="auditSystemContent != null  and auditSystemContent != ''">like '%'||#{auditSystemContent}||'%',</if>
+            <if test="auditConfirmationFindings != null  ">like '%'||#{auditConfirmationFindings}||'%',</if>
+            <if test="auditModelNameSend != null  ">like '%'||#{auditModelNameSend}||'%',</if>
+            <if test="auditModelLogic != null  and auditModelLogic != ''">like '%'||#{auditModelLogic}||'%',</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%',</if>
+            <if test="createPerson != null  and createPerson != ''">like '%'||#{createPerson}||'%',</if>
+            now(),
+            <if test="updatePerson != null  and updatePerson != ''">like '%'||#{updatePerson}||'%',</if>
+            now(),
+            <if test="isdel != null  and isdel != ''">like '%'||#{isdel}||'%',</if>
+
+        </trim>
+    </insert>
+
+    <!--修改-->
+
+    <update id="updateAuditHandoverModel">
+        UPDATE hpeapm.audit_elements_handover_model
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="auditPoint != null ">audit_point=like '%'||#{auditPoint}||'%',</if>
+            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">
+                audit_prospective_point=like '%'||#{auditProspectivePoint}||'%',
+            </if>
+            <if test="auditSystemName != null  and auditSystemName != ''">audit_system_name=like '%'||#{auditSystemName}||'%',</if>
+            <if test="auditSystemContent != null  and auditSystemContent != ''">
+                audit_system_content=like '%'||#{auditSystemContent}||'%',
+            </if>
+            <if test="auditConfirmationFindings != null">audit_confirmation_findings=like '%'||#{auditConfirmationFindings}||'%',</if>
+            <if test="auditModelNameSend != null">audit_model_name_send=like '%'||#{auditModelNameSend}||'%',</if>
+            <if test="auditModelLogic != null">audit_model_logic=like '%'||#{auditModelLogic}||'%',</if>
+            <if test="auditModelNumber != null">audit_model_number=like '%'||#{auditModelNumber}||'%',</if>
+            <if test="createPerson != null  and createPerson != ''">create_person=like '%'||#{createPerson}||'%',</if>
+            <if test="createTime != null  and createTime != ''">create_time=like '%'||#{createTime}||'%',</if>
+            <if test="updatePerson != null  and updatePerson != ''">update_person,</if>
+            <if test="updateTime != null  and updateTime != ''">update_time=like '%'||#{updateTime}||'%',</if>
+            <if test="isdel != null  and isdel != ''">isdel=like '%'||#{isdel}||'%',</if>
+        </trim>
+        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+    </update>
+
+    <!--删除  AND st.type_of_information='审计模型来源信息'-->
+    <update id="deleteByAuditModelNumber">
+        UPDATE hpeapm.audit_elements_handover_model
+        SET isdel=0
+        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+    </update>
+
+    <select id="selectByAuditModelNumber" parameterType="com.cxsj.mxzd.commom.ParamData"
+            resultMap="AuditHandoverModelMap">
+        select *
+        from hpeapm.audit_elements_handover_model
+        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+          AND isdel = 1;
+    </select>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementInfo" id="AuditAllMap">
+        <id property="auditModelNumber" column="auditModelNumber"/>
+        <result property="auditPointNumber" column="auditPointNumber"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="auditModelName"/>
+        <result property="auditModelDescribe" column="auditModelDescribe"/>
+        <result property="informationSupplement" column="informationSupplement"/>
+        <result property="informationSources" column="informationSources"/>
+        <result property="remark" column="remark"/>
+        <result property="auditBusinessLogic" column="auditBusinessLogic"/>
+        <result property="primaryBusinessProcess" column="primaryBusinessProcess"/>
+        <result property="expectedRisks" column="expectedRisks"/>
+        <result property="expectedDataRequirements" column="expectedDataRequirements"/>
+        <result property="expectedDataCoversUnitDemand" column="expectedDataCoversUnitDemand"/>
+        <result property="requirementsInvolveTheSystem" column="requirementsInvolveTheSystem"/>
+        <result property="subordinateToSystem" column="subordinateToSystem"/>
+        <result property="modelCode" column="modelCode"/>
+        <result property="secondaryBusinessProcess" column="secondaryBusinessProcess"/>
+        <result property="dataContentDescription" column="dataContentDescription"/>
+        <result property="dockPeople" column="dockPeople"/>
+        <result property="writeTime" column="writeTime"/>
+        <result column="dockDepartment" property="dockDepartment"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="auditPoint" column="auditPoint"/>
+        <result property="auditProspectivePoint" column="auditProspectivePoint"/>
+        <result property="auditSystemName" column="auditSystemName"/>
+        <result property="auditSystemContent" column="auditSystemContent"/>
+        <result property="auditConfirmationFindings" column="auditConfirmationFindings"/>
+        <result property="auditModelNameSend" column="auditModelNameSend"/>
+        <result property="auditModelLogic" column="auditModelLogic"/>
+        <result property="typeOfInformation" column="typeOfInformation"/>
+        <result property="detailedTime" column="detailedTime"/>
+        <result property="writeTime" column="write_time"/>
+        <result property="shareUnit" column="share_unit"/>
+        <result property="shareUnitName" column="shareUnitName"/>
+        <result property="secondModelNumber" column="second_model_number"/>
+        <result property="secondModelName" column="secondModelName"/>
+        <result property="isOnline" column="isOnline"/>
+        <collection property="auditFindDataBases" column="audit_model_number"
+                    ofType="com.cxsj.mxzd.pojo.AuditFindDataBase" javaType="list">
+            <id property="auditModelNumber" column="auditModelNumber_1"/>
+            <result property="problemSummary" column="problemSummary"/>
+            <result property="problemDescription" column="problemDescription"/>
+            <result property="auditTime" column="auditTime"/>
+            <result property="auditInvolved" column="auditInvolved"/>
+            <result property="auditProject" column="auditProject"/>
+
+        </collection>
+
+        <!-- <collection property="auditHandoverModels" column="audit_model_number" ofType="com.cxsj.mxzd.pojo.AuditHandoverModel" javaType="list">
+             <id property="auditModelNumber" column="auditModelNumber_2"/>
+             <result property="auditModelNumber" column="auditModelNumber" />
+             <result property="auditPoint" column="auditPoint" />
+             <result property="auditProspectivePoint" column="auditProspectivePoint" />
+             <result property="auditSystemName" column="auditSystemName" />
+             <result property="auditSystemContent" column="auditSystemContent" />
+             <result property="auditConfirmationFindings" column="auditConfirmationFindings" />
+             <result property="auditModelNameSend" column="auditModelNameSend" />
+             <result property="auditModelLogic" column="auditModelLogic" />
+
+         </collection>-->
+    </resultMap>
+
+
+    <select id="selectCenterList" parameterType="com.cxsj.mxzd.commom.ParamData" resultMap="AuditAllMap">
+        WITH filtered_steps AS (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        type_of_information,
+        detailed_time,
+        write_time
+        FROM
+        "hpeapm"."audit_elements_operation_steps"
+        WHERE
+        delete_status = '1'
+        AND information_type = '审计模型来源信息'
+        <if test="isImport!= null and isImport !='' ">
+            AND "is_import" = like '%'||#{isImport}||'%'
+        </if>
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = like '%'||#{dockPeople}||'%'
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department LIKE like '%'||#{dockDepartment}||'%'
+        </if>
+        ),
+        filtered_info AS (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        information_sources,
+        audit_point_number,
+        remark,
+        primary_business_process,
+        secondary_business_process,
+        is_online,
+        share_unit,
+        second_model_number
+        FROM
+        "hpeapm"."audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            AND offline!='1'
+        </if>
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process LIKE '%'||like '%'||#{primaryBusinessProcess}||'%'||'%'
+        </if>
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            AND secondary_business_process LIKE '%'||like '%'||#{secondaryBusinessProcess}||'%'||'%'
+        </if>
+        <if test="informationSources != null and informationSources!=''">
+            AND information_sources = like '%'||#{informationSources}||'%'
+        </if>
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            AND audit_point_number LIKE '%'||like '%'||#{auditPointNumber}||'%'||'%'
+        </if>
+        <if test="auditPointName != null and auditPointName!=''">
+            AND audit_point_name LIKE '%'||like '%'||#{auditPointName}||'%'||'%'
+        </if>
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            AND audit_model_number LIKE '%'||like '%'||#{auditModelNumber}||'%'||'%'
+        </if>
+        <if test="auditModelName != null and auditModelName!=''">
+            AND audit_model_name LIKE '%'||like '%'||#{auditModelName}||'%'||'%'
+        </if>
+        ),
+        org_info AS (
+        SELECT DISTINCT
+        "busiUnitCode" || "orgCode" AS "id",
+        "provinceName" || '-' || "orgName" AS "name"
+        FROM
+        hpmgr."bonc_union_orginfos"
+        WHERE
+        "busiUnitCode" = 'CM000'
+        UNION ALL
+        SELECT DISTINCT
+        "busiUnitCode" AS "id",
+        "provinceName" AS "name"
+        FROM
+        hpmgr."bonc_union_orginfos"
+        WHERE
+        "busiUnitCode"  != 'CM000'
+        )
+        SELECT
+        a.auditPointNumber,
+        a.auditPointName,
+        a.auditModelNumber,
+        a.auditModelName,
+        a.dockPeople,
+        a.dockDepartment,
+        a.primaryBusinessProcess,
+        a.secondaryBusinessProcess,
+        a.informationSources,
+        a.isOnline,
+        a.remark,
+        a.typeOfInformation,
+        a.detailedTime,
+        a.write_time,
+        c."name" AS shareUnitName,
+        a.second_model_number,
+        b."ModelName" AS secondModelName
+        FROM (
+        SELECT
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        b.information_sources AS informationSources,
+        b.is_online AS isOnline,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        b.remark,
+        a.type_of_information AS typeOfInformation,
+        a.detailed_time AS detailedTime,
+        a.write_time,
+        b.share_unit AS share_unit,
+        b.second_model_number
+        FROM
+        filtered_steps a
+        JOIN
+        filtered_info b ON a.audit_model_number = b.audit_model_number
+        ORDER BY a.detailed_time DESC
+        LIMIT like '%'||#{size}||'%' OFFSET like '%'||#{page}||'%'
+        ) a
+        LEFT JOIN "hpeapm"."xbpj_company_model" b ON a.second_model_number = b."ModelNo"
+        LEFT JOIN org_info c ON a.share_unit = c."id"
+        ORDER BY a.detailedTime DESC
+    </select>
+
+
+
+    <select id="selectCenterListCount" parameterType="com.cxsj.mxzd.commom.ParamData" resultType="java.lang.Integer">
+        SELECT
+        COUNT(DISTINCT _abc.auditModelNumber) as result
+        FROM
+        (
+        SELECT
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        b.information_sources AS informationSources,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        b.remark remark
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        information_type
+        FROM
+        "hpeapm"."audit_elements_operation_steps"
+        WHERE
+        delete_status = '1'
+        AND information_type ='审计模型来源信息'
+        <if test="isImport!= null and isImport !='' ">
+            AND "is_import" = like '%'||#{isImport}||'%'
+        </if>
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = like '%'||#{dockPeople}||'%'
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department like like '%'||#{dockDepartment}||'%'
+        </if>
+        ) a
+        JOIN (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        information_sources,
+        audit_point_number,
+        remark remark,
+        primary_business_process,
+        secondary_business_process
+        FROM
+        "hpeapm"."audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <!-- 一级业务过程 -->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process like '%'||like '%'||#{primaryBusinessProcess}||'%'||'%'
+        </if>
+        <!-- 二级业务过程 -->
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            and secondary_business_process like '%'||like '%'||#{secondaryBusinessProcess}||'%'||'%'
+        </if>
+        <!-- 信息源 -->
+        <if test="informationSources != null and informationSources!=''">
+            and information_sources= like '%'||#{informationSources}||'%'
+        </if>
+        <!-- 审计点编号 -->
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            and audit_point_number like '%'||like '%'||#{auditPointNumber}||'%'||'%'
+        </if>
+        <!-- 审计点名称 -->
+        <if test="auditPointName != null and auditPointName!=''">
+            and audit_point_name like '%'||like '%'||#{auditPointName}||'%'||'%'
+        </if>
+        <!-- 审计模型编号 -->
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            and audit_model_number like '%'||like '%'||#{auditModelNumber}||'%'||'%'
+        </if>
+        <!-- 审计模型名称 -->
+        <if test="auditModelName != null and auditModelName!=''">
+            and audit_model_name like '%'||like '%'||#{auditModelName}||'%'||'%'
+            escape '|'
+        </if>
+        ) b ON a.audit_model_number = b.audit_model_number
+        ) _abc
+        LEFT JOIN (
+        SELECT
+        problem_description problemDescription,
+        audit_time auditTime,
+        "audit_involved" auditInvolved,
+        "audit_project" auditProject,
+        audit_model_number,
+        problem_summary problemSummary
+        FROM
+        "hpeapm"."audit_elements_find_database"
+        WHERE
+        isdel = '1'
+        ) ba ON _abc.auditModelNumber = ba.audit_model_number
+        LEFT JOIN (
+        SELECT
+        audit_point auditPoint,
+        "audit_prospective_point" auditProspectivePoint,
+        "audit_system_name" auditSystemName,
+        "audit_system_content" auditSystemContent,
+        "audit_confirmation_findings" auditConfirmationFindings,
+        "audit_model_name_send" auditModelNameSend,
+        "audit_model_logic" auditModelLogic,
+        audit_model_number
+        FROM
+        "hpeapm"."audit_elements_handover_model"
+        WHERE
+        isdel = '1'
+        ) mo ON ba.audit_model_number = mo.audit_model_number
+    </select>
+
+
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementSheetPojo" id="AuditHandoverExcelModelMap">
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="informationSources" column="information_sources"/>
+        <result property="remark" column="audit_confirmation_findings"/>
+        <result property="problemSummary" column="problem_summary"/>
+        <result property="problemDescription" column="problem_description"/>
+        <result property="auditTime" column="audit_time"/>
+        <result property="auditInvolved" column="audit_involved"/>
+        <result property="auditProject" column="audit_project"/>
+        <result property="auditPoint" column="audit_point"/>
+        <result property="auditProspectivePoint" column="audit_prospective_point"/>
+        <result property="auditSystemName" column="audit_system_name"/>
+        <result property="auditSystemContent" column="audit_system_content"/>
+        <result property="auditConfirmationFindings" column="audit_confirmation_findings"/>
+        <result property="auditModelNameSend" column="audit_model_name_send"/>
+        <result property="auditModelLogic" column="audit_model_logic"/>
+        <result property="dockPeople" column="dock_people"/>
+
+
+    </resultMap>
+
+
+    <!--hpeapm.audit_elements_find_database ba-->
+    <select id="selectExcelList" parameterType="com.cxsj.mxzd.commom.ParamData"
+            resultType="com.cxsj.mxzd.pojo.AuditElementSheetPojo">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        _abc.auditPointNumber AS auditPointNumber,
+        _abc.auditPointName AS auditPointName,
+        _abc.auditModelNumber AS auditModelNumber,
+        _abc.auditModelName AS auditModelName,
+        _abc.dockPeople AS dockPeople,
+        _abc.dockDepartment AS dockDepartment,
+        _abc.primaryBusinessProcess AS primaryBusinessProcess,
+        _abc.secondaryBusinessProcess AS secondaryBusinessProcess,
+        _abc.informationSources AS informationSources,
+        _abc.isOnline AS isOnline,
+        _abc.remark AS remark,
+        _abc.typeOfInformation,
+        _abc.detailedTime,
+        _abc.writeTime,
+        cc."name" shareUnit,
+        bb."ModelName" as secondModelNumber
+        FROM
+        (
+        SELECT
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.secondary_business_process AS secondaryBusinessProcess,
+        b.primary_business_process AS primaryBusinessProcess,
+        b.information_sources AS informationSources,
+        b.is_online AS isOnline,
+        a.dock_people AS dockPeople,
+        a.dock_department AS dockDepartment,
+        b.remark remark,
+        a.type_of_information as typeOfInformation,
+        a.detailed_time detailedTime,
+        a.write_time as writeTime,
+        b.share_unit share_unit,
+        b.second_model_number
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        information_type,
+        type_of_information,
+        detailed_time,
+        write_time
+        FROM
+        hpeapm.audit_elements_operation_steps
+        WHERE
+        delete_status = '1'
+        AND information_type ='审计模型来源信息'
+        <if test="isImport!= null and isImport !='' ">
+            AND "is_import" = like '%'||#{isImport}||'%'
+        </if>
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people = like '%'||#{dockPeople}||'%'
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND dock_department LIKE like '%'||#{dockDepartment}||'%'
+        </if>
+        ) a
+        JOIN (
+        SELECT
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        information_sources,
+        audit_point_number,
+        remark remark,
+        primary_business_process,
+        secondary_business_process,
+        is_online,
+        share_unit,
+        second_model_number
+        FROM
+        hpeapm."audit_elements_info"
+        WHERE
+        1 = 1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <!-- 一级-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
+            AND primary_business_process like '%' || like '%'||#{primaryBusinessProcess}||'%' || '%'
+        </if>
+
+        <!-- 二级-->
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
+            and secondary_business_process like '%' || like '%'||#{secondaryBusinessProcess}||'%' || '%'
+        </if>
+        <!-- 来源-->
+        <if test="informationSources != null and informationSources!=''">
+            and information_sources= like '%'||#{informationSources}||'%'
+        </if>
+        <!-- 审计点编号-->
+        <if test="auditPointNumber != null and auditPointNumber!=''">
+            and audit_point_number like '%'||#{}||'%',like '%'||#{auditPointNumber}||'%',like '%'||#{}||'%'
+        </if>
+        <!-- 审计点名称-->
+        <if test="auditPointName != null and auditPointName!=''">
+            and audit_point_name like '%'||#{}||'%',like '%'||#{auditPointName}||'%',like '%'||#{}||'%'
+        </if>
+
+        <!-- 审计模型编号-->
+        <if test="auditModelNumber != null and auditModelNumber!=''">
+            and audit_model_number like '%'||#{}||'%',like '%'||#{auditModelNumber}||'%',like '%'||#{}||'%'
+
+        </if>
+
+        <!-- 审计模型名称-->
+        <if test="auditModelName != null and auditModelName!=''">
+            and audit_model_name like '%'||#{}||'%',like '%'||#{auditModelName}||'%',like '%'||#{}||'%'
+        </if>
+
+
+        <if test="informationSources != null and informationSources!=''">
+            and information_sources= like '%'||#{informationSources}||'%'
+        </if>
+        ) b ON a.audit_model_number = b.audit_model_number
+        ORDER BY detailedTime DESC
+        ) _abc
+        LEFT JOIN hpeapm."xbpj_company_model" bb
+        ON _abc.second_model_number = bb."ModelNo"
+        LEFT JOIN (
+        (SELECT DISTINCT
+        (busiUnitCode, orgCode) AS id,
+        (provinceName, '-', orgName) AS "name"
+        FROM
+        hpmgr."bonc_union_orginfos"
+        WHERE "busiUnitCode" = 'CM000')
+        UNION
+        ALL
+        (SELECT DISTINCT
+        "busiUnitCode" AS id,
+        "provinceName" AS "name"
+        FROM
+        hpmgr."bonc_union_orginfos"
+        WHERE "busiUnitCode" != 'CM000'
+        ORDER BY "busiUnitCode")
+        ) cc
+        ON _abc.share_unit = cc."id"
+        ) a
+        ORDER BY
+        a.detailedTime DESC
+    </select>
+
+
+    <insert id="inserts" parameterType="java.util.List">
+        insert into hpeapm.audit_elements_handover_model(
+        id,
+        audit_point,
+        audit_prospective_point,audit_system_name,
+        audit_system_content,audit_confirmation_findings,
+        audit_model_name_send,audit_model_logic,
+        audit_model_number,
+        create_person,create_time,update_person,update_time,isdel)
+        values
+        <foreach collection="list" item="auditHandoverModel" separator=",">
+            (
+            like '%'||#{auditHandoverModel.id}||'%',
+            like '%'||#{auditHandoverModel.auditPoint}||'%',
+            like '%'||#{auditHandoverModel.auditProspectivePoint}||'%',
+            like '%'||#{auditHandoverModel.auditSystemName}||'%',
+            like '%'||#{auditHandoverModel.auditSystemContent}||'%',
+            like '%'||#{auditHandoverModel.auditConfirmationFindings}||'%',
+            like '%'||#{auditHandoverModel.auditModelNameSend}||'%',
+            like '%'||#{auditHandoverModel.auditModelLogic}||'%',
+            like '%'||#{auditHandoverModel.auditModelNumber}||'%',
+            like '%'||#{auditHandoverModel.createPerson}||'%',
+            now(),
+            like '%'||#{auditHandoverModel.updatePerson}||'%',
+            now(),
+            1)
+        </foreach>
+    </insert>
+
+
+
+    <select id="selectAllPrvd" resultType="java.util.Map">
+        (SELECT DISTINCT
+             (busiUnitCode, orgCode) AS id,
+             (provinceName, '-', orgName) AS "name"
+         FROM
+             hpmgr."bonc_union_orginfos"
+         WHERE "busiUnitCode" = 'CM000'
+        )
+        UNION
+            ALL
+        (SELECT DISTINCT
+             "busiUnitCode" AS id,
+             "provinceName" AS "name"
+         FROM
+             hpmgr."bonc_union_orginfos"
+         WHERE "busiUnitCode" != 'CM000'
+         ORDER BY "busiUnitCode")
+    </select>
+
+
+
+    <select id="selectAllModel" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            aa.ModelNo AS id,
+            aa.ModelName AS "name"
+        FROM
+            hpeapm."xbpj_company_model" aa
+        WHERE aa."modeling_dept" = like '%'||#{prvdId}||'%'
+          <if test="orgCode!=null and orgCode !=''">
+              AND AA."org_code" = like '%'||#{orgCode}||'%'
+          </if>
+        <if test="secondModelNumber!=null and secondModelNumber !=''">
+            AND AA."ModelNo" = like '%'||#{secondModelNumber}||'%'
+        </if>
+        <if test="secondModelName!=null and secondModelName !=''">
+            AND AA."ModelName" = like '%'||#{secondModelName}||'%'
+        </if>
+        ORDER BY aa."model_online_time" DESC,id
+    </select>
+</mapper>
+
+

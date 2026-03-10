@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.pg.PgOtherAuditModelMapper">
+
+
+    <select id="selectModelSysMsg" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT a.model_name            AS supModelNumber,
+               a.order_auto_id         AS orderAutoId,
+               a.sys_mxzd_model_number AS mxzdModelNumber
+        FROM hpeapm.xbpj_company_model_gl a
+        WHERE a.sys_mxzd_model_number = like '%'||#{mxzdModelNumber}||'%'
+        ORDER BY a.sys_mxzd_time DESC LIMIT 1
+    </select>
+
+
+    <select id="selectUpdateModelNoList" resultType="java.util.Map">
+        SELECT a."new_pointNo" AS "newPointNo",
+               a."new_modelNo" AS "newModelNo",
+               a."old_modelNo" AS "oldModelNo"
+        FROM hpeapm."audit_update_modelNo" a
+    </select>
+
+
+    <update id="updateaudit_elements_data_cut_in" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_data_cut_in
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updateaudit_supp_in_cut" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_supp_in_cut
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%';
+    </update>
+
+    <update id="updateaudit_elements_data_support_v2" parameterType="java.util.Map">
+        UPDATE hpeapm."audit_elements_data_support_v2"
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+
+    </update>
+
+    <update id="updateaudit_elements_find_database" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_find_database
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_handover_model" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_handover_model
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_info" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_info
+        SET modelNoLs  =like '%'||#{newModelNo}||'%',
+            "pointNoLs"=like '%'||#{newPointNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_info_log" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_info_log
+        SET modelNoLs  =like '%'||#{newModelNo}||'%',
+            "pointNoLs"=like '%'||#{newPointNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_model_evaluation" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_model_evaluation
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_online_model" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_online_model
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+    <update id="updateaudit_elements_operation_steps" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_operation_steps
+        SET modelNoLs  =like '%'||#{newModelNo}||'%',
+            "pointNoLs"=like '%'||#{newPointNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updateaudit_elements_system" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_system
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+
+    </update>
+
+
+    <update id="updatespl_business_examine" parameterType="java.util.Map">
+        UPDATE hpeapm."spl_business_examine"
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updatespl_model_type" parameterType="java.util.Map">
+        UPDATE hpeapm."spl_model_type"
+        SET modelNoLs  =like '%'||#{newModelNo}||'%',
+            "pointNoLs"=like '%'||#{newPointNo}||'%'
+        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updatespl_business_db" parameterType="java.util.Map">
+        UPDATE hpeapm.spl_business_db
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE model_no = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updatespl_business_dy" parameterType="java.util.Map">
+        UPDATE hpeapm.spl_business_dy
+        SET modelNoLs =like '%'||#{newModelNo}||'%'
+        WHERE model_no = like '%'||#{oldModelNo}||'%'
+    </update>
+
+
+    <update id="updateUnitModelProType" parameterType="java.util.Map">
+        UPDATE
+            hpeapm."xbpj_company_model" a
+        SET a."hava_pro" = like '%'||#{proType}||'%'
+        WHERE a."ModelNo" = like '%'||#{auditModelNumber}||'%'
+    </update>
+
+
+    <select id="selectUpdateModelNumberMsg" resultType="java.util.Map">
+        SELECT a."audit_model_number"     AS auditModelNumber,
+               a."audit_model_number_new" AS auditModelNumberNew
+        FROM hpeapm."model_msg_update" a
+        WHERE audit_model_number_type = '是'
+    </select>
+
+
+    <update id="updateModelOtherMsg" parameterType="java.util.Map">
+        UPDATE hpeapm.audit_elements_info a
+        SET primary_business_process = b.primary_business_process_new
+        FROM (
+            SELECT *
+            FROM hpeapm.model_msg_update
+            WHERE primary_business_process_type = '是'
+        ) b
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE hpeapm.audit_elements_info a
+        SET secondary_business_process = b.secondary_business_process_new
+        FROM (
+            SELECT *
+            FROM hpeapm.model_msg_update
+            WHERE secondary_business_process_type = '是'
+        ) b
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE hpeapm.audit_elements_info a
+        SET audit_point_name = b.audit_point_name_new
+        FROM (
+            SELECT *
+            FROM hpeapm.model_msg_update
+            WHERE audit_point_name_type = '是'
+        ) b
+        WHERE a.audit_model_number = b.audit_model_number;
+
+        UPDATE
+            hpeapm."audit_elements_operation_steps" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_point_name_type = '是') b
+        SET
+            a.audit_point_name = b.audit_point_name_new
+        WHERE a.audit_model_number = b.audit_model_number;
+
+        UPDATE
+            hpeapm."spl_model_type" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_point_name_type = '是') b
+        SET
+            a.audit_point_name = b.audit_point_name_new
+        WHERE a.audit_model_number = b.audit_model_number;
+
+
+        UPDATE
+            hpeapm."audit_elements_info" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_model_name_type = '是') b
+        SET
+            a.audit_model_name = b.audit_model_name_new
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE
+            hpeapm."audit_elements_operation_steps" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_model_name_type = '是') b
+        SET
+            a.audit_model_name = b.audit_model_name_new
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE
+            hpeapm."spl_model_type" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_model_name_type = '是') b
+        SET
+            a.audit_model_name = b.audit_model_name_new
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE
+            hpeapm."audit_elements_info" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_point_number_type = '是') b
+        SET
+            a.audit_point_number = b.audit_point_number_new
+        WHERE a.audit_model_number = b.audit_model_number;
+
+
+        UPDATE
+            hpeapm."audit_elements_operation_steps" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_point_number_type = '是') b
+        SET
+            a.audit_point_number = b.audit_point_number_new
+        WHERE a.audit_model_number = b.audit_model_number;
+        UPDATE
+            hpeapm."spl_model_type" a,
+            (SELECT
+            *
+            FROM
+            hpeapm."model_msg_update"
+            WHERE audit_point_number_type = '是') b
+        SET
+            a.audit_point_number = b.audit_point_number_new
+        WHERE a.audit_model_number = b.audit_model_number;
+
+    </update>
+
+    <select id="updateModelNumber" parameterType="java.util.Map">
+        UPDATE
+            hpeapm.audit_elements_data_cut_in
+        SET audit_model_number = like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_data_cut_in_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_elements_data_support_v2
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_data_support_v2_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_elements_find_database
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_find_database_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_elements_handover_model
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_handover_model_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_elements_info
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_info_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_elements_model_evaluation
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_model_evaluation_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+
+        UPDATE
+            hpeapm.audit_elements_online_model
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_online_model_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+
+
+        UPDATE
+            hpeapm.audit_elements_operation_steps
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_operation_steps_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+
+
+        UPDATE
+            hpeapm.audit_elements_system
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_elements_system_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.audit_supp_in_cut
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.audit_supp_in_cut_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+
+
+        UPDATE
+            hpeapm.spl_business_examine
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.spl_business_examine_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+
+        UPDATE
+            hpeapm.spl_model_type
+        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        WHERE id IN
+              (SELECT id
+               FROM hpeapm.spl_model_type_bfupmodelNumber
+               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+        UPDATE
+            hpeapm.spl_business_db
+        SET model_no =like '%'||#{auditModelNumberNew}||'%'
+        WHERE db_id IN
+              (SELECT db_id
+               FROM hpeapm.spl_business_db_bfupmodelNumber
+               WHERE model_no = like '%'||#{auditModelNumber}||'%');
+        UPDATE
+            hpeapm.spl_business_dy
+        SET model_no =like '%'||#{auditModelNumberNew}||'%'
+        WHERE dy_id IN
+              (SELECT dy_id
+               FROM hpeapm.spl_business_dy_bfupmodelNumber
+               WHERE model_no = like '%'||#{auditModelNumber}||'%');
+    </select>
+
+
+    <update id="bfTable" parameterType="java.util.Map">
+        ALTER TABLE hpeapm.audit_elements_data_cut_in RENAME TO hpeapm.audit_elements_data_cut_in_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_data_cut_in (LIKE hpeapm.audit_elements_data_cut_in_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_data_cut_in
+        SELECT *
+        FROM hpeapm.audit_elements_data_cut_in_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_elements_data_support_v2 RENAME TO hpeapm.audit_elements_data_support_v2_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_data_support_v2 (LIKE hpeapm.audit_elements_data_support_v2_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_data_support_v2
+        SELECT *
+        FROM hpeapm.audit_elements_data_support_v2_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_elements_find_database RENAME TO hpeapm.audit_elements_find_database_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_find_database (LIKE hpeapm.audit_elements_find_database_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_find_database
+        SELECT *
+        FROM hpeapm.audit_elements_find_database_bfupmodelNumber;
+
+        ALTER TABLE hpeapm.audit_elements_handover_model RENAME TO hpeapm.audit_elements_handover_model_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_handover_model (LIKE hpeapm.audit_elements_handover_model_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_handover_model
+        SELECT *
+        FROM hpeapm.audit_elements_handover_model_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_elements_info RENAME TO hpeapm.audit_elements_info_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_info (LIKE hpeapm.audit_elements_info_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_info
+        SELECT *
+        FROM hpeapm.audit_elements_info_bfupmodelNumber;
+
+
+
+        ALTER TABLE hpeapm.audit_elements_model_evaluation RENAME TO hpeapm.audit_elements_model_evaluation_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_model_evaluation (LIKE hpeapm.audit_elements_model_evaluation_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_model_evaluation
+        SELECT *
+        FROM hpeapm.audit_elements_model_evaluation_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_elements_online_model RENAME TO hpeapm.audit_elements_online_model_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_online_model (LIKE hpeapm.audit_elements_online_model_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_online_model
+        SELECT *
+        FROM hpeapm.audit_elements_online_model_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_elements_operation_steps RENAME TO hpeapm.audit_elements_operation_steps_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_operation_steps (LIKE hpeapm.audit_elements_operation_steps_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_operation_steps
+        SELECT *
+        FROM hpeapm.audit_elements_operation_steps_bfupmodelNumber;
+
+        ALTER TABLE hpeapm.audit_elements_system RENAME TO hpeapm.audit_elements_system_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_elements_system (LIKE hpeapm.audit_elements_system_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_elements_system
+        SELECT *
+        FROM hpeapm.audit_elements_system_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.audit_supp_in_cut RENAME TO hpeapm.audit_supp_in_cut_bfupmodelNumber;
+        CREATE TABLE hpeapm.audit_supp_in_cut (LIKE hpeapm.audit_supp_in_cut_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.audit_supp_in_cut
+        SELECT *
+        FROM hpeapm.audit_supp_in_cut_bfupmodelNumber;
+
+        ALTER TABLE hpeapm.spl_business_examine RENAME TO hpeapm.spl_business_examine_bfupmodelNumber;
+        CREATE TABLE hpeapm.spl_business_examine (LIKE hpeapm.spl_business_examine_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.spl_business_examine
+        SELECT *
+        FROM hpeapm.spl_business_examine_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.spl_model_type RENAME TO hpeapm.spl_model_type_bfupmodelNumber;
+        CREATE TABLE hpeapm.spl_model_type (LIKE hpeapm.spl_model_type_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.spl_model_type
+        SELECT *
+        FROM hpeapm.spl_model_type_bfupmodelNumber;
+
+
+        ALTER TABLE hpeapm.spl_business_db RENAME TO hpeapm.spl_business_db_bfupmodelNumber;
+        CREATE TABLE hpeapm.spl_business_db (LIKE hpeapm.spl_business_db_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.spl_business_db
+        SELECT *
+        FROM hpeapm.spl_business_db_bfupmodelNumber;
+
+        ALTER TABLE hpeapm.spl_business_dy RENAME TO hpeapm.spl_business_dy_bfupmodelNumber;
+        CREATE TABLE hpeapm.spl_business_dy (LIKE hpeapm.spl_business_dy_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.spl_business_dy
+        SELECT *
+        FROM hpeapm.spl_business_dy_bfupmodelNumber;
+
+        ALTER TABLE hpeapm.spl_workitem_his RENAME TO hpeapm.spl_workitem_his_bfupmodelNumber;
+        CREATE TABLE hpeapm.spl_workitem_his (LIKE hpeapm.spl_workitem_his_bfupmodelNumber INCLUDING ALL);
+        INSERT INTO hpeapm.spl_workitem_his
+        SELECT *
+        FROM hpeapm.spl_workitem_his_bfupmodelNumber;
+    </update>
+
+
+    <delete id="dropTableBf">
+        DROP TABLE hpeapm.audit_elements_data_cut_in_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_data_support_v2_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_find_database_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_handover_model_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_info_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_model_evaluation_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_online_model_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_operation_steps_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_elements_system_bfupmodelNumber;
+        DROP TABLE hpeapm.audit_supp_in_cut_bfupmodelNumber;
+        DROP TABLE hpeapm.spl_business_examine_bfupmodelNumber;
+        DROP TABLE hpeapm.spl_model_type_bfupmodelNumber;
+        DROP TABLE hpeapm.spl_business_db_bfupmodelNumber;
+        DROP TABLE hpeapm.spl_business_dy_bfupmodelNumber;
+        DROP TABLE hpeapm.spl_workitem_his_bfupmodelNumber;
+    </delete>
+
+
+    <select id="selectMxzdModelMsg" resultType="com.cxsj.largemodel.facade.ModelKmFacade">
+        SELECT info.audit_model_number         AS auditModelNumber,
+               info.audit_model_name           AS auditModelName,
+               info.primary_business_process   AS primaryBusinessProcess,
+               info.secondary_business_process AS secondaryBusinessProcess,
+               info.execution_logic            AS auditModelExecutionLogic,
+               modelType."write_time"          AS writeTime,
+               evaluation.model_state          AS deploymentModelState,
+               evaluation.modeling_method      AS deploymentModelingMethod,
+               info.model_code                 AS deploymentModelCode,
+               info.model_code_file_id         AS deploymentModelCodeFileId,
+               suppAcc.name                    AS dataAssetObjectNameCN,
+               suppAcc.code                    AS dataAssetObjectNameEN,
+               suppAcc.assetCode               AS dataAssetCode,
+               suppAcc.status                  AS dataAssetStatus,
+               suppAcc.originalSystem          AS dataAssetSourceSystem,
+               suppAcc.interName               AS dataAssetInterfaceName,
+               suppoNoAcc.data_supporter       AS nonDataAssetDataSource,
+               suppoNoAcc.name                 AS nonDataAssetObjectNameCN,
+               suppoNoAcc.code                 AS nonDataAssetObjectNameEN,
+               suppoNoAcc.assetCode            AS nonDataAssetCode,
+               suppoNoAcc.status               AS nonDataAssetStatus,
+               suppoNoAcc.originalSystem       AS nonDataAssetSourceSystem,
+               suppoNoAcc.interName            AS nonDataAssetInterfaceName
+        FROM hpeapm.audit_elements_info info
+                 LEFT JOIN hpeapm."spl_model_type" modelType
+                           ON info."audit_model_number" = modelType."audit_model_number"
+                 LEFT JOIN hpeapm."audit_elements_model_evaluation" evaluation
+                           ON info.audit_model_number = evaluation.audit_model_number
+                 LEFT JOIN
+             (SELECT audit_model_number,
+                     "name",
+                     "code",
+                     assetCode,
+                     "status",
+                     originalSystem,
+                     interName
+              FROM hpeapm."audit_elements_data_support_v2"
+              WHERE isdel = '1'
+                AND is_acc = '1') suppAcc
+             ON info."audit_model_number" = suppAcc.audit_model_number
+                 LEFT JOIN
+             (SELECT audit_model_number,
+                     "name",
+                     "code",
+                     assetCode,
+                     "status",
+                     originalSystem,
+                     interName,
+                     data_supporter
+              FROM hpeapm."audit_elements_data_support_v2"
+              WHERE isdel = '1'
+                AND is_acc = '0') suppoNoAcc
+             ON info."audit_model_number" = suppoNoAcc.audit_model_number
+        where info."audit_model_number" is not null
+          AND info."audit_model_number" LIKE '%HQ000%'
+        ORDER BY info."audit_model_number"
+
+    </select>
+
+
+    <select id="selectMxzdModelMsgTest" resultType="com.cxsj.largemodel.facade.ModelKmFacade">
+        SELECT *
+        FROM hpeapm.model_table_02
+    </select>
+
+
+    <select id="selectModelCaseMsgTest" resultType="com.cxsj.largemodel.facade.ModelKmFacade">
+        SELECT AUDIT_MDL_CODE  AS auditModelNumber,
+            /* 审计模型编码 */
+               AUDIT_MDL_NAME  AS clueAuditModelName,
+            /* 审计模型名称 */
+               BRAE_PARTY      AS clueModelSupportParty,
+            /* 支撑方 */
+               AUDIT_CYCLE     AS clueAuditCycle,
+            /* 审计周期 */
+               MON_WARN_TIME   AS clueMonthlyAlarmTime,
+            /* 每月告警时间 */
+               AUDIT_MON       AS clueAuditMonth,
+            /* 审计月 */
+               DATA_MON        AS clueDataMonth,
+            /* 数据月 */
+               AUDIT_CLUE_CODE AS clueAuditCode,
+            /* 审计线索编码 */
+               AUDIT_CLUE_NAME AS clueAuditName,
+            /* 审计线索名称 */
+               AUDIT_CLUE_TYP  AS clueType,
+            /* 线索类型 */
+               AUDIT_CLUE_UNIT AS clueAuditUnit,
+            /* 审计线索单位 */
+               AUDIT_UNIT_CODE AS clueAuditedUnitCode,
+            /* 被审计单位编码 */
+               AUDIT_UNIT_NAME AS clueAuditedUnit,
+            /* 被审计单位 */
+               AUDIT_CLUE_VAL  AS clueQuantity,
+            /* 线索量 */
+               CLUE_CNT_RATE   AS clueQuantityRatio,
+            /* 线索量占比 */
+               CLUE_CNT_RANK   AS clueQuantityRank
+            /* 线索量排名 */
+        FROM hpeapm."tb_03"
+        where AUDIT_MDL_CODE is not null
+    </select>
+
+
+    <select id="selectModelCaseMsg" resultType="com.cxsj.largemodel.facade.ModelKmFacade">
+        SELECT AUDIT_MDL_CODE  AS clueAuditModelCode,
+               AUDIT_MDL_CODE  AS auditModelNumber,
+            /* 审计模型编码 */
+               AUDIT_MDL_NAME  AS clueAuditModelName,
+            /* 审计模型名称 */
+               BRAE_PARTY      AS clueModelSupportParty,
+            /* 支撑方 */
+               AUDIT_CYCLE     AS clueAuditCycle,
+            /* 审计周期 */
+               MON_WARN_TIME   AS clueMonthlyAlarmTime,
+            /* 每月告警时间 */
+               AUDIT_MON       AS clueAuditMonth,
+            /* 审计月 */
+               DATA_MON        AS clueDataMonth,
+            /* 数据月 */
+               AUDIT_CLUE_CODE AS clueAuditCode,
+            /* 审计线索编码 */
+               AUDIT_CLUE_NAME AS clueAuditName,
+            /* 审计线索名称 */
+               AUDIT_CLUE_TYP  AS clueType,
+            /* 线索类型 */
+               AUDIT_CLUE_UNIT AS clueAuditUnit,
+            /* 审计线索单位 */
+               AUDIT_UNIT_CODE AS clueAuditedUnitCode,
+            /* 被审计单位编码 */
+               AUDIT_UNIT_NAME AS clueAuditedUnit,
+            /* 被审计单位 */
+               AUDIT_CLUE_VAL  AS clueQuantity,
+            /* 线索量 */
+               CLUE_CNT_RATE   AS clueQuantityRatio,
+            /* 线索量占比 */
+               CLUE_CNT_RANK   AS clueQuantityRank
+            /* 线索量排名 */
+        FROM hpbus.TB_AUDIT_CLUE_LIBRARY_VT
+        WHERE AUDIT_MON = TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMM')
+          and AUDIT_MDL_CODE is not null
+    </select>
+
+
+    <select id="selectLargeKmBaseEntity" resultType="com.cxsj.largemodel.facade.AuditElementInfoBaseFacade">
+        SELECT info.audit_model_number                 AS auditModelNumber,
+               info.audit_model_name                   AS auditModelName,
+               info.primary_business_process           AS primaryBusinessProcess,
+               info.secondary_business_process         AS secondaryBusinessProcess,
+               info.audit_business_logic               AS auditBusinessLogic,
+               info.expected_risks                     AS expectedRisks,
+               modelType.write_time                    AS writeTime,
+               modelType.model_owner                   AS modelOwner,
+               modelType.dock_dept                     AS dockDept,
+               elements.code_requirement               AS codeRequirement,
+               elements.file_name                      AS fileName,
+               elements.specification_requirement      AS specificationRequirement,
+               elements.reference_number               AS referenceNumber,
+               elements.dispatch_time                  AS dispatchTime,
+               elements.start_time                     AS startTime,
+               elements.standard_basis                 AS standardBasis,
+               online.number_units_covered             AS numberUnitsCovered,
+               online.number_professional_institutions AS numberProfessionalInstitutions,
+               online.number_of_provincial             AS numberOfProvincial,
+               online.model_online_time                AS modelOnlineTime,
+               online.service_ownership_system         AS serviceOwnershipSystem,
+               online.model_running_frequency          AS modelRunningFrequency,
+               info.running_mode                       AS runningMode,
+               info.quality_rating                     AS qualityRating,
+               online.sources_audit_practice           AS sourcesAuditPractice,
+               online.ascription_special               AS ascriptionSpecial,
+               online.online_remarks                   AS onlineRemarks,
+               modelType.def_exam_userDept             AS defExamUserDept,
+               caseFxal.problem_summary                AS problemSummary,
+               caseFxal.problem_detail_description     AS problemDetailDescription,
+               caseFxal.audit_period                   AS auditPeriod,
+               caseFxal.involved_unit                  AS involvedUnit,
+               caseFxal.audit_project                  AS auditProject,
+               caseYsfxal.problem_summary              AS ysProblemSummary,
+               caseYsfxal.problem_detail_description   AS ysProblemDetailDescription,
+               caseYsfxal.audit_period                 AS ysAuditPeriod,
+               caseYsfxal.involved_unit                AS ysInvolvedUnit,
+               caseYsfxal.audit_project                AS ysAuditProject
+        FROM hpeapm.audit_elements_info info
+                 LEFT JOIN hpeapm.spl_model_type modelType
+                           ON info.audit_model_number = modelType.audit_model_number
+                 LEFT JOIN hpeapm.audit_elements_online_model online
+                           ON info."audit_model_number" = online."audit_model_number"
+                 LEFT JOIN hpeapm.audit_elements_system elements
+                           ON info.audit_model_number = elements.audit_model_number
+                 LEFT JOIN
+             (SELECT *
+              FROM hpeapm."audit_element_case"
+              WHERE is_del = 0
+                AND "type" = '1') caseFxal
+             ON info."audit_model_number" = caseFxal.audit_model_number
+                 LEFT JOIN
+             (SELECT *
+              FROM hpeapm."audit_element_case"
+              WHERE is_del = 0
+                AND "type" = '2') caseYsfxal
+             ON info."audit_model_number" = caseYsfxal.audit_model_number
+        WHERE elements.delete_status = '1'
+          AND info."audit_model_number" LIKE '%HQ000%'
+        ORDER BY info.audit_model_number,
+                 info.quality_rating
+    </select>
+
+
+    <select id="selectLargeKmBaseEntityTest" resultType="com.cxsj.largemodel.facade.AuditElementInfoBaseFacade">
+        SELECT *
+        FROM hpeapm.model_info_table_01
+        ORDER BY auditModelNumber,
+                 runningMode
+    </select>
+
+</mapper>

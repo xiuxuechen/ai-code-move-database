@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.pg.PgAuditElementInfoLogMapper">
+
+    <resultMap id="AuditElementInfoLogMap" type="com.cxsj.mxzd.pojo.AuditElementInfoLog">
+        <result column="audit_point_number" property="auditPointNumber"/>
+        <result column="audit_point_name" property="auditPointName"/>
+        <result column="audit_model_number" property="auditModelNumber"/>
+        <result column="audit_model_name" property="auditModelName"/>
+        <result column="audit_model_describe" property="auditModelDescribe"/>
+        <result column="information_supplement" property="informationSupplement"/>
+        <result column="scope_of_data" property="scopeOfData"/>
+        <result column="data_domain" property="dataDomain"/>
+        <result column="data_access_source" property="dataAccessSource"/>
+        <result column="data_attribution_system" property="dataAttributionSystem"/>
+        <result column="data_access_time" property="dataAccessTime"/>
+        <result column="data_retention_cycle" property="dataRetentionCycle"/>
+        <result column="structured_data_not" property="structuredDataNot"/>
+        <result column="existing_data_of_model" property="existingDataOfModel"/>
+        <result column="data_content_description_xq" property="dataContentDescriptionXq"/>
+        <result column="involved_system" property="involvedSystem"/>
+        <result column="scope_of_data_xq" property="scopeOfDataXq"/>
+        <result column="information_sources" property="informationSources"/>
+        <result column="find_remark" property="findremark"/>
+        <result column="audit_business_logic" property="auditBusinessLogic"/>
+        <result column="audit_model_business_logic" property="auditModelBusinessLogic"/>
+        <result column="primary_business_process" property="primaryBusinessProcess"/>
+        <result column="expected_risks" property="expectedRisks"/>
+        <result column="expected_data_requirements" property="expectedDataRequirements"/>
+        <result column="expected_data_covers_unit_demand" property="expectedDataCoversUnitDemand"/>
+        <result column="requirements_involve_the_system" property="requirementsInvolveTheSystem"/>
+        <result column="subordinate_to_system" property="subordinateToSystem"/>
+        <result column="model_code" property="modelCode"/>
+        <result column="secondary_business_process" property="secondaryBusinessProcess"/>
+        <result column="dock_people" property="dockPeople"/>
+        <result column="dock_phone" property="dockPhone"/>
+        <result column="write_time" property="writeTime"/>
+        <result column="dock_department" property="dockDepartment"/>
+        <result column="information_type" property="informationType"/>
+        <result column="code_requirement" property="codeRequirement"/>
+        <result column="file_name" property="fileName"/>
+        <result column="specification_requirement" property="specificationRequirement"/>
+        <result column="reference_number" property="referenceNumber"/>
+        <result column="dispatch_time" property="dispatchTime"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="audit_point" property="auditPoint"/>
+        <result column="audit_prospective_point" property="auditProspectivePoint"/>
+        <result column="audit_system_name" property="auditSystemName"/>
+        <result column="audit_system_content" property="auditSystemContent"/>
+        <result column="audit_confirmation_findings" property="auditConfirmationFindings"/>
+        <result column="audit_model_name_send" property="auditModelNameSend"/>
+        <result column="audit_model_logic" property="auditModelLogic"/>
+        <result column="problem_summary" property="problemSummary"/>
+        <result column="problem_description" property="problemDescription"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="audit_involved" property="auditInvolved"/>
+        <result column="data_content_description" property="dataContentDescription"/>
+        <result column="audit_project" property="auditProject"/>
+        <result column="scope_of_data" property="scopeOfData"/>
+        <result column="data_domain" property="dataDomain"/>
+        <result column="data_access_source" property="dataAccessSource"/>
+        <result column="data_attribution_system" property="dataAttributionSystem"/>
+        <result column="access_time" property="accessTime"/>
+        <result column="data_retention_cycle" property="dataRetentionCycle"/>
+        <result column="structured_data_not" property="structuredDataNot"/>
+        <result column="existing_data_of_model" property="existingDataOfModel"/>
+        <result column="remark" property="remark"/>
+        <result column="data_content_description_xq" property="dataContentDescriptionXq"/>
+        <result column="involved_system" property="involvedSystem"/>
+        <result column="scope_of_data_xq" property="scopeOfDataXq"/>
+        <result column="assessment_result" property="assessmentResult"/>
+        <result column="model_assessment_remarks" property="modelAssessmentRemarks"/>
+        <result column="model_development_logic" property="modelDevelopmentLogic"/>
+        <result column="stay_development_content" property="stayDevelopmentContent"/>
+        <result column="progress_the_development" property="progressTheDevelopment"/>
+        <result column="expected_completion_time" property="expectedCompletionTime"/>
+        <result column="conditions_still_lacking" property="conditionsStillLacking"/>
+        <result column="model_development_remarks" property="modelDevelopmentRemarks"/>
+        <result column="model_state" property="modelState"/>
+        <result column="service_ownership_system" property="serviceOwnershipSystem"/>
+        <result column="data_source_used_model" property="dataSourceUsedModel"/>
+        <result column="data_start_time" property="dataStartTime"/>
+        <result column="model_running_frequency" property="modelRunningFrequency"/>
+        <result column="number_units_covered" property="numberUnitsCovered"/>
+        <result column="number_of_provincial" property="numberOfProvincial"/>
+        <result column="number_professional_institutions" property="numberProfessionalInstitutions"/>
+        <result column="whether_cured_system" property="whetherCuredSystem"/>
+        <result column="model_online_time" property="modelOnlineTime"/>
+        <result column="sources_audit_practice" property="sourcesAuditPractice"/>
+        <result column="ascription_special" property="ascriptionSpecial"/>
+        <result column="online_remarks" property="onlineRemarks"/>
+        <result column="operation_log" property="operationLog"/>
+        <result column="create_person" property="createPerson"/>
+        <result column="create_date" property="createDate"/>
+        <result column="organ" property="organ"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+
+
+   <insert id="insertInfoLog" parameterType="com.cxsj.mxzd.pojo.AuditElementInfoLog" keyProperty="id" useGeneratedKeys="true">
+       INSERT  into hpeapm.audit_elements_info_log(
+       audit_point_number,audit_point_name,audit_model_number,audit_model_name,
+       audit_model_describe,information_supplement,information_sources,
+       find_remark,audit_business_logic,primary_business_process,
+       expected_risks,expected_data_requirements,expected_data_covers_unit_demand,
+       requirements_involve_the_system,subordinate_to_system,model_code,secondary_business_process,
+       dock_phone,dock_people,write_time,dock_department,information_type,code_requirement,file_name,specification_requirement,reference_number,
+       dispatch_time,start_time,end_time,audit_point,audit_prospective_point,audit_system_name,audit_system_content,audit_confirmation_findings,
+       audit_model_name_send,audit_model_logic,problem_summary,problem_description,audit_time,audit_involved,audit_project,data_content_description,
+       scope_of_data,data_domain,data_access_source,data_attribution_system,access_time,data_retention_cycle,structured_data_not,
+       existing_data_of_model,remark,data_content_description_xq,involved_system,scope_of_data_xq,assessment_result,model_assessment_remarks,
+       model_development_logic,stay_development_content,progress_the_development,expected_completion_time,conditions_still_lacking,
+       model_development_remarks,model_state,service_ownership_system,data_source_used_model,data_start_time,
+       model_running_frequency,number_units_covered,
+       number_of_provincial,number_professional_institutions,whether_cured_system,
+       model_online_time,sources_audit_practice,ascription_special,
+       online_remarks,operation_log,create_person,create_date,organ,phone,audit_model_business_logic
+       ) VALUES (
+       like '%'||#{auditPointNumber}||'%',like '%'||#{auditPointName}||'%',like '%'||#{auditModelNumber}||'%',
+       like '%'||#{auditModelName}||'%',like '%'||#{auditModelDescribe}||'%',like '%'||#{informationSupplement}||'%',
+       like '%'||#{informationSources}||'%',like '%'||#{findRemark}||'%',
+       like '%'||#{auditBusinessLogic}||'%',like '%'||#{primaryBusinessProcess}||'%',
+       like '%'||#{expectedRisks}||'%',like '%'||#{expectedDataRequirements}||'%',like '%'||#{expectedDataCoversUnitDemand}||'%',
+       like '%'||#{requirementsInvolveTheSystem}||'%',like '%'||#{subordinateToSystem}||'%',
+       like '%'||#{modelCode}||'%',like '%'||#{secondaryBusinessProcess}||'%',
+       like '%'||#{dockPhone}||'%',like '%'||#{dockPeople}||'%',
+       like '%'||#{writeTime}||'%',like '%'||#{dockDepartment}||'%',like '%'||#{informationType}||'%',
+       like '%'||#{codeRequirement}||'%',like '%'||#{fileName}||'%',like '%'||#{specificationRequirement}||'%',
+       like '%'||#{referenceNumber}||'%',like '%'||#{dispatchTime}||'%',like '%'||#{startTime}||'%',
+       like '%'||#{endTime}||'%',like '%'||#{auditPoint}||'%',like '%'||#{auditProspectivePoint}||'%',like '%'||#{auditSystemName}||'%',
+       like '%'||#{auditSystemContent}||'%',like '%'||#{auditConfirmationFindings}||'%',like '%'||#{auditModelNameSend}||'%',
+       like '%'||#{auditModelLogic}||'%',like '%'||#{problemSummary}||'%',like '%'||#{problemDescription}||'%',
+       like '%'||#{auditTime}||'%',like '%'||#{auditInvolved}||'%',
+       like '%'||#{auditProject}||'%',like '%'||#{dataContentDescription}||'%',
+       like '%'||#{scopeOfData}||'%',like '%'||#{dataDomain}||'%',like '%'||#{dataAccessSource}||'%',like '%'||#{dataAttributionSystem}||'%',
+       like '%'||#{accessTime}||'%',like '%'||#{dataRetentionCycle}||'%',
+       like '%'||#{structuredDataNot}||'%',like '%'||#{existingDataOfModel}||'%',like '%'||#{remark}||'%',
+       like '%'||#{dataContentDescriptionXq}||'%',like '%'||#{involvedSystem}||'%',
+       like '%'||#{scopeOfDataXq}||'%',like '%'||#{assessmentResult}||'%',like '%'||#{modelAssessmentRemarks}||'%',like '%'||#{modelDevelopmentLogic}||'%',
+       like '%'||#{stayDevelopmentContent}||'%',like '%'||#{progressTheDevelopment}||'%',like '%'||#{expectedCompletionTime}||'%',
+       like '%'||#{conditionsStillLacking}||'%',like '%'||#{modelDevelopmentRemarks}||'%',like '%'||#{modelState}||'%',
+       like '%'||#{serviceOwnershipSystem}||'%',like '%'||#{dataSourceUsedModel}||'%',like '%'||#{dataStartTime}||'%',
+       like '%'||#{modelRunningFrequency}||'%',like '%'||#{numberUnitsCovered}||'%',like '%'||#{numberOfProvincial}||'%',
+       like '%'||#{numberProfessionalInstitutions}||'%',like '%'||#{whetherCuredSystem}||'%',
+       like '%'||#{modelOnlineTime}||'%',like '%'||#{sourcesAuditPractice}||'%',like '%'||#{ascriptionSpecial}||'%',
+       like '%'||#{onlineRemarks}||'%',like '%'||#{operationLog}||'%',like '%'||#{createPerson}||'%',CURRENT_TIMESTAMP,like '%'||#{organ}||'%',like '%'||#{phone}||'%',like '%'||#{auditModelBusinessLogic}||'%'
+       )
+   </insert>
+
+
+</mapper>
+
+

@@ -1,0 +1,1772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 命名空间 -->
+<mapper namespace="com.cxsj.mxzd.mapper.mysql.MysqlDataSupportCapabilityMapper">
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementInfo" id="AuditElementInfoMap">
+        <result property="id" column="id"/>
+        <result property="auditPointNumber" column="audit_point_number"/>
+        <result property="auditPointName" column="audit_point_name"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="auditModelName" column="audit_model_name"/>
+        <result property="primaryBusinessProcess" column="primary_business_process"/>
+        <result property="secondaryBusinessProcess" column="secondary_business_process"/>
+        <result property="writeTime" column="writeTime"/>
+        <result property="dataContentDescription" column="data_content_description"/>
+        <result property="dockPeople" column="dockPeople"/>
+        <result property="dockDepartment" column="dockDepartment"/>
+        <result property="dockPhone" column="dockPhone"/>
+        <result property="writeTime" column="writeTime"/>
+        <result property="existingDataOfModelId" column="existing_data_of_model"/>
+        <result property="remark" column="support_remark"/>
+    </resultMap>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.DataSupportInfo" id="SupportInfoMap">
+        <result property="id" column="id"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+        <result property="assetCode" column="assetCode"/>
+        <result property="dataCode" column="code"/>
+        <result property="name" column="name"/>
+        <result property="originalSystemcode" column="originalSystemcode"/>
+        <result property="originalSystem" column="originalSystem"/>
+        <result property="interId" column="interId"/>
+        <result property="interName" column="interName"/>
+        <result property="objLevelCode" column="objLevelCode"/>
+        <result property="busiType" column="busiType"/>
+        <result property="dataStatus" column="status"/>
+        <result property="dataSupporter" column="data_supporter"/>
+        <result property="isAcc" column="is_acc"/>
+    </resultMap>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.AuditElementsEmpty" id="AuditElementsEmptyListMap">
+        <result property="auditPointNumber" column="auditPointNumber"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="auditModelName" column="auditModelName"/>
+        <result property="remark" column="remark"/>
+        <result property="existingDataOfModel" column="existingDataOfModel"/>
+        <result property="dockPeople" column="dockPeople"/>
+        <result property="typeOfInformation" column="typeOfInformation"/>
+        <result property="detailedTime" column="detailedTime"/>
+        <result property="dockDepartment" column="dockDepartment"/>
+        <result property="dockDepartment" column="dockDepartment"/>
+        <result property="isOnline" column="isOnline"/>
+        <collection property="dataSupportInfo" column="examId" ofType="com.cxsj.mxzd.pojo.DataSupportInfo"
+                    javaType="list">
+            <result property="assetCode" column="assetCode"/>
+            <result property="dataCode" column="dataCode"/>
+            <result property="name" column="name"/>
+            <result property="originalSystemcode" column="originalSystemcode"/>
+            <result property="originalSystem" column="originalSystem"/>
+            <result property="interId" column="interId"/>
+            <result property="interName" column="interName"/>
+            <result property="objLevelCode" column="objLevelCode"/>
+            <result property="busiType" column="busiType"/>
+            <result property="dataStatus" column="dataStatus"/>
+            <result property="dataSupporter" column="dataSupporter"/>
+            <result property="isAcc" column="isAcc"/>
+        </collection>
+        <collection property="dataCutInfo" column="examId" ofType="com.cxsj.mxzd.pojo.DataCutInfo"
+                    javaType="list">
+            <result property="dataContentDescriptionXq" column="dataContentDescriptionXq"/>
+            <result property="involvedSystem" column="involvedSystem"/>
+            <result property="scopeOfDataXq" column="scopeOfDataXq"/>
+        </collection>
+    </resultMap>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.SupportInCutInfo" id="suppCut">
+        <result property="id" column="id"/>
+        <result property="suppId" column="supp_id"/>
+        <result property="cutId" column="cut_id"/>
+        <result property="auditModelNumber" column="audit_model_number"/>
+    </resultMap>
+
+
+    <resultMap type="com.cxsj.common.dto.ModelOrderParam" id="modelOrderMap">
+        <result property="business1Name" column="business1Name"/>
+        <result property="business2Name" column="business2Name"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="modelName" column="modelName"/>
+        <result property="modelNumber" column="modelNumber"/>
+        <result property="auditBusinessLogic" column="auditBusinessLogic"/>
+        <result property="executionLogic" column="executionLogic"/>
+        <result property="dataToSystem" column="dataToSystem"/>
+        <result property="businessArea" column="businessArea"/>
+        <result property="sourceDomain" column="sourceDomain"/>
+        <result property="expectedAuditFind" column="expectedAuditFind"/>
+        <result property="modelCode" column="modelCode"/>
+        <result property="modelCodeFileId" column="modelCodeFileId"/>
+        <result property="autoDeputy" column="autoDeputy"/>
+        <result property="autoPeople" column="autoPeople"/>
+        <result property="autoDeptId" column="autoDeptId"/>
+        <result property="autoDeptName" column="autoDeptName"/>
+        <collection property="dataAssetsParams" column="modelNumber" ofType="com.cxsj.common.dto.DataAssetsParam"
+                    javaType="list">
+            <result property="assetcode" column="assetcode"/>
+            <result property="englishName" column="englishName"/>
+            <result property="chineseName" column="chineseName"/>
+            <result property="interid" column="interid"/>
+            <result property="innerName" column="innerName"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="getOrderModelMsgByModelNumber" resultMap="modelOrderMap" parameterType="java.lang.String">
+        SELECT a.primary_business_process   AS business1Name,
+               a.secondary_business_process AS business2Name,
+               a.audit_point_name           AS auditPointName,
+               a.audit_model_name           AS modelName,
+               a.audit_business_logic       AS auditBusinessLogic,
+               a.execution_logic            AS executionLogic,
+               a.subordinate_to_system      AS dataToSystem,
+               a.expected_risks             AS expectedAuditFind,
+               a."model_code"               AS modelCode,
+               a.model_code_file_id         AS modelCodeFileId,
+               a.business_area                 businessArea,
+               a.source_domain                 sourceDomain,
+               a."audit_model_number"       AS modelNumber,
+               b."audit_model_number"       AS modelNumber,
+               b."assetCode"                AS assetcode,
+               b."code"                     AS englishName,
+               b."name"                     AS "chineseName",
+               b."interId"                  AS interid,
+               b."interName"                AS innerName,
+               c."dock_people"                 autoPeople,
+               c."dock_deputy"                 autoDeputy,
+               c."dock_dept"                   autoDeptName
+        FROM (SELECT *
+              FROM audit_elements_info
+              WHERE "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
+             ) a
+                 LEFT JOIN
+             (SELECT *
+              FROM spl_model_type
+              WHERE "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')) c
+             ON a."audit_model_number" = c."audit_model_number"
+                 LEFT JOIN
+             (SELECT *
+              FROM "audit_elements_data_support_v2"
+              WHERE isdel = '1'
+                AND "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')) b
+             ON a."audit_model_number" = b."audit_model_number"
+
+    </select>
+
+    <!--分页查询审计支撑能力列表-->
+    <select id="selectSupportList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="AuditElementsEmptyListMap">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        "_abc"."auditPointNumber" AS "auditPointNumber",
+        "_abc"."auditPointName" AS "auditPointName",
+        "_abc"."auditModelNumber" AS "auditModelNumber",
+        "_abc"."auditModelName" AS "auditModelName",
+        "_abc"."dockPeople" AS "dockPeople",
+        "_abc"."dockDepartment" AS "dockDepartment",
+        "_abc"."primaryBusinessProcess" AS "primaryBusinessProcess",
+        "_abc"."secondaryBusinessProcess" AS "secondaryBusinessProcess",
+        "_abc"."informationSources" AS "informationSources",
+        "_abc"."typeOfInformation" AS "typeOfInformation",
+        "_abc"."detailedTime" AS "detailedTime",
+        "_abc"."isOnline" AS "isOnline",
+        "supp"."code" AS "dataCode",
+        "supp"."assetCode" AS "assetCode",
+        "supp"."name" AS "name",
+        "supp"."originalSystemcode" AS "originalSystemcode",
+        "supp"."originalSystem" AS "originalSystem",
+        "supp"."interId" AS "interId",
+        "supp"."interName" AS "interName",
+        "supp"."status" AS "dataStatus",
+        "supp"."objLevelCode" AS "objLevelCode",
+        "supp"."busiType" AS "busiType",
+        "is_acc" AS "isAcc",
+        "supp"."data_supporter" AS "dataSupporter",
+        "cut"."data_content_description_xq" AS "dataContentDescriptionXq",
+        "cut"."involved_system" AS "involvedSystem",
+        "cut"."scope_of_data_xq" AS "scopeOfDataXq",
+        CASE WHEN "_abc"."existing_data_of_model"=1
+        THEN '是' WHEN "_abc"."existing_data_of_model"=0 THEN '否' ELSE '部分满足' END AS "existingDataOfModel",
+        "_abc"."remark" AS "remark"
+        FROM
+        (
+        SELECT
+        "b"."audit_point_number" AS "auditPointNumber",
+        "b"."audit_point_name" AS "auditPointName",
+        "b"."audit_model_number" AS "auditModelNumber",
+        "b"."audit_model_name" AS "auditModelName",
+        "b"."primary_business_process" AS "primaryBusinessProcess",
+        "b"."secondary_business_process" AS "secondaryBusinessProcess",
+        "b"."is_online" AS "isOnline",
+        "b"."information_sources" AS "informationSources",
+        "a"."dock_people" AS "dockPeople",
+        "a"."dock_department" AS "dockDepartment",
+        "a"."type_of_information" AS "typeOfInformation",
+        "b"."existing_data_of_model" AS "existing_data_of_model",
+        "support_remark" AS "remark",
+        "a"."detailed_time" AS "detailedTime"
+        FROM
+        (
+        SELECT
+        "audit_model_number",
+        "dock_people",
+        "dock_department",
+        "type_of_information",
+        "detailed_time"
+        FROM
+        "hpeapm"."audit_elements_operation_steps"
+        WHERE
+        "information_type" = '数据支撑能力'
+        AND "delete_status" = '1'
+        <if test="dockPeople != null and dockPeople !=''">
+            AND "dock_people" LIKE CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="isImport!= null and isImport !='' ">
+            AND "is_import" LIKE CONCAT('%', #{isImport}, '%')
+        </if>
+        )a
+        JOIN(
+        SELECT
+        "primary_business_process",
+        "secondary_business_process",
+        "information_sources",
+        "audit_point_number",
+        "audit_point_name",
+        "audit_model_number",
+        "audit_model_name",
+        "existing_data_of_model",
+        "is_online",
+        "support_remark"
+        FROM
+        "hpeapm"."audit_elements_info"
+        where 1=1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and "offline"!='1'
+        </if>
+        <!--<if test="isImport== null"> AND "is_online"='1'</if>-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
+            AND "primary_business_process" LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
+        </if>
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
+            AND "secondary_business_process" LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
+        </if>
+        <if test="informationSources != null and informationSources !=''">
+            AND "information_sources" LIKE CONCAT('%', #{informationSources}, '%')
+        </if>
+        <if test="auditPointNumber != null and auditPointNumber !=''">
+            AND "audit_point_number" LIKE CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        <if test="auditPointName != null and auditPointName!=''">
+            AND "audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+        </if>
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND "audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="auditModelName != null and auditModelName !=''">
+            AND "audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+        </if>
+        )b ON "a"."audit_model_number" = "b"."audit_model_number"
+        ORDER BY "a"."detailed_time" desc
+        
+        )_abc
+        LEFT JOIN(
+        SELECT
+        "assetCode",
+        "code",
+        "name",
+        "originalSystemcode",
+        "originalSystem",
+        "interId",
+        "interName",
+        "objLevelCode",
+        "busiType",
+        "status",
+        "data_supporter",
+        "audit_model_number",
+        "is_acc"
+        FROM
+        "hpeapm"."audit_elements_data_support_v2"
+        WHERE "isdel" = '1'
+        )supp ON "_abc"."auditModelNumber" = "supp"."audit_model_number"
+        LEFT JOIN(
+        SELECT
+        "data_content_description_xq",
+        "involved_system",
+        "scope_of_data_xq",
+        "audit_model_number"
+        FROM
+        "hpeapm"."audit_elements_data_cut_in"
+        WHERE
+        "isdel" = '1'
+        )cut ON "supp"."audit_model_number" = "cut"."audit_model_number"
+        )a where 1=1 ORDER BY "detailedTime" desc
+    </select>
+
+
+    <!--分页查询审计支撑能力列表统计总数量-->
+    <select id="selectSupportListCount" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.lang.Integer">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        COUNT(DISTINCT "_abc"."auditModelNumber") AS "result"
+        FROM
+        (
+        SELECT
+        "b"."audit_point_number" AS "auditPointNumber",
+        "b"."audit_point_name" AS "auditPointName",
+        "b"."audit_model_number" AS "auditModelNumber",
+        "b"."audit_model_name" AS "auditModelName",
+        "b"."primary_business_process" AS "primaryBusinessProcess",
+        "b"."secondary_business_process" AS "secondaryBusinessProcess",
+        "b"."information_sources" AS "informationSources",
+        "a"."dock_people" AS "dockPeople",
+        "a"."dock_department" AS "dockDepartment",
+        "b"."existing_data_of_model" AS "existing_data_of_model",
+        "support_remark" AS "remark"
+        FROM
+        (
+        SELECT
+        "audit_model_number",
+        "dock_people",
+        "dock_department"
+        FROM
+        "hpeapm"."audit_elements_operation_steps"
+        WHERE
+        "information_type" = '数据支撑能力'
+        AND "delete_status" = '1'
+        <if test="dockPeople != null and dockPeople !=''">
+            AND "dock_people" LIKE CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="isImport!= null and isImport !='' ">
+            AND "is_import" LIKE CONCAT('%', #{isImport}, '%')
+        </if>
+        )a
+        JOIN(
+        SELECT
+        "primary_business_process",
+        "secondary_business_process",
+        "information_sources",
+        "audit_point_number",
+        "audit_point_name",
+        "audit_model_number",
+        "audit_model_name",
+        "existing_data_of_model",
+        "support_remark"
+        FROM
+        "hpeapm"."audit_elements_info"
+        WHERE 1=1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            AND "offline" != '1'
+        </if>
+        <!-- <if test="isImport== null"> AND is_online='1'</if>-->
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
+            AND "primary_business_process" LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
+        </if>
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
+            AND "secondary_business_process" LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
+        </if>
+        <if test="informationSources != null and informationSources !=''">
+            AND "information_sources" LIKE CONCAT('%', #{informationSources}, '%')
+        </if>
+        <if test="auditPointNumber != null and auditPointNumber !=''">
+            AND "audit_point_number" LIKE CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        <if test="auditPointName != null and auditPointName!=''">
+            AND "audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+        </if>
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND "audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="auditModelName != null and auditModelName !=''">
+            AND "audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+        </if>
+        )b ON "a"."audit_model_number" = "b"."audit_model_number"
+        )_abc
+        LEFT JOIN(
+        SELECT
+        "data_interface_name",
+        "data_content_description",
+        "scope_of_data",
+        "data_domain",
+        "data_access_source",
+        "data_attribution_system",
+        "data_access_time",
+        "data_retention_cycle",
+        "structured_data_not",
+        "audit_model_number",
+        "data_supporter"
+        FROM
+        "hpeapm"."audit_elements_data_support"
+        WHERE
+        "isdel" = '1'
+        )supp ON "_abc"."auditModelNumber" = "supp"."audit_model_number"
+        LEFT JOIN(
+        SELECT
+        "data_content_description_xq",
+        "involved_system",
+        "scope_of_data_xq",
+        "audit_model_number"
+        FROM
+        "hpeapm"."audit_elements_data_cut_in"
+        WHERE
+        "isdel" = '1'
+        )cut ON "supp"."audit_model_number" = "cut"."audit_model_number"
+        )a WHERE 1=1
+    </select>
+
+
+    <!--查询数据支撑能力信息导出适用接口 -->
+    <select id="getdataSupportList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="com.cxsj.mxzd.pojo.exportParam.ExportDateSupportExcel">
+        SELECT
+        *
+        from
+        (
+        SELECT
+        _abc.auditPointNumber,
+        _abc.auditPointName,
+        _abc.auditModelNumber,
+        _abc.auditModelName,
+        _abc.primaryBusinessProcess,
+        _abc.secondaryBusinessProcess,
+        _abc.dockPeople as dockPeople,
+        _abc.dockDepartment as dockDepartment,
+        _abc.remark as remark,
+        _abc.existingDataOfModel as existingDataOfModel,
+        sedc.assetCode as assetCode,
+        sedc.dataCode as dataCode,
+        sedc.name as name,
+        sedc.originalSystemcode as originalSystemcode,
+        sedc.originalSystem as originalSystem,
+        sedc.interId as interId,
+        sedc.interName as interName,
+        sedc.objLevelCode as objLevelCode,
+        sedc.busiType as busiType,
+        sedc.dataStatus as dataStatus,
+        sedc.dataSupporter as dataSupporter,
+        case when sedc.isAcc=1 then '是' else '否' end as isAcc,
+        sedc.data_content_description_xq as dataContentDescriptionXq,
+        sedc.involved_system as involvedSystem,
+        sedc.scope_of_data_xq as scopeOfDataXq
+        from (
+        SELECT
+        sic.audit_model_number,
+        supp.assetCode as assetCode,
+        supp.code as dataCode,
+        supp.name as name,
+        supp.originalSystemcode as originalSystemcode,
+        supp.originalSystem as originalSystem,
+        supp.interId as interId,
+        supp.interName as interName,
+        supp.objLevelCode as objLevelCode,
+        supp.busiType as busiType,
+        supp.status as dataStatus,
+        supp.data_supporter as dataSupporter,
+        supp.is_acc as isAcc,
+        cut.data_content_description_xq,
+        cut.involved_system,
+        cut.scope_of_data_xq
+        from (
+        SELECT
+        id,
+        assetCode,
+        "code",
+        "name",
+        originalSystemcode,
+        originalSystem,
+        interId,
+        interName,
+        objLevelCode,
+        busiType,
+        "status",
+        data_supporter,
+        audit_model_number,
+        is_acc
+        FROM
+        "audit_elements_data_support_v2"
+        WHERE 1 = 1
+        AND isdel='1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )supp
+        RIGHT JOIN (SELECT * from audit_supp_in_cut where 1=1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )as sic on supp.id=sic.supp_id
+        RIGHT JOIN
+        (
+        SELECT
+        id,
+        data_content_description_xq,
+        involved_system,
+        scope_of_data_xq,
+        audit_model_number
+        FROM
+        "audit_elements_data_cut_in"
+        WHERE
+        isdel = '1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )cut on sic.cut_id=cut.id
+        UNION
+        SELECT
+        sic.audit_model_number,
+        supp.assetCode as assetCode,
+        supp.code as dataCode,
+        supp.name as name,
+        supp.originalSystemcode as originalSystemcode,
+        supp.originalSystem as originalSystem,
+        supp.interId as interId,
+        supp.interName as interName,
+        supp.objLevelCode as objLevelCode,
+        supp.busiType as busiType,
+        supp.status as dataStatus,
+        supp.data_supporter as dataSupporter,
+        supp.is_acc as isAcc,
+        cut.data_content_description_xq,
+        cut.involved_system,
+        cut.scope_of_data_xq
+        from (
+        SELECT
+        id,
+        assetCode,
+        "code",
+        "name",
+        originalSystemcode,
+        originalSystem,
+        interId,
+        interName,
+        objLevelCode,
+        busiType,
+        "status",
+        data_supporter,
+        audit_model_number,
+        is_acc
+        FROM
+        "audit_elements_data_support_v2"
+        WHERE 1 = 1
+        AND isdel='1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )supp
+        LEFT JOIN (SELECT * from audit_supp_in_cut where 1=1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )as sic on supp.id=sic.supp_id
+        LEFT JOIN (
+        SELECT
+        id,
+        data_content_description_xq,
+        involved_system,
+        scope_of_data_xq,
+        audit_model_number
+        FROM
+        "audit_elements_data_cut_in"
+        WHERE
+        isdel = '1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        )cut on sic.cut_id=cut.id)sedc
+        RIGHT JOIN
+        (
+        SELECT
+        b.audit_point_number AS auditPointNumber,
+        b.audit_point_name AS auditPointName,
+        b.audit_model_number AS auditModelNumber,
+        b.audit_model_name AS auditModelName,
+        b.primary_business_process as primaryBusinessProcess,
+        b.secondary_business_process as secondaryBusinessProcess,
+        b.information_sources as informationSources,
+        a.dock_people AS dockPeople,
+        a.dock_department as dockDepartment,
+        a.type_of_information as typeOfInformation,
+        case when b.existing_data_of_model=1
+        then '是' when b.existing_data_of_model=0 then '否' else '部分满足' end as
+        existingDataOfModel,
+        support_remark as remark
+        FROM
+        (
+        SELECT
+        audit_model_number,
+        dock_people,
+        dock_department,
+        type_of_information
+        FROM
+        audit_elements_operation_steps
+        WHERE
+        information_type = '数据支撑能力'
+        AND delete_status = '1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="dockPeople != null and dockPeople !=''">
+            AND dock_people LIKE CONCAT('%', #{dockPeople}, '%')
+        </if>
+        <if test="dockDepartment != null and dockDepartment !=''">
+            AND dock_department LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        <if test="auditPointName != null and auditPointName !=''">
+            AND audit_point_name LIKE CONCAT('%', #{auditPointName}, '%')
+        </if>
+        <if test="auditPointNumber != null and auditPointNumber !=''">
+            AND audit_point_number LIKE CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        )a
+        JOIN(
+        SELECT
+        primary_business_process,
+        secondary_business_process,
+        information_sources,
+        audit_point_number,
+        audit_point_name,
+        audit_model_number,
+        audit_model_name,
+        existing_data_of_model,
+        support_remark
+        FROM
+        "audit_elements_info"
+        where 1=1
+        <if test="prvdCode!= null and prvdCode == 'HQ0' ">
+            and offline!='1'
+        </if>
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
+            AND primary_business_process LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
+        </if>
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
+            AND secondary_business_process LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
+        </if>
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+
+        <if test="auditModelName != null and auditModelName !=''">
+            AND audit_model_name LIKE CONCAT('%', #{auditModelName}, '%')
+        </if>
+        <if test="auditPointName != null and auditPointName !=''">
+            AND audit_point_name LIKE CONCAT('%', #{auditPointName}, '%')
+        </if>
+        <if test="auditPointNumber != null and auditPointNumber !=''">
+            AND audit_point_number LIKE CONCAT('%', #{auditPointNumber}, '%')
+        </if>
+        )b ON a.audit_model_number=b.audit_model_number
+        )_abc on sedc.audit_model_number=_abc.auditModelNumber)axc where axc.auditModelNumber != '' ORDER BY
+        axc.auditModelNumber asc
+    </select>
+
+
+    <!--审计点名称下拉框 -->
+    <select id="getDropdownAuditPointName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT
+        a."audit_point_name" AS auditPointNumber,
+        a."audit_point_name" AS auditPointName
+        FROM
+        "audit_elements_info" a
+        LEFT JOIN "spl_model_type" b
+        ON a."audit_model_number" = b."audit_model_number"
+        WHERE a."audit_point_name" IS NOT NULL
+        AND a."audit_point_name" != ''
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND b."dock_dept" LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+    </select>
+
+
+    <select id="getDropdownAuditModelName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT
+        a.audit_model_name AS "auditModelNumber",
+        a.audit_model_name AS "auditModelName"
+        FROM
+        "hpeapm"."audit_elements_info" a
+        LEFT JOIN "hpeapm"."spl_model_type" b
+        ON a."audit_model_number" = b."audit_model_number"
+        WHERE a.audit_model_name IS NOT NULL
+        AND a.audit_model_name != ''
+        <if test="auditPointName != null and auditPointName !=''">
+            AND a.audit_point_name LIKE CONCAT('%', #{auditPointName}, '%')
+        </if>
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND b."dock_dept" LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+    </select>
+
+
+
+    <select id="selectModelNameToPointName" parameterType="java.util.List" resultType="java.util.Map">
+        SELECT DISTINCT b."audit_model_name" AS "auditModelNumber",
+                        b."audit_model_name" AS "auditModelName"
+        FROM "hpeapm"."spl_mainten_db" a
+                 LEFT JOIN "hpeapm"."audit_elements_info" b
+                           ON a."model_no" = b."audit_model_number"
+        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b."audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+    </select>
+
+
+
+    <select id="selectGlMsg" parameterType="java.lang.String" resultType="com.cxsj.mxzd.pojo.ASuppInParam">
+        SELECT a."cut_id"             AS cutId,
+               a."audit_model_number" AS auditModelNumber
+        FROM audit_supp_in_cut a
+        WHERE a."audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+          AND a."cut_id" IS NOT NULL
+    </select>
+
+
+    <delete id="deleteGlMsg" parameterType="java.util.Map">
+        DELETE
+        FROM
+        audit_supp_in_cut
+        WHERE 1=1
+        AND "audit_model_number" in
+        <foreach collection="auditModelSet" item="auditModel" index="index" open="(" close=")" separator=",">
+            CONCAT('%', #{auditModel}, '%')
+        </foreach>
+    </delete>
+
+
+    <!--综合查询下拉框，获取当前部门下所有的录入人名称 -->
+    <select id="getdataDockPeopleList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT
+        "dock_people"
+        FROM
+        "hpeapm"."audit_elements_operation_steps"
+        WHERE "dock_people" IS NOT NULL
+        AND "dock_people" !=''
+        <if test="dockDepartment!= null and dockDepartment !=''">
+            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+        </if>
+        AND "delete_status"=1
+    </select>
+
+
+    <!--一级业务流程 审计库下拉框当中的数据 -->
+    <select id="getDropdownboxNo1TableNew" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT "primary_business_process_id" AS "id",
+                        "primary_business_process"    AS "name"
+        FROM "hpeapm"."audit_elements_business_process"
+        WHERE "primary_business_process" IS NOT NULL
+          AND "primary_business_process" !=''
+    </select>
+
+    <!--二级业务流程 审计库下拉框当中的数据 -->
+    <select id="getDropdownboxMo2TableNew" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT DISTINCT
+        "secondary_business_process_id" AS "id",
+        "secondary_business_process" AS "name"
+        FROM
+        "hpeapm"."audit_elements_business_process"
+        WHERE "secondary_business_process" IS NOT NULL
+        AND "secondary_business_process" !=''
+        <if test="business1 != null and business1 !=''">
+            AND "primary_business_process" LIKE CONCAT('%', #{business1}, '%')
+        </if>
+    </select>
+
+
+    <!--删除审计能力支撑，数据资产-->
+    <update id="deleteByAuditModelNumber">
+        UPDATE audit_elements_data_support_v2
+        SET isdel=0
+        where audit_model_number = #{auditModelNumber}
+    </update>
+
+
+    <!--将审计能力支撑中数据接入需求数据中最早的时间放入这里-->
+
+    <update id="updateAuditElementInfo" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        UPDATE audit_elements_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="existingDataOfModelId != null ">existing_data_of_model=#{existingDataOfModelId},</if>
+            <if test="remark != null">support_remark=#{remark},</if>
+        </trim>
+        where audit_model_number = #{auditModelNumber}
+    </update>
+
+    <select id="selectByAuditModelNumberSupport" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="AuditElementInfoMap">
+        select
+        id,audit_point_number,audit_point_name,audit_model_number,audit_model_name,primary_business_process,secondary_business_process,existing_data_of_model,support_remark
+        from audit_elements_info where 1=1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number=#{auditModelNumber}
+        </if>
+    </select>
+
+    <!--根据模型编号查询资产管理表中是否有当前数据-->
+    <select id="selectByAuditModelNumberSupportzichan" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="SupportInfoMap">
+        SELECT
+        id,
+        audit_model_number,
+        assetCode,
+        "code",
+        "name",
+        originalSystemcode,
+        originalSystem,
+        interId,
+        interName,
+        objLevelCode,
+        busiType,
+        is_acc AS is_acc,
+        "status" AS "status",
+        data_supporter
+        FROM
+        "audit_elements_data_support_v2"
+        WHERE 1 = 1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        AND isdel=1;
+    </select>
+
+
+    <!--根据模型编号查询资产管理表中是否有当前数据-->
+    <select id="selectByAuditModelNumberSupportzichanAscTime"
+            parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultMap="SupportInfoMap">
+        select data_access_time from audit_elements_data_support
+        where 1=1
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        AND isdel=1 order by data_access_time asc LIMIT 1
+    </select>
+
+    <!--根据模型编号修改数据能力支撑数据资产管理-->
+    <update id="updateAuditSupportDataBase" parameterType="com.cxsj.mxzd.pojo.DataSupportInfo">
+        UPDATE audit_elements_data_support
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dataInterfaceName != null and dataInterfaceName !=''">data_interface_name=#{dataInterfaceName},
+            </if>
+            <if test="dataContentDescription != null and dataContentDescription !=''">
+                data_content_description=#{dataContentDescription},
+            </if>
+            <if test="scopeOfData != null and scopeOfData !=''">scope_of_data=#{scopeOfData},</if>
+            <if test="dataDomain != null  and dataDomain != ''">data_domain=#{dataDomain},</if>
+            <if test="dataAccessSource != null  and dataAccessSource != ''">data_access_source=#{dataAccessSource},</if>
+            <if test="dataAttributionSystem != null  and dataAttributionSystem != ''">
+                data_attribution_system=#{dataAttributionSystem},
+            </if>
+            <if test="dataAccessTime != null and dataAccessTime !=''">data_access_time=#{dataAccessTime},</if>
+            <if test="dataRetentionCycle != null and dataRetentionCycle !=''">
+                data_retention_cycle=#{dataRetentionCycle},
+            </if>
+            <if test="structuredDataNotId != null  and structuredDataNotId != ''">
+                structured_data_not=#{structuredDataNotId},
+            </if>
+            <if test="dataSupporter != null  and dataSupporter != ''">data_supporter=#{dataSupporter},</if>
+        </trim>
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            WHERE audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="id != null and id !=''">
+            AND id=#{id}
+        </if>
+
+    </update>
+
+
+    <!--新增，修改，或者删除审计支撑的时候先将审计支撑所有数据状态置位0-->
+    <update id="updateAuditSupportDeleteStatus" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
+        UPDATE audit_elements_data_support_v2 set isdel=0
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            WHERE audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+    </update>
+
+    <!--插入数据能力支撑数据资产管理-->
+    <insert id="insertAuditSupportDataBase" parameterType="com.cxsj.mxzd.pojo.DataSupportInfo">
+        INSERT INTO "audit_elements_data_support_v2"
+        (id, audit_model_number, assetCode, code, "name", originalSystemcode, originalSystem, interId, interName,
+         objLevelCode, busiType, status, data_supporter, is_acc)
+        VALUES (#{id}, #{auditModelNumber}, #{assetCode}, #{dataCode}, #{name}, #{originalSystemcode},
+                #{originalSystem}, #{interId}, #{interName}, #{objLevelCode}, #{busiType}, #{dataStatus},
+                #{dataSupporter}, #{isAcc})
+    </insert>
+
+
+    <insert id="insertAllDataSup" parameterType="java.util.Map">
+        INSERT INTO "audit_elements_data_support_v2"
+        (id,audit_model_number,assetCode,code,"name",originalSystemcode,originalSystem,interId,interName,
+        objLevelCode,busiType,status,data_supporter,is_acc)
+        VALUES
+        <foreach collection="suportList" item="emp" separator=",">
+            (#{emp.id}, #{emp.auditModelNumber}, #{emp.assetCode}, #{emp.dataCode}, #{emp.name},
+            #{emp.originalSystemcode},
+            #{emp.originalSystem}, #{emp.interId}, #{emp.interName}, #{emp.objLevelCode}, #{emp.busiType},
+            #{emp.dataStatus}, #{emp.dataSupporter}, #{emp.isAcc})
+        </foreach>
+    </insert>
+
+
+    <select id="selectAllDataSupport" resultType="com.cxsj.mxzd.pojo.DataSupportInfo">
+        SELECT a.id                                    AS id,
+               a."audit_model_number"                  AS auditModelNumber,
+               REPLACE(a."assetCode", '\n', '')        AS assetCode,
+               REPLACE(a."code", '\n', '')             AS dataCode,
+               REPLACE(a."name", '\n', '')             AS "name",
+               REPLACE(a.originalSystemcode, '\n', '') AS originalSystemcode,
+               REPLACE(a."originalSystem", '\n', '')   AS originalSystem,
+               REPLACE(a."interId", '\n', '')          AS interId,
+               REPLACE(a.interName, '\n', '')          AS interName,
+               REPLACE(a.objLevelCode, '\n', '')       AS objLevelCode,
+               REPLACE(a.busiType, '\n', '')           AS busiType,
+               REPLACE(a."status", '\n', '')           AS dataStatus,
+               REPLACE(a."data_supporter", '\n', '')   AS dataSupporter,
+               REPLACE(a."is_acc", '\n', '')           AS isAcc
+        FROM "audit_elements_data_support_v2" a
+        WHERE a.isdel = '1'
+    </select>
+
+
+    <!--1数据接口名称-->
+    <select id="getinterfaceNumberList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select DISTINCT data_interface_number as 'value', data_interface_name as label
+        from audit_data_assets
+        where 1 = 1
+    </select>
+
+
+    <!--2数据内容描述-->
+    <select id="getdataContentDescriptionList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select
+        data_content_description_id as 'value',
+        CONCAT(data_content_description, '(', data_content_description_id, ')') as label
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+    </select>
+
+
+    <!--3数据范围-->
+    <select id="getscopeOfDataList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select
+        scope_of_data as label,
+        scope_of_data as 'value'
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+    <!--4数据归属域-->
+    <select id="gedataDomainList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select
+        data_domain as label,
+        data_domain as 'value'
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+    <!--5是否结构化数据-->
+    <select id="getstructuredDataNotIdList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.lang.String">
+        select
+        case when structured_data_not='是' then '1' else '0' end as structuredDataNotId
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+    <!--6数据留存时间-->
+    <select id="getdataRetentionCycleList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select
+        IFNULL(data_retention_cycle,'') as label,
+        IFNULL(data_retention_cycle,'') as 'value'
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+    <!--7数据接入时间-->
+    <select id="getdataAccesstimeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.lang.String">
+        select
+        IFNULL(DATE_FORMAT(STR_TO_DATE((data_access_time,'01'),"%Y%m%d"),"%Y-%m-%d") ,'')as 'value'
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+
+    <!--8数据归属系统-->
+    <select id="getdataAttributionSystemList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        select
+        data_attribution_system as label,
+        data_attribution_system as 'value'
+        from audit_data_assets
+        where 1=1
+        <if test="dataInterfaceNameId != null and dataInterfaceNameId !=''">
+            AND data_interface_number LIKE CONCAT('%', #{dataInterfaceNameId}, '%')
+        </if>
+        <if test="dataInterfaceName != null and dataInterfaceName !=''">
+            AND data_interface_name LIKE CONCAT('%', #{dataInterfaceName}, '%')
+        </if>
+        <if test="dataContentDescriptionId != null and dataContentDescriptionId !=''">
+            AND data_content_description_id LIKE CONCAT('%', #{dataContentDescriptionId}, '%')
+        </if>
+        <if test="dataContentDescription != null and dataContentDescription !=''">
+            AND data_content_description LIKE CONCAT('%', #{dataContentDescription}, '%')
+        </if>
+    </select>
+
+
+    <!--批量保存数据支撑能力 -->
+    <insert id="insertsuportList" parameterType="java.util.List">
+        INSERT INTO audit_elements_data_support (
+        data_interface_name,
+        data_content_description,
+        scope_of_data,
+        data_domain,
+        data_access_source,
+        data_attribution_system,
+        data_access_time,
+        data_retention_cycle,
+        structured_data_not,
+        audit_model_number,
+        data_supporter,
+        isdel
+        )
+        VALUES
+        <foreach collection="list" item="emp" separator=",">
+            (
+            #{emp.dataInterfaceName},
+            #{emp.dataContentDescription},
+            #{emp.scopeOfData},
+            #{emp.dataDomain},
+            #{emp.dataAccessSource},
+            #{emp.dataAttributionSystem},
+            #{emp.dataAccessTime},
+            #{emp.dataRetentionCycle},
+            #{emp.structuredDataNotId},
+            #{emp.auditModelNumber},
+            #{emp.dataSupporter},
+            '1'
+            )
+        </foreach>
+    </insert>
+
+
+    <!--批量保存数据支撑能力-数据接入信息 -->
+    <insert id="insertcutList" parameterType="java.util.List">
+        INSERT INTO audit_elements_data_cut_in (
+        data_content_description_xq,
+        involved_system,
+        scope_of_data_xq,
+        audit_model_number,
+        isdel
+        )
+        VALUES
+        <foreach collection="list" item="emp" separator=",">
+            (
+            #{emp.dataContentDescriptionXq},
+            #{emp.involvedSystem},
+            #{emp.scopeOfDataXq},
+            #{emp.auditModelNumber},
+            '1'
+            )
+        </foreach>
+    </insert>
+
+
+    <!--8数据归属系统-->
+    <select id="selectSupportInCutById" parameterType="com.cxsj.mxzd.pojo.SupportInCutInfo"
+            resultMap="suppCut">
+        select
+        *
+        from audit_supp_in_cut
+        where 1=1
+        <if test="suppId != null and suppId !=''">
+            AND supp_id LIKE CONCAT('%', #{suppId}, '%')
+        </if>
+
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+    </select>
+
+
+    <select id="selectAssCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        assetCode AS "label",
+        assetCode AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectDataCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        code AS "label",
+        code AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectNameList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        name AS "label",
+        name AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectSourceSys" resultType="java.util.Map">
+        SELECT DISTINCT sys_x2 AS "label",
+                        sys_x2 AS "value"
+        FROM map_system_list
+        WHERE approv_status = 'success'
+          AND CURRENT_TIMESTAMP BETWEEN "start_time"
+            AND "end_time"
+          AND effec_status = 'Y'
+    </select>
+
+
+    <select id="selectOriginalSystemcodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        originalSystemcode AS "label",
+        originalSystemcode AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectOriginalSystemList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        originalSystem AS "label",
+        originalSystem AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectInterIdList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        interId AS "label",
+        interId AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectInterNameList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        interName AS "label",
+        interName AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectObjLevelCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        objLevelCode AS "label",
+        objLevelCode AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectBusiTypeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        busiType AS "label",
+        busiType AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="dataStatus != null and dataStatus !=''">
+            AND status=#{dataStatus}
+        </if>
+    </select>
+
+
+    <select id="selectDataStatusList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
+            resultType="java.util.Map">
+        SELECT DISTINCT
+        status AS "label",
+        status AS "value"
+        FROM
+        "audit_assets_data"
+        where 1=1
+        <if test="assetCode != null and assetCode !=''">
+            AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
+        </if>
+        <if test="dataCode != null and dataCode !=''">
+            AND code=#{dataCode}
+        </if>
+        <if test="name != null and name !=''">
+            AND "name"=#{name}
+        </if>
+        <if test="originalSystemcode != null and originalSystemcode !=''">
+            AND originalSystemcode=#{originalSystemcode}
+        </if>
+        <if test="originalSystem != null and originalSystem !=''">
+            AND originalSystem=#{originalSystem}
+        </if>
+        <if test="interId != null and interId !=''">
+            AND interId=#{interId}
+        </if>
+        <if test="interName != null and interName !=''">
+            AND interName=#{interName}
+        </if>
+        <if test="objLevelCode != null and objLevelCode !=''">
+            AND objLevelCode=#{objLevelCode}
+        </if>
+        <if test="busiType != null and busiType !=''">
+            AND busiType=#{busiType}
+        </if>
+    </select>
+
+
+    <resultMap type="com.cxsj.mxzd.pojo.ModelAssetsPojo" id="ModelAssetsMap">
+        <result property="primaryBusinessProcess" column="primaryBusinessProcess"/>
+        <result property="secondaryBusinessProcess" column="secondaryBusinessProcess"/>
+        <result property="auditPointName" column="auditPointName"/>
+        <result property="auditPointNumber" column="auditPointNumber"/>
+        <result property="auditModelName" column="auditModelName"/>
+        <result property="auditModelNumber" column="auditModelNumber"/>
+        <result property="sourcesAuditPractice" column="sourcesAuditPractice"/>
+        <collection property="assets" column="auditModelNumber" ofType="com.cxsj.mxzd.pojo.AssetsPojo"
+                    javaType="list">
+            <result property="assetCode" column="assetCode"/>
+            <result property="code" column="code"/>
+            <result property="name" column="name"/>
+            <result property="originalSystemcode" column="originalSystemcode"/>
+            <result property="originalSystem" column="originalSystem"/>
+            <result property="interId" column="interId"/>
+            <result property="interName" column="interName"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="selectAuditModelAssets" parameterType="com.cxsj.mxzd.pojo.ModAssetsParam"
+            resultMap="ModelAssetsMap">
+        SELECT
+        a.*,
+        b.sourcesAuditPractice AS sourcesAuditPractice
+        FROM
+        (SELECT
+        a."primary_business_process" AS primaryBusinessProcess,
+        a."secondary_business_process" AS secondaryBusinessProcess,
+        a."audit_point_name" auditPointName,
+        a."audit_point_number" auditPointNumber,
+        a."audit_model_name" auditModelName,
+        a."audit_model_number" auditModelNumber,
+        b."assetCode" AS assetCode,
+        b."code" AS "code",
+        b."name" AS "name",
+        b."originalSystemcode" AS originalSystemcode,
+        b."originalSystem" originalSystem,
+        b."interId" interId,
+        b."interName" interName
+        FROM
+        "audit_elements_info" a
+        LEFT JOIN "audit_elements_data_support_v2" b
+        ON a."audit_model_number" = b."audit_model_number"
+        WHERE b."isdel" = '1'
+        <if test="auditModelNumber != null and auditModelNumber !=''">
+            AND a."audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+        </if>
+        <if test="auditModelName != null and auditModelName !=''">
+            AND a."audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+        </if>
+        <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
+            AND a."primary_business_process"=#{primaryBusinessProcess}
+        </if>
+        <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
+            AND a."secondary_business_process"=#{secondaryBusinessProcess}
+        </if>
+        <if test="assetCode != null and assetCode !=''">
+            AND b.assetCode=#{assetCode}
+        </if>
+        <if test="code != null and code !=''">
+            AND b.code LIKE CONCAT('%', #{code}, '%')
+        </if>
+        <if test="name != null and name !=''">
+            AND b.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        ) a
+        LEFT JOIN
+        (SELECT
+        sources_audit_practice AS sourcesAuditPractice,
+        audit_model_number
+        FROM
+        "audit_elements_online_model"
+        WHERE is_deleted = '0'
+        ) b
+        ON a.auditModelNumber = b.audit_model_number
+    </select>
+
+
+    <!-- 清空数据资产数据表数据   -->
+    <delete id="trunAessesData">
+        TRUNCATE audit_assets_data
+    </delete>
+
+
+    <delete id="deleteDataSupportData">
+        DELETE
+        FROM "audit_elements_data_support_v2"
+        WHERE isdel = '1'
+    </delete>
+
+
+    <insert id="inertAessData" parameterType="java.util.Map">
+        INSERT INTO "audit_assets_data"
+        VALUES
+        <foreach collection="list" item="itemList" separator=",">
+            (#{itemList.assetCode}, #{itemList.code}, #{itemList.name}, #{itemList.originalSystemcode},
+            #{itemList.originalSystem}, #{itemList.interId}, #{itemList.interName},
+            #{itemList.objLevelCode}, #{itemList.busiType}, #{itemList.status})
+        </foreach>
+    </insert>
+
+
+    <select id="selectAccessMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.DataSupportInfo">
+        SELECT DISTINCT
+        assetCode AS assetCode,
+        "code" AS dataCode,
+        "name" AS "name",
+        originalSystemcode AS originalSystemcode,
+        originalSystem AS originalSystem,
+        interId AS interId,
+        interName AS interName,
+        objLevelCode AS objLevelCode,
+        busiType AS busiType,
+        "status" AS dataStatus
+        FROM
+        "audit_assets_data"
+        WHERE 1 = 1
+        <if test="code != null and code !=''">
+            AND "code" LIKE CONCAT('%', #{code}, '%')
+        </if>
+        <if test="name != null and name !=''">
+            AND "name" LIKE CONCAT('%', #{name}, '%')
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <delete id="deleteAllModelMsg" parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam">
+        DELETE FROM  audit_elements_data_cut_in WHERE audit_model_number IN<foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_data_support_v2 WHERE audit_model_number IN   <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_find_database WHERE audit_model_number IN <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_handover_model WHERE audit_model_number IN <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_info WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                                    item="auditModelNumber"
+                                                                                    index="index" open="(" close=")"
+                                                                                    separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_model_evaluation WHERE audit_model_number IN <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_online_model WHERE audit_model_number IN <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_operation_steps WHERE audit_model_number IN <foreach
+            collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_element_case WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                                   item="auditModelNumber" index="index"
+                                                                                   open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_elements_system WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                                      item="auditModelNumber"
+                                                                                      index="index" open="(" close=")"
+                                                                                      separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM audit_supp_in_cut WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                                  item="auditModelNumber" index="index"
+                                                                                  open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM spl_business_examine WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                                     item="auditModelNumber"
+                                                                                     index="index" open="(" close=")"
+                                                                                     separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM spl_model_type WHERE audit_model_number IN <foreach collection="auditModelNumbers"
+                                                                               item="auditModelNumber" index="index"
+                                                                               open="(" close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM spl_business_db WHERE model_no IN <foreach collection="auditModelNumbers"
+                                                                      item="auditModelNumber" index="index" open="("
+                                                                      close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+        DELETE FROM spl_business_dy WHERE model_no IN <foreach collection="auditModelNumbers"
+                                                                      item="auditModelNumber" index="index" open="("
+                                                                      close=")" separator=",">
+        CONCAT('%', #{auditModelNumber}, '%')</foreach>;
+    </delete>
+
+
+    <select id="selectDropIds" parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam"
+            resultType="java.lang.String">
+        SELECT
+        id
+        FROM
+        "spl_model_type" a
+        WHERE audit_model_number IN
+        <foreach collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
+            CONCAT('%', #{auditModelNumber}, '%')
+        </foreach>
+    </select>
+
+
+</mapper>
+
+
