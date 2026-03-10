@@ -1,12 +1,14 @@
 package com.cxsj.mxzd.mapper.mysql;
 
-import com.cxsj.mxzd.pojo.ExamModelPojo;
-import com.cxsj.mxzd.pojo.ExamParam;
-import com.cxsj.mxzd.pojo.ExamPojp;
+import com.cxsj.mxzd.pojo.spl.ExamModelPojo;
+import com.cxsj.mxzd.pojo.spl.ExamParam;
+import com.cxsj.mxzd.pojo.spl.ExamPojp;
 import com.cxsj.mxzd.pojo.spl.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.PersonalCenter;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 /**
  * AuditModelExamMapper Mapper 接口

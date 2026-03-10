@@ -1,9 +1,10 @@
 package com.cxsj.mxzd.commom;
 
 
-import org.apache.commons.lang.StringUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.alibaba.excel.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 
@@ -54,14 +55,7 @@ public class ParamData extends HashMap implements Map {
 			if (StringUtils.isNotBlank(value))
 				returnMap.put(name, replaceSpecialCharacters(value));
 		}
-		if (returnMap.containsKey(Constants.CUR_PAGE) && returnMap.containsKey(Constants.PAGE_SIZE)) {
-			returnMap.put(Constants.LIMIT_FROM,
-					getLimitFrom(returnMap.get(Constants.CUR_PAGE), returnMap.get(Constants.PAGE_SIZE)));
-			returnMap.put(Constants.LIMIT_TO, getLimitTo(returnMap.get(Constants.PAGE_SIZE)));
-		} else {
-			returnMap.put(Constants.LIMIT_FROM, Constants.DEFAULT_LIMIT_FROM);
-			returnMap.put(Constants.LIMIT_TO, Constants.DEFAULT_LIMIT_TO);
-		}
+
 		map = returnMap;
 	}
 

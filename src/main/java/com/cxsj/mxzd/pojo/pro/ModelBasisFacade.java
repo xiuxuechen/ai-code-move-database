@@ -1,11 +1,10 @@
 package com.cxsj.mxzd.pojo.pro;
 
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -21,7 +20,6 @@ public class ModelBasisFacade {
     /**
      * 模型业务编码
      */
-    @TableId
     private String modelNumber;
 
     /**

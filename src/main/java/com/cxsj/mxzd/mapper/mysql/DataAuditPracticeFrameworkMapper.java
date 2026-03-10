@@ -3,11 +3,11 @@ package com.cxsj.mxzd.mapper.mysql;
 import com.cxsj.mxzd.pojo.AuditElementInfo;
 import com.cxsj.mxzd.pojo.AuditElementsParam;
 import com.cxsj.mxzd.pojo.AuditElementsSystemParam;
-import com.cxsj.mxzd.pojo.AuditModelDesignVo;
 import com.cxsj.mxzd.pojo.PersonalCenter;
-import com.cxsj.mxzd.pojo.UserToRoleData;
 import java.util.List;
 import java.util.Map;
+
+import com.cxsj.mxzd.pojo.exportParam.AuditModelDesignVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -112,11 +112,6 @@ public interface DataAuditPracticeFrameworkMapper {
      * SELECT 操作: getMessageBycodeRequirements
      */
     Map getMessageBycodeRequirements(String param);
-
-    /**
-     * SELECT 操作: selectOrgUserList
-     */
-    UserToRoleData selectOrgUserList(String param);
 
     /**
      * INSERT 操作: insertsystemMessage

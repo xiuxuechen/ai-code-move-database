@@ -1,12 +1,14 @@
 package com.cxsj.mxzd.mapper.mysql;
 
-import com.cxsj.mxzd.pojo.ExamHisEntuty;
+import com.cxsj.mxzd.pojo.spl.ExamHisEntuty;
 import com.cxsj.mxzd.pojo.spl.ExamineandapproveParam;
 import com.cxsj.mxzd.pojo.PersonalCenter;
-import com.cxsj.mxzd.pojo.SqlModelTypeParam;
-import com.cxsj.mxzd.pojo.WorkItemEntity;
+import com.cxsj.mxzd.pojo.spl.SqlModelTypeParam;
+import com.cxsj.mxzd.pojo.spl.WorkItemEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 /**
  * ExamineandapproveMapper Mapper 接口

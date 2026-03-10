@@ -1,7 +1,5 @@
 package com.cxsj.largemodel.facade;
 
-import com.cxsj.common.util.PinYinUtil;
-import com.cxsj.largemodel.common.LargemodelCommon;
 import lombok.Data;
 
 /**
@@ -72,10 +70,4 @@ public class InstitutionalKnowlEdgebaseFacade {
      * 数据权限
      */
     private String dataAuthority;
-
-
-    public String getKmId() {
-        return  PinYinUtil.getPingYin(LargemodelCommon.INS_KM_BASE_ID + this.insDeptId + this.insFileType).toLowerCase();
-
-    }
 }
