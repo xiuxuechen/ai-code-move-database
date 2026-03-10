@@ -8,33 +8,32 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * AuditModelMapper Mapper 接口
- * 自动生成 - 请勿手动修改
  */
 @Mapper
 public interface MysqlAuditModelMapper {
 
     /**
-     * SELECT 操作: selectAll
+     * 查询所有审计模型
      */
     List<AuditModel> selectAll();
 
     /**
-     * SELECT 操作: selectById
+     * 根据 ID 查询
      */
-    List<AuditModel> selectById();
+    AuditModel selectById(@Param("id") Long id);
 
     /**
-     * SELECT 操作: selectByModelCode
+     * 根据模型代码查询
      */
-    List<AuditModel> selectByModelCode();
+    AuditModel selectByModelCode(@Param("modelCode") String modelCode);
 
     /**
-     * SELECT 操作: selectByStatus
+     * 根据状态查询
      */
-    List<AuditModel> selectByStatus();
+    List<AuditModel> selectByStatus(@Param("status") String status);
 
     /**
-     * SELECT 操作: count
+     * 统计总数
      */
     int count();
 

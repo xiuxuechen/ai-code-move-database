@@ -16,31 +16,31 @@
 
     <select id="selectAll" resultMap="BaseResultMap">
         SELECT id, model_code, model_name, model_type, description, status, created_at, updated_at
-        FROM audit_models
+        FROM hpeapm.audit_models
         ORDER BY id
     </select>
 
     <select id="selectById" resultMap="BaseResultMap">
         SELECT id, model_code, model_name, model_type, description, status, created_at, updated_at
-        FROM audit_models
+        FROM hpeapm.audit_models
         WHERE id = #{id}
     </select>
 
     <select id="selectByModelCode" resultMap="BaseResultMap">
         SELECT id, model_code, model_name, model_type, description, status, created_at, updated_at
-        FROM audit_models
+        FROM hpeapm.audit_models
         WHERE model_code = #{modelCode}
     </select>
 
     <select id="selectByStatus" resultMap="BaseResultMap">
         SELECT id, model_code, model_name, model_type, description, status, created_at, updated_at
-        FROM audit_models
+        FROM hpeapm.audit_models
         WHERE status = #{status}
         ORDER BY id
     </select>
 
     <select id="count" resultType="int">
-        SELECT COUNT(*) FROM audit_models
+        SELECT COUNT(*) FROM hpeapm.audit_models
     </select>
 
 </mapper>
