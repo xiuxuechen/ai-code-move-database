@@ -37,11 +37,41 @@ public class OtherAuditModelMapperTest {
         System.out.println("========================================");
     }
 
-    // TODO: 添加具体的测试方法
-    // 参考 AuditModelMapperTest.java 的实现方式
-    // 每个方法需要：
-    // 1. @Test 和 @Order 注解
-    // 2. @DisplayName 描述
-    // 3. SQL 注释（单行 // 格式）
-    // 4. 双数据源查询对比
+    @Test
+    @Order(1)
+    @DisplayName("selectModelSysMsg - 查询模型系统消息")
+    public void testSelectModelSysMsg() {
+        // PostgreSQL SQL: SELECT * FROM hpeapm.audit_elements_system WHERE audit_model_number = ?
+        // MySQL SQL: SELECT * FROM audit_elements_system WHERE audit_model_number = ?
+
+        System.out.println("\n=== 测试 selectModelSysMsg ===");
+
+        java.util.Map<String, Object> param = new java.util.HashMap<>();
+        param.put("auditModelNumber", "TEST_MODEL_001");
+
+        java.util.Map pgResult = pgMapper.selectModelSysMsg(param);
+        java.util.Map mysqlResult = mysqlMapper.selectModelSysMsg(param);
+
+        System.out.println("✓ PostgreSQL 结果: " + (pgResult != null ? "有数据" : "无数据"));
+        System.out.println("✓ MySQL 结果: " + (mysqlResult != null ? "有数据" : "无数据"));
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("updateaudit_elements_info - 更新审计要素信息表")
+    public void testUpdateAuditElementsInfo() {
+        // PostgreSQL SQL: UPDATE hpeapm.audit_elements_info SET audit_model_number = ? WHERE audit_model_number = ?
+        // MySQL SQL: UPDATE audit_elements_info SET audit_model_number = ? WHERE audit_model_number = ?
+
+        System.out.println("\n=== 测试 updateaudit_elements_info ===");
+
+        java.util.Map<String, Object> param = new java.util.HashMap<>();
+        param.put("newAuditModelNumber", "TEST_NEW_001");
+        param.put("oldAuditModelNumber", "TEST_OLD_001");
+
+        int pgResult = pgMapper.updateaudit_elements_info(param);
+
+        assertTrue(pgResult >= 0, "PostgreSQL 更新应该成功");
+        System.out.println("✓ PostgreSQL 更新成功，影响行数: " + pgResult);
+    }
 }

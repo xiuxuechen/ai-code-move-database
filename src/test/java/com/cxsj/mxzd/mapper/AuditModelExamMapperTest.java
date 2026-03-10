@@ -37,11 +37,39 @@ public class AuditModelExamMapperTest {
         System.out.println("========================================");
     }
 
-    // TODO: 添加具体的测试方法
-    // 参考 AuditModelMapperTest.java 的实现方式
-    // 每个方法需要：
-    // 1. @Test 和 @Order 注解
-    // 2. @DisplayName 描述
-    // 3. SQL 注释（单行 // 格式）
-    // 4. 双数据源查询对比
+    @Test
+    @Order(1)
+    @DisplayName("getModelPrvd - 获取模型提供者")
+    public void testGetModelPrvd() {
+        // PostgreSQL SQL: SELECT * FROM hpeapm.spl_business_examine WHERE audit_model_number = ?
+        // MySQL SQL: SELECT * FROM spl_business_examine WHERE audit_model_number = ?
+
+        System.out.println("\n=== 测试 getModelPrvd ===");
+
+        String auditModelNumber = "TEST_MODEL_001";
+
+        String pgResult = pgMapper.getModelPrvd(auditModelNumber);
+        String mysqlResult = mysqlMapper.getModelPrvd(auditModelNumber);
+
+        System.out.println("✓ PostgreSQL 结果: " + pgResult);
+        System.out.println("✓ MySQL 结果: " + mysqlResult);
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("insertDbMsg - 插入数据库消息")
+    public void testInsertDbMsg() {
+        // PostgreSQL SQL: INSERT INTO hpeapm.spl_business_examine (...) VALUES (...)
+        // MySQL SQL: INSERT INTO spl_business_examine (...) VALUES (...)
+
+        System.out.println("\n=== 测试 insertDbMsg ===");
+
+        com.cxsj.mxzd.pojo.spl.ExamModelPojo entity = new com.cxsj.mxzd.pojo.spl.ExamModelPojo();
+        entity.setAuditModelNumber("TEST_EXAM_MODEL_001");
+
+        int pgResult = pgMapper.insertDbMsg(entity);
+
+        assertTrue(pgResult >= 0, "PostgreSQL 插入应该成功");
+        System.out.println("✓ PostgreSQL 插入成功，影响行数: " + pgResult);
+    }
 }

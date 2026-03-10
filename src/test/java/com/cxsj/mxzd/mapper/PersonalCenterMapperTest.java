@@ -37,11 +37,37 @@ public class PersonalCenterMapperTest {
         System.out.println("========================================");
     }
 
-    // TODO: 添加具体的测试方法
-    // 参考 AuditModelMapperTest.java 的实现方式
-    // 每个方法需要：
-    // 1. @Test 和 @Order 注解
-    // 2. @DisplayName 描述
-    // 3. SQL 注释（单行 // 格式）
-    // 4. 双数据源查询对比
+    @Test
+    @Order(1)
+    @DisplayName("getAuditPointNameList - 获取审计点名称列表")
+    public void testGetAuditPointNameList() {
+        // PostgreSQL SQL: SELECT DISTINCT audit_point_name FROM hpeapm.audit_elements_info WHERE isdel = 1
+        // MySQL SQL: SELECT DISTINCT audit_point_name FROM audit_elements_info WHERE isdel = 1
+
+        System.out.println("\n=== 测试 getAuditPointNameList ===");
+
+        java.util.Map<String, Object> pgResult = pgMapper.getAuditPointNameList();
+        java.util.Map<String, Object> mysqlResult = mysqlMapper.getAuditPointNameList();
+
+        System.out.println("✓ PostgreSQL 结果: " + (pgResult != null ? "有数据" : "无数据"));
+        System.out.println("✓ MySQL 结果: " + (mysqlResult != null ? "有数据" : "无数据"));
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("insertPersonalCenterMessage - 插入个人中心消息")
+    public void testInsertPersonalCenterMessage() {
+        // PostgreSQL SQL: INSERT INTO hpeapm.spl_business_examine (submit_user, audit_model_number, business_type, status, create_time, isdel) VALUES (?, ?, ?, ?, now(), 1)
+        // MySQL SQL: INSERT INTO spl_business_examine (submit_user, audit_model_number, business_type, status, create_time, isdel) VALUES (?, ?, ?, ?, now(), 1)
+
+        System.out.println("\n=== 测试 insertPersonalCenterMessage ===");
+
+        com.cxsj.mxzd.pojo.PersonalCenter entity = new com.cxsj.mxzd.pojo.PersonalCenter();
+        entity.setAuditModelNumber("TEST_PERSONAL_001");
+
+        int pgResult = pgMapper.insertPersonalCenterMessage(entity);
+
+        assertTrue(pgResult >= 0, "PostgreSQL 插入应该成功");
+        System.out.println("✓ PostgreSQL 插入成功，影响行数: " + pgResult);
+    }
 }

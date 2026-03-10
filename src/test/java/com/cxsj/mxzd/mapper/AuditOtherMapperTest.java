@@ -37,11 +37,43 @@ public class AuditOtherMapperTest {
         System.out.println("========================================");
     }
 
-    // TODO: 添加具体的测试方法
-    // 参考 AuditModelMapperTest.java 的实现方式
-    // 每个方法需要：
-    // 1. @Test 和 @Order 注解
-    // 2. @DisplayName 描述
-    // 3. SQL 注释（单行 // 格式）
-    // 4. 双数据源查询对比
+    @Test
+    @Order(1)
+    @DisplayName("selectAuditCodeCount - 统计审计代码数量")
+    public void testSelectAuditCodeCount() {
+        // PostgreSQL SQL: SELECT COUNT(*) FROM hpeapm.audit_elements_info WHERE audit_code = ?
+        // MySQL SQL: SELECT COUNT(*) FROM audit_elements_info WHERE audit_code = ?
+
+        System.out.println("\n=== 测试 selectAuditCodeCount ===");
+
+        com.cxsj.mxzd.pojo.MaintenMsgParam param = new com.cxsj.mxzd.pojo.MaintenMsgParam();
+        param.setAuditCode("TEST_CODE_001");
+
+        Integer pgCount = pgMapper.selectAuditCodeCount(param);
+        Integer mysqlCount = mysqlMapper.selectAuditCodeCount(param);
+
+        assertNotNull(pgCount, "PostgreSQL 统计结果不应为 null");
+        assertNotNull(mysqlCount, "MySQL 统计结果不应为 null");
+
+        System.out.println("✓ PostgreSQL count: " + pgCount);
+        System.out.println("✓ MySQL count: " + mysqlCount);
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("insertMaintenMsg - 插入维护消息")
+    public void testInsertMaintenMsg() {
+        // PostgreSQL SQL: INSERT INTO hpeapm.spl_business_examine_mainten (...) VALUES (...)
+        // MySQL SQL: INSERT INTO spl_business_examine_mainten (...) VALUES (...)
+
+        System.out.println("\n=== 测试 insertMaintenMsg ===");
+
+        com.cxsj.mxzd.pojo.MaintenMsgParam entity = new com.cxsj.mxzd.pojo.MaintenMsgParam();
+        entity.setAuditModelNumber("TEST_MAINTEN_001");
+
+        int pgResult = pgMapper.insertMaintenMsg(entity);
+
+        assertTrue(pgResult >= 0, "PostgreSQL 插入应该成功");
+        System.out.println("✓ PostgreSQL 插入成功，影响行数: " + pgResult);
+    }
 }

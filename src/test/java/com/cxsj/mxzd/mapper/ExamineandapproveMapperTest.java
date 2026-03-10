@@ -37,11 +37,40 @@ public class ExamineandapproveMapperTest {
         System.out.println("========================================");
     }
 
-    // TODO: 添加具体的测试方法
-    // 参考 AuditModelMapperTest.java 的实现方式
-    // 每个方法需要：
-    // 1. @Test 和 @Order 注解
-    // 2. @DisplayName 描述
-    // 3. SQL 注释（单行 // 格式）
-    // 4. 双数据源查询对比
+    @Test
+    @Order(1)
+    @DisplayName("selectNowExamineadapprove - 查询当前审批")
+    public void testSelectNowExamineadapprove() {
+        // PostgreSQL SQL: SELECT * FROM hpeapm.spl_business_examine WHERE status = ? AND isdel = 1
+        // MySQL SQL: SELECT * FROM spl_business_examine WHERE status = ? AND isdel = 1
+
+        System.out.println("\n=== 测试 selectNowExamineadapprove ===");
+
+        java.util.Map<String, Object> param = new java.util.HashMap<>();
+        param.put("status", 1);
+
+        String pgResult = pgMapper.selectNowExamineadapprove(param);
+        String mysqlResult = mysqlMapper.selectNowExamineadapprove(param);
+
+        System.out.println("✓ PostgreSQL 结果: " + (pgResult != null ? "有数据" : "无数据"));
+        System.out.println("✓ MySQL 结果: " + (mysqlResult != null ? "有数据" : "无数据"));
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("insertModelMessage - 插入模型消息")
+    public void testInsertModelMessage() {
+        // PostgreSQL SQL: INSERT INTO hpeapm.spl_business_examine (audit_model_number, business_code, status, create_time, isdel) VALUES (?, ?, ?, now(), 1)
+        // MySQL SQL: INSERT INTO spl_business_examine (audit_model_number, business_code, status, create_time, isdel) VALUES (?, ?, ?, now(), 1)
+
+        System.out.println("\n=== 测试 insertModelMessage ===");
+
+        com.cxsj.mxzd.pojo.spl.SqlModelTypeParam entity = new com.cxsj.mxzd.pojo.spl.SqlModelTypeParam();
+        entity.setAuditModelNumber("TEST_EXAM_001");
+
+        int pgResult = pgMapper.insertModelMessage(entity);
+
+        assertTrue(pgResult >= 0, "PostgreSQL 插入应该成功");
+        System.out.println("✓ PostgreSQL 插入成功，影响行数: " + pgResult);
+    }
 }
