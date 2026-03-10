@@ -18,16 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DualSourceCompareTest {
 
     @Autowired
-    private com.cxsj.mxzd.mapper.pg.AuditElementInfoMapper pgAuditElementInfoMapper;
+    private com.cxsj.mxzd.mapper.pg.PgAuditElementInfoMapper pgAuditElementInfoMapper;
 
     @Autowired
-    private com.cxsj.mxzd.mapper.mysql.AuditElementInfoMapper mysqlAuditElementInfoMapper;
+    private com.cxsj.mxzd.mapper.mysql.MysqlAuditElementInfoMapper mysqlAuditElementInfoMapper;
 
     @Autowired
-    private com.cxsj.mxzd.mapper.pg.AuditFindDataBaseMapper pgAuditFindDataBaseMapper;
+    private com.cxsj.mxzd.mapper.pg.PgAuditFindDataBaseMapper pgAuditFindDataBaseMapper;
 
     @Autowired
-    private com.cxsj.mxzd.mapper.mysql.AuditFindDataBaseMapper mysqlAuditFindDataBaseMapper;
+    private com.cxsj.mxzd.mapper.mysql.MysqlAuditFindDataBaseMapper mysqlAuditFindDataBaseMapper;
 
     @Test
     public void testAuditElementInfoCount() {
