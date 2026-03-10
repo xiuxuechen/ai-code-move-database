@@ -773,18 +773,4 @@
     </select>
 
 
-
-    <select id="selectOrgUserList" resultType="com.cxsj.common.dto.UserToRoleData" parameterType="java.lang.String">
-        SELECT DISTINCT *
-        FROM (SELECT DISTINCT b."deputyAccountNumber" AS "deputyAccountNumber",
-                              b."userName"            AS "userName"
-              FROM hpmgr.bonc_union_userinfos a
-                       LEFT JOIN hpmgr.bonc_union_userinfos b
-                                 ON a."orgCode" = b."orgCode"
-              WHERE 1 = 1
-                AND A."deputyAccountNumber" = like CONCAT('%', #{deputyAccountNumber}, '%')) a
-        WHERE 1 = 1
-    </select>
-
-
 </mapper>

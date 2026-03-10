@@ -47,7 +47,7 @@ public class DualSourceCompareTest {
         System.out.println("=== 测试 AuditFindDataBase 记录数量 ===");
 
         List<AuditFindDataBase> pgList = pgAuditFindDataBaseMapper.selectAuditFindDataBase(new AuditFindDataBase());
-        List<AuditFindDataBase> mysqlList = mysqlAuditFindDataBaseMapper.selectAuditFindDataBase(new AuditFindDataBase());
+        List<AuditFindDataBase> mysqlList = mysqlAuditFindDataBaseMapper.selectAuditFindDataBase();
 
         System.out.println("PostgreSQL 记录数: " + pgList.size());
         System.out.println("MySQL 记录数: " + mysqlList.size());
