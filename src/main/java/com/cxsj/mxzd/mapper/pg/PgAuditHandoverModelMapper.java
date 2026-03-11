@@ -55,7 +55,7 @@ public interface PgAuditHandoverModelMapper {
     /**
      * INSERT 操作: insertAuditHandoverModel
      */
-    int insertAuditHandoverModel(AuditFindDataBase param);
+    int insertAuditHandoverModel(AuditHandoverModel param);
 
     /**
      * INSERT 操作: inserts

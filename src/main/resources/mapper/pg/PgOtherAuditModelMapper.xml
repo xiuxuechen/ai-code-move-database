@@ -10,7 +10,7 @@
                a.order_auto_id         AS orderAutoId,
                a.sys_mxzd_model_number AS mxzdModelNumber
         FROM hpeapm.xbpj_company_model_gl a
-        WHERE a.sys_mxzd_model_number = like '%'||#{mxzdModelNumber}||'%'
+        WHERE a.sys_mxzd_model_number LIKE '%'||#{mxzdModelNumber}||'%'
         ORDER BY a.sys_mxzd_time DESC LIMIT 1
     </select>
 
@@ -25,112 +25,112 @@
 
     <update id="updateaudit_elements_data_cut_in" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_data_cut_in
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updateaudit_supp_in_cut" parameterType="java.util.Map">
         UPDATE hpeapm.audit_supp_in_cut
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%';
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%';
     </update>
 
     <update id="updateaudit_elements_data_support_v2" parameterType="java.util.Map">
         UPDATE hpeapm."audit_elements_data_support_v2"
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
 
     </update>
 
     <update id="updateaudit_elements_find_database" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_find_database
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_handover_model" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_handover_model
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_info" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_info
-        SET modelNoLs  =like '%'||#{newModelNo}||'%',
-            "pointNoLs"=like '%'||#{newPointNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number  =#{newModelNo},
+            audit_point_number=#{newPointNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_info_log" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_info_log
-        SET modelNoLs  =like '%'||#{newModelNo}||'%',
-            "pointNoLs"=like '%'||#{newPointNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number  =#{newModelNo},
+            audit_point_number=#{newPointNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_model_evaluation" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_model_evaluation
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_online_model" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_online_model
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
     <update id="updateaudit_elements_operation_steps" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_operation_steps
-        SET modelNoLs  =like '%'||#{newModelNo}||'%',
-            "pointNoLs"=like '%'||#{newPointNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number  =#{newModelNo},
+            audit_point_number=#{newPointNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updateaudit_elements_system" parameterType="java.util.Map">
         UPDATE hpeapm.audit_elements_system
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
 
     </update>
 
 
     <update id="updatespl_business_examine" parameterType="java.util.Map">
         UPDATE hpeapm."spl_business_examine"
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updatespl_model_type" parameterType="java.util.Map">
         UPDATE hpeapm."spl_model_type"
-        SET modelNoLs  =like '%'||#{newModelNo}||'%',
-            "pointNoLs"=like '%'||#{newPointNo}||'%'
-        WHERE audit_model_number = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number  =#{newModelNo},
+            audit_point_number=#{newPointNo}
+        WHERE audit_model_number LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updatespl_business_db" parameterType="java.util.Map">
         UPDATE hpeapm.spl_business_db
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE model_no = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE model_no LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updatespl_business_dy" parameterType="java.util.Map">
         UPDATE hpeapm.spl_business_dy
-        SET modelNoLs =like '%'||#{newModelNo}||'%'
-        WHERE model_no = like '%'||#{oldModelNo}||'%'
+        SET audit_model_number =#{newModelNo}
+        WHERE model_no LIKE '%'||#{oldModelNo}||'%'
     </update>
 
 
     <update id="updateUnitModelProType" parameterType="java.util.Map">
         UPDATE
             hpeapm."xbpj_company_model" a
-        SET a."hava_pro" = like '%'||#{proType}||'%'
-        WHERE a."ModelNo" = like '%'||#{auditModelNumber}||'%'
+        SET a."hava_pro" = #{proType}
+        WHERE a."modelno" LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -259,120 +259,120 @@
     <select id="updateModelNumber" parameterType="java.util.Map">
         UPDATE
             hpeapm.audit_elements_data_cut_in
-        SET audit_model_number = like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number = #{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_data_cut_in_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_elements_data_support_v2
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_data_support_v2_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_elements_find_database
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_find_database_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_elements_handover_model
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_handover_model_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_elements_info
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_info_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_elements_model_evaluation
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_model_evaluation_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
 
         UPDATE
             hpeapm.audit_elements_online_model
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_online_model_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
 
 
         UPDATE
             hpeapm.audit_elements_operation_steps
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_operation_steps_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
 
 
         UPDATE
             hpeapm.audit_elements_system
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_elements_system_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.audit_supp_in_cut
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.audit_supp_in_cut_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
 
 
         UPDATE
             hpeapm.spl_business_examine
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.spl_business_examine_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
 
         UPDATE
             hpeapm.spl_model_type
-        SET audit_model_number =like '%'||#{auditModelNumberNew}||'%'
+        SET audit_model_number =#{auditModelNumberNew}
         WHERE id IN
               (SELECT id
                FROM hpeapm.spl_model_type_bfupmodelNumber
-               WHERE audit_model_number = like '%'||#{auditModelNumber}||'%');
+               WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%');
         UPDATE
             hpeapm.spl_business_db
-        SET model_no =like '%'||#{auditModelNumberNew}||'%'
+        SET model_no =#{auditModelNumberNew}
         WHERE db_id IN
               (SELECT db_id
                FROM hpeapm.spl_business_db_bfupmodelNumber
-               WHERE model_no = like '%'||#{auditModelNumber}||'%');
+               WHERE model_no LIKE '%'||#{auditModelNumber}||'%');
         UPDATE
             hpeapm.spl_business_dy
-        SET model_no =like '%'||#{auditModelNumberNew}||'%'
+        SET model_no =#{auditModelNumberNew}
         WHERE dy_id IN
               (SELECT dy_id
                FROM hpeapm.spl_business_dy_bfupmodelNumber
-               WHERE model_no = like '%'||#{auditModelNumber}||'%');
+               WHERE model_no LIKE '%'||#{auditModelNumber}||'%');
     </select>
 
 

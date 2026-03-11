@@ -17,8 +17,6 @@
         <result property="informationType" column="information_type"/>
         <result property="typeOfInformation" column="type_of_information"/>
         <result property="status" column="status"/>
-        <result property="continueToEnter" column="continue_to_enter"/>
-        <result property="currentInput" column="current_input"/>
     </resultMap>
 
 
@@ -36,7 +34,6 @@
         <result property="examDepy" column="exam_depy"/>
         <result property="examineDept" column="examine_dept"/>
         <result property="auditModelType" column="audit_model_type"/>
-        <result property="continueToEnter" column="continue_to_enter"/>
         <result property="isExamine" column="isExamine"/>
         <result property="remarks" column="remarks"/>
         <result property="defExamUser" column="def_exam_user"/>
@@ -159,7 +156,6 @@
         b."dock_dept" AS "deckDept",
         b."creat_time" AS "writeTime",
         b."audit_model_type" AS "auditModelType",
-        b."continue_to_enter" AS "continueToEnter",
         c."examine_user" AS "examineUser",
         c."exam_depy" AS "examDepy",
         c."examine_dept" AS "examineDept",
@@ -253,7 +249,6 @@
         b."dock_dept" AS "deckDept",
         b."creat_time" AS "writeTime",
         b."audit_model_type" AS "auditModelType",
-        b."continue_to_enter" AS "continueToEnter",
         c."examine_user" AS "examineUser",
         c."exam_depy" AS "examDepy",
         c."examine_dept" AS "examineDept",
@@ -271,7 +266,7 @@
         AND a."exam_id" = c."id"
         WHERE a."role_id" like '%' || #{dockDeputy} || '%'
         <if test="txType!= null and  txType !='' ">
-            AND a."is_tx" = '%'||#{txType}||'%'
+            AND a."is_tx" LIKE '%'||#{txType}||'%'
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
             AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
@@ -309,7 +304,7 @@
         AND a."exam_id" = c."id"
         WHERE a."role_id" like '%' || #{dockDeputy} || '%'
         <if test="txType!= null and  txType!='' ">
-            AND a."is_tx" = '%'||#{txType}||'%'
+            AND a."is_tx" LIKE '%'||#{txType}||'%'
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
             AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
@@ -462,7 +457,7 @@
         SELECT COUNT(*) "COUNT"
         FROM hpeapm."audit_elements_operation_steps"
         WHERE information_type like '%' || #{informationType} || '%'
-          AND audit_model_number like '%'||#{auditModelNumber}||'%'
+          AND audit_model_number #{auditModelNumber}
           AND delete_status = '1'
     </select>
 
@@ -490,13 +485,11 @@
                                                              information_type,
                                                              type_of_information,
                                                              "status",
-                                                             continue_to_enter,
-                                                             current_input,
                                                              is_import,
                                                              detailed_time)
         VALUES (#{dockPhone}, #{dockPeople}, #{writeTime}, #{dockDepartment},
                 #{auditPointNumber}, #{auditPointName}, #{auditModelNumber}, #{auditModelName},
-                #{informationType}, #{typeOfInformation}, #{status}, #{continueToEnter}, #{currentInput}, #{isImport},
+                #{informationType}, #{typeOfInformation}, #{status}, #{isImport},
                 CURRENT_TIMESTAMP)
     </insert>
 
@@ -508,8 +501,6 @@
             hpeapm."audit_elements_operation_steps"
             SET
             "status" = '0',
-            continue_to_enter = '0',
-            current_input = '0',
             type_of_information='模型信息预览'
             WHERE
             audit_model_number= '%'||#{auditModelNumber}||'%'
@@ -536,7 +527,7 @@
             write_time= '%'||#{writeTime}||'%',
             dock_department= '%'||#{dockDepartment}||'%'
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
-          and information_type  like '%'||#{informationType}||'%'
+          and information_type  #{informationType}
           and delete_status = '1'
     </update>
 
@@ -544,9 +535,7 @@
     <update id="updateMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         UPDATE
             hpeapm."audit_elements_operation_steps"
-        SET continue_to_enter = '%'||#{continueToEnter}||'%',
-            "status"           = '%'||#{status}||'%',
-            current_input      = '%'||#{currentInput}||'%'
+            "status"           LIKE '%'||#{status}||'%',
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           AND delete_status != '0'
     </update>
@@ -569,7 +558,6 @@
             THEN '4'
             ELSE '0'
             END,
-            current_input =
             CASE
             WHEN information_type = '审计模型设计'
             THEN '1'
@@ -581,7 +569,6 @@
             THEN '4'
             ELSE '0'
             END,
-            continue_to_enter =
             CASE
             WHEN information_type = '审计模型设计'
             THEN '2'
@@ -616,7 +603,7 @@
             hpeapm."audit_elements_operation_steps"
         SET delete_status='0'
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
-          and information_type  like '%'||#{informationType}||'%'
+          and information_type  #{informationType}
           and delete_status = '1'
     </update>
 
@@ -634,8 +621,8 @@
         SELECT COUNT(*) 'COUNT'
         FROM hpeapm."audit_elements_operation_steps"
         WHERE delete_status = '1'
-          AND audit_model_number  like '%'||#{pointModelNumber}||'%'
-          AND information_type  like '%'||#{typeOfInformation}||'%'
+          AND audit_model_number  #{pointModelNumber}
+          AND information_type  #{typeOfInformation}
     </select>
 
 
@@ -676,7 +663,7 @@
     <select id="selectUser" resultType="java.lang.String">
         SELECT dock_dept AS "user"
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number  like '%'||#{audit_model_number}||'%'
+        WHERE audit_model_number  #{audit_model_number}
     </select>
 
 
@@ -686,7 +673,7 @@
                dock_department AS dockDepartment
         FROM hpeapm."audit_elements_operation_steps"
         WHERE information_type = '审计模型部署'
-          AND audit_model_number  like '%'||#{auditModelNumber}||'%'
+          AND audit_model_number  #{auditModelNumber}
           AND delete_status != '0'
     </select>
 

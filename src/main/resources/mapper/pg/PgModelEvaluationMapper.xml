@@ -97,16 +97,16 @@
         SELECT *
         FROM hpeapm.audit_elements_model_evaluation
         WHERE 1 = 1
-          AND audit_model_number like '%'||#{auditModelNumber}||'%'
-          and is_deleted = 0
+          AND audit_model_number = #{auditModelNumber}
+          and is_deleted = '0'
     </select>
 
     <select id="selectWriteTime" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT write_time
         FROM hpeapm.audit_elements_operation_steps
-        WHERE audit_model_number = '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND information_type = '审计模型部署'
-          and delete_status = 1
+          and delete_status = '1'
     </select>
 
     <select id="getModelEvaluationDataByAuditId" resultMap="mdelEvaluationPojoMap">
@@ -116,7 +116,7 @@
                  LEFT JOIN hpeapm.spl_model_type b
                            ON a."audit_model_number" = b."audit_model_number"
         WHERE 1 = 1
-          AND a.audit_model_number = '%'||#{auditModelNumber}||'%'
+          AND a.audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND a.is_deleted = 0
     </select>
 
@@ -133,7 +133,7 @@
         ON a."audit_model_number" = b."audit_model_number"
         WHERE 1 = 1
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND a.audit_model_number='%'||#{auditModelNumber}||'%'
+            AND a.audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
     </select>
 
@@ -218,15 +218,15 @@
         WHERE
         delete_status = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like '%'||#{dockDepartment}||'%'
+            AND dock_department #{dockDepartment}
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type ='%'||#{informationType}||'%'
+            AND information_type  LIKE '%'||#{informationType}||'%'
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         ) a
         JOIN (
         SELECT
@@ -308,7 +308,7 @@
         </if>
         <!-- 模型开发进度-->
         <if test="progressTheDevelopment != null">
-            and progress_the_development like '%'||#{progressTheDevelopment}||'%'
+            and progress_the_development #{progressTheDevelopment}
         </if>
         ) ba ON _abc.auditModelNumber = ba.audit_model_number
         ) a
@@ -354,12 +354,12 @@
         information_type = '审计模型部署'
         AND delete_status = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like '%'||#{dockDepartment}||'%'
+            AND dock_department #{dockDepartment}
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         ) a
         JOIN (
         SELECT
@@ -384,30 +384,30 @@
         <!--  <if test="isImport== null"> AND is_online='1'</if>-->
         <!-- 一级-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%'||#{primaryBusinessProcess}||'%'
+            AND primary_business_process #{primaryBusinessProcess}
         </if>
 
         <!-- 二级-->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%'||#{secondaryBusinessProcess}||'%'
+            and secondary_business_process #{secondaryBusinessProcess}
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||#{auditPointNumber}||'%'
+            and audit_point_number #{auditPointNumber}
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||#{auditPointName}||'%'
+            and audit_point_name #{auditPointName}
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||#{auditModelNumber}||'%'
+            and audit_model_number #{auditModelNumber}
         </if>
 
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||#{auditModelName}||'%'
+            and audit_model_name #{auditModelName}
             escape '|'
         </if>
 
@@ -435,7 +435,7 @@
         </if>
         <!-- 模型开发进度-->
         <if test="progressTheDevelopment != null">
-            and progress_the_development like '%'||#{progressTheDevelopment}||'%'
+            and progress_the_development #{progressTheDevelopment}
         </if>
         ) ba ON _abc.auditModelNumber = ba.audit_model_number
         ) a
@@ -462,19 +462,19 @@
             <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="assessmentResult != null  and assessmentResult != ''">like '%'||#{assessmentResult}||'%',</if>
-            <if test="modelAssessmentRemarks != null  and modelAssessmentRemarks != ''">like '%'||#{modelAssessmentRemarks}||'%',</if>
-            <if test="modelDevelopmentLogic != null  and modelDevelopmentLogic != ''">like '%'||#{modelDevelopmentLogic}||'%',</if>
-            <if test="stayDevelopmentContent != null  and stayDevelopmentContent != ''">like '%'||#{stayDevelopmentContent}||'%',</if>
-            <if test="progressTheDevelopment != null  and progressTheDevelopment != ''">like '%'||#{progressTheDevelopment}||'%',</if>
-            <if test="expectedCompletionTime != null and expectedCompletionTime != ''">like '%'||#{expectedCompletionTime}||'%',</if>
-            <if test="conditionsStillLacking != null  and conditionsStillLacking != ''">like '%'||#{conditionsStillLacking}||'%',</if>
-            <if test="modelDevelopmentRemarks != null  and modelDevelopmentRemarks != ''">like '%'||#{modelDevelopmentRemarks}||'%',
+            <if test="assessmentResult != null  and assessmentResult != ''">#{assessmentResult},</if>
+            <if test="modelAssessmentRemarks != null  and modelAssessmentRemarks != ''">#{modelAssessmentRemarks},</if>
+            <if test="modelDevelopmentLogic != null  and modelDevelopmentLogic != ''">#{modelDevelopmentLogic},</if>
+            <if test="stayDevelopmentContent != null  and stayDevelopmentContent != ''">#{stayDevelopmentContent},</if>
+            <if test="progressTheDevelopment != null  and progressTheDevelopment != ''">#{progressTheDevelopment},</if>
+            <if test="expectedCompletionTime != null and expectedCompletionTime != ''">#{expectedCompletionTime},</if>
+            <if test="conditionsStillLacking != null  and conditionsStillLacking != ''">#{conditionsStillLacking},</if>
+            <if test="modelDevelopmentRemarks != null  and modelDevelopmentRemarks != ''">#{modelDevelopmentRemarks},
             </if>
-            <if test="modelState != null  and modelState != ''">like '%'||#{modelState}||'%',</if>
-            <if test="modelingMethod != null  and modelingMethod != ''">like '%'||#{modelingMethod}||'%',</if>
-            <if test="isDeleted != null  and isDeleted != ''">like '%'||#{isDeleted}||'%',</if>
-            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%'</if>
+            <if test="modelState != null  and modelState != ''">#{modelState},</if>
+            <if test="modelingMethod != null  and modelingMethod != ''">#{modelingMethod},</if>
+            <if test="isDeleted != null  and isDeleted != ''">#{isDeleted},</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">#{auditModelNumber}</if>
         </trim>
     </insert>
 
@@ -483,46 +483,46 @@
         UPDATE hpeapm.audit_elements_model_evaluation
         <trim prefix="SET" suffixOverrides=",">
             <if test="assessmentResult != null">
-                assessment_result='%'||#{assessmentResult}||'%',
+                assessment_result LIKE '%'||#{assessmentResult}||'%',
             </if>
             <if test="modelingMethod != null">
-                modeling_method='%'||#{modelingMethod}||'%',
+                modeling_method LIKE '%'||#{modelingMethod}||'%',
             </if>
             <if test="modelAssessmentRemarks != null">
-                model_assessment_remarks='%'||#{modelAssessmentRemarks}||'%',
+                model_assessment_remarks LIKE '%'||#{modelAssessmentRemarks}||'%',
             </if>
             <if test="modelDevelopmentLogic != null">
-                model_development_logic='%'||#{modelDevelopmentLogic}||'%',
+                model_development_logic LIKE '%'||#{modelDevelopmentLogic}||'%',
             </if>
             <if test="stayDevelopmentContent != null">
-                stay_development_content='%'||#{stayDevelopmentContent}||'%',
+                stay_development_content LIKE '%'||#{stayDevelopmentContent}||'%',
             </if>
             <if test="progressTheDevelopment != null">
-                progress_the_development='%'||#{progressTheDevelopment}||'%',
+                progress_the_development LIKE '%'||#{progressTheDevelopment}||'%',
             </if>
             <if test="expectedCompletionTime != null">
-                expected_completion_time='%'||#{expectedCompletionTime}||'%',
+                expected_completion_time LIKE '%'||#{expectedCompletionTime}||'%',
             </if>
             <if test="conditionsStillLacking != null">
-                conditions_still_lacking='%'||#{conditionsStillLacking}||'%',
+                conditions_still_lacking LIKE '%'||#{conditionsStillLacking}||'%',
             </if>
             <if test="modelDevelopmentRemarks != null">
-                model_development_remarks='%'||#{modelDevelopmentRemarks}||'%',
+                model_development_remarks LIKE '%'||#{modelDevelopmentRemarks}||'%',
             </if>
             <if test="modelState != null">
-                model_state='%'||#{modelState}||'%',
+                model_state LIKE '%'||#{modelState}||'%',
             </if>
             <if test="isDeleted != null">
-                is_deleted='%'||#{isDeleted}||'%',
+                is_deleted LIKE '%'||#{isDeleted}||'%',
             </if>
             <if test="modelingMethod != null">
-                modeling_method='%'||#{modelingMethod}||'%',
+                modeling_method LIKE '%'||#{modelingMethod}||'%',
             </if>
             <if test="auditModelNumber != null">
-                audit_model_number='%'||#{auditModelNumber}||'%'
+                audit_model_number LIKE '%'||#{auditModelNumber}||'%'
             </if>
         </trim>
-        where audit_model_number = '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -530,7 +530,7 @@
     <update id="deleteModelEvaluation">
         UPDATE hpeapm.audit_elements_model_evaluation
         set is_deleted = 1
-        where audit_model_number = '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <!-- 导出数据   -->
@@ -605,15 +605,15 @@
         WHERE
         delete_status = '1' AND information_type ='审计模型部署'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like '%'||#{dockDepartment}||'%'
+            AND dock_department #{dockDepartment}
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type ='%'||#{informationType}||'%'
+            AND information_type  LIKE '%'||#{informationType}||'%'
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         ) a
         JOIN (
         SELECT
@@ -644,31 +644,31 @@
         </if>
         <!-- 一级-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%'||#{primaryBusinessProcess}||'%'
+            AND primary_business_process #{primaryBusinessProcess}
         </if>
 
         <!-- 二级-->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%'||#{secondaryBusinessProcess}||'%'
+            and secondary_business_process #{secondaryBusinessProcess}
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||#{auditPointNumber}||'%'
+            and audit_point_number #{auditPointNumber}
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||#{auditPointName}||'%'
+            and audit_point_name #{auditPointName}
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||#{auditModelNumber}||'%'
+            and audit_model_number #{auditModelNumber}
 
         </if>
 
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||#{auditModelName}||'%'
+            and audit_model_name #{auditModelName}
         </if>
         ) b ON a.audit_model_number = b.audit_model_number
         ORDER BY detailedTime DESC
@@ -695,7 +695,7 @@
         </if>
         <!-- 模型开发进度-->
         <if test="progressTheDevelopment != null and progressTheDevelopment != ''">
-            and progress_the_development like '%'||#{}||'%',like '%'||#{progressTheDevelopment}||'%',like '%'||#{}||'%'
+            and progress_the_development #{},#{progressTheDevelopment},#{}
         </if>
         ) ba ON _abc.auditModelNumber = ba.audit_model_number
         ) a
@@ -710,7 +710,7 @@
         UPDATE
             hpeapm."audit_elements_info" a
         SET a."offline" = '1'
-        WHERE a."audit_model_number" = '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -719,7 +719,7 @@
         UPDATE
             hpeapm."audit_elements_info" a
         SET a."offline" = '0'
-        WHERE a."audit_model_number" = '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -736,7 +736,7 @@
                 a."audit_model_number" IN
                 <foreach item="item" index="index" collection="auditModelNumberList"
                          open="(" separator="," close=")">
-                    like '%'||#{item}||'%'
+                    #{item}
                 </foreach>
             </if>
         </where>

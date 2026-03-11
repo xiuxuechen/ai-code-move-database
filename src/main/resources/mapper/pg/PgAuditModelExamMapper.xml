@@ -11,7 +11,7 @@
                                               exam_time,
                                               exam_id,
                                               db_deputy,
-                                              db_type) VALUES (like '%'||#{auditModelNumber}||'%', CURRENT_TIMESTAMP, like '%'||#{examinID}||'%', like '%'||#{deputyAccountNumber}||'%',like '%'||#{dbType}||'%')
+                                              db_type) VALUES (#{auditModelNumber}, CURRENT_TIMESTAMP, #{examinID}, #{deputyAccountNumber},#{dbType})
     </insert>
 
 
@@ -20,7 +20,7 @@
         INSERT INTO hpeapm.spl_mainten_db (model_no,
                                              exam_time,
                                              exam_id,
-                                             role_id) VALUES (like '%'||#{auditModelNumber}||'%', CURRENT_TIMESTAMP, like '%'||#{examinID}||'%', like '%'||#{deputyAccountNumber}||'%')
+                                             role_id) VALUES (#{auditModelNumber}, CURRENT_TIMESTAMP, #{examinID}, #{deputyAccountNumber})
     </insert>
 
     <!--新增待阅-->
@@ -29,15 +29,15 @@
                                               dy_time,
                                               exam_id,
                                               dy_deputy,
-                                              pro_id) VALUES (like '%'||#{auditModelNumber}||'%', CURRENT_TIMESTAMP, like '%'||#{examinID}||'%', like '%'||#{deputyAccountNumber}||'%',like '%'||#{proId}||'%')
+                                              pro_id) VALUES (#{auditModelNumber}, CURRENT_TIMESTAMP, #{examinID}, #{deputyAccountNumber},#{proId})
     </insert>
 
 
     <!--查询模型的所属部门-->
     <select id="getModelPrvd" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT a."busiUnitCode" AS prvd
+        SELECT a.busiunitcode AS prvd
         FROM hpmgr."bonc_union_userinfos" a
-        WHERE a."deputyAccountNumber" = like '%'||#{deputyAccountNumber}||'%'
+        WHERE a."deputyAccountNumber" LIKE '%'||#{deputyAccountNumber}||'%'
     </select>
 
 
@@ -47,57 +47,57 @@
         FROM hpeapm."spl_model_type" a
                  LEFT JOIN hpeapm."map_bonc_gl" b
                            ON a."dock_dept" = b."prvd_jc"
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
     <select id="selectDockerPrvd" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         SELECT
         CASE
-        WHEN a.busiUnitCode = 'CM000'
+        WHEN a."busiunitcode" = 'CM000'
         THEN '集团公司'
         ELSE b.org_name
         END AS prvd
         FROM
         hpmgr.bonc_union_userinfos a
         LEFT JOIN hpmgr.bonc_cmwa_prvd b
-        ON a.busiUnitCode = b.org_code
-        WHERE a.userName = like '%'||#{dockPeople}||'%'
+        ON a."busiunitcode" = b.org_code
+        WHERE a.userName LIKE '%'||#{dockPeople}||'%'
         <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
-            AND like '%'||#{dockDepartment}||'%' LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+            AND #{dockDepartment} LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
         </if>
         LIMIT 1
     </select>
 
     <select id="selectUserDockerPrvd" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         SELECT CASE
-                   WHEN a.busiUnitCode = 'CM000'
+                   WHEN a."busiunitcode" = 'CM000'
                        THEN '集团公司'
                    ELSE b.org_name
                    END AS prvd
         FROM hpmgr.bonc_union_userinfos a
                  LEFT JOIN hpmgr.bonc_cmwa_prvd b
-                           ON a.busiUnitCode = b.org_code
-        WHERE a.userName = like '%'||#{dockPeople}||'%'
+                           ON a."busiunitcode" = b.org_code
+        WHERE a.userName LIKE '%'||#{dockPeople}||'%'
 
-          AND like '%'||#{dockDepartment}||'%' LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+          AND #{dockDepartment} LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
             LIMIT 1
     </select>
 
 
     <select id="selecPrvd" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-        aa.busiUnitCode,
-        aa.provinceName,
-        aa.orgCode,
-        aa.orgName
+        aa."busiunitcode",
+        aa.provincename,
+        aa.orgcode,
+        aa.orgname
         FROM
         hpmgr.bonc_union_orginfos aa
         WHERE 1 = 1
-        <if test="orgName!=null and orgName!=''">
-            AND aa.orgName LIKE '%' || like '%'||#{orgName}||'%' || '%'
+        <if test="orgname!=null and orgname!=''">
+            AND aa.orgname LIKE '%' || #{orgname} || '%'
         </if>
-        AND like '%'||#{prvdName}||'%' LIKE '%' || REPLACE(REPLACE(aa.provinceName, '公司', ''), '总部', '') || '%'
+        AND #{prvdName} LIKE '%' || REPLACE(REPLACE(aa.provincename, '公司', ''), '总部', '') || '%'
         LIMIT 1
     </select>
 
@@ -105,7 +105,7 @@
     <select id="selectUserMsg" resultType="java.util.Map" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         SELECT
         CASE
-        WHEN a.busiUnitCode = 'CM000'
+        WHEN a."busiunitcode" = 'CM000'
         THEN '集团公司'
         ELSE b.org_name
         END AS prvd,
@@ -115,10 +115,10 @@
         FROM
         hpmgr.bonc_union_userinfos a
         LEFT JOIN hpmgr.bonc_cmwa_prvd b
-        ON a.busiUnitCode = b.org_code
-        WHERE a.userName = like '%'||#{dockPeople}||'%'
+        ON a."busiunitcode" = b.org_code
+        WHERE a.userName LIKE '%'||#{dockPeople}||'%'
         <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
-            AND like '%'||#{dockDepartment}||'%' LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
+            AND #{dockDepartment} LIKE '%' || REPLACE(b.org_name, '公司', '') || '%'
         </if>
         LIMIT 1
     </select>
@@ -133,8 +133,8 @@
                            ON a."bonc_role" = b."role_name"
                  LEFT JOIN hpmgr."bonc_union_userinfos" d
                            ON b."deputy_accountNumber" = d."deputyAccountNumber"
-        WHERE a."map_role" = like '%'||#{roleName}||'%'
-          AND d."busiUnitCode" = like '%'||#{prvd}||'%'
+        WHERE a."map_role" LIKE '%'||#{roleName}||'%'
+          AND d.busiunitcode LIKE '%'||#{prvd}||'%'
           and d."deputyAccountNumber" is not null
     </select>
 
@@ -143,7 +143,7 @@
     <select id="selectDefaultSpUser" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT a."def_exam_userDept" AS defaultUser
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -152,7 +152,7 @@
         SELECT a."def_exam_userDept" AS defaultUserDepy,
                a."def_exam_user"     AS defaultUser
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -161,7 +161,7 @@
         SELECT a."def2_exam_userdepy" AS default2UserDepy,
                a."def2_exam_user"     AS default2User
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -173,14 +173,14 @@
                a."share_user"        AS shareUser,
                a."share_user_depy"   AS shareUserDepy
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
     <select id="selectDockerUserDeputy" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT a."deputyAccountNumber" AS deputy
         FROM hpmgr."bonc_union_userinfos" a
-        WHERE a."userName" = like '%'||#{userName}||'%' LIMIT 1
+        WHERE a."userName" LIKE '%'||#{userName}||'%' LIMIT 1
     </select>
 
 
@@ -189,7 +189,7 @@
         SELECT a."userName"            AS userName,
                a."deputyAccountNumber" AS deputy
         FROM hpmgr."bonc_union_userinfos" a
-        WHERE deputyAccountNumber = like '%'||#{defExamUser}||'%'
+        WHERE deputyAccountNumber LIKE '%'||#{defExamUser}||'%'
     </select>
 
 
@@ -206,7 +206,7 @@
         WHERE c."deputyAccountNumber" IS NOT NULL
         and a."map_role" IN
         <foreach collection="roles" item="role" index="index" open="(" close=")" separator=",">
-            like '%'||#{role}||'%'
+            #{role}
         </foreach>
     </select>
 
@@ -219,13 +219,13 @@
         a."is_del" = '0'
         WHERE 1=1
         <if test="auditModelNumber!= null and auditModelNumber !='' ">
-            AND a."model_no" =like '%'||#{auditModelNumber}||'%'
+            AND a."model_no" =#{auditModelNumber}
         </if>
         <if test="id!= null and id !='' ">
-            AND a."db_id"=like '%'||#{id}||'%'
+            AND a."db_id"=#{id}
         </if>
         <if test="examinID!= null and examinID !='' ">
-            AND a."exam_id"=like '%'||#{examinID}||'%'
+            AND a."exam_id"=#{examinID}
         </if>
     </update>
 
@@ -238,13 +238,13 @@
         a."is_del" = '0'
         WHERE 1=1
         <if test="auditModelNumber!= null and auditModelNumber !='' ">
-            AND a."model_no" =like '%'||#{auditModelNumber}||'%'
+            AND a."model_no" =#{auditModelNumber}
         </if>
         <if test="id!= null and id !='' ">
-            AND a."dy_id"=like '%'||#{id}||'%'
+            AND a."dy_id"=#{id}
         </if>
         <if test="examinID!= null and examinID !='' ">
-            AND a."exam_id"=like '%'||#{examinID}||'%'
+            AND a."exam_id"=#{examinID}
         </if>
     </update>
 
@@ -254,7 +254,7 @@
             parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam">
         SELECT a."sub_depy" AS subDepy
         FROM hpeapm."spl_business_examine" a
-        WHERE id = like '%'||#{examinID}||'%'
+        WHERE id LIKE '%'||#{examinID}||'%'
     </select>
 
 
@@ -283,7 +283,7 @@
         ON a."exam_id" = b."id"
         WHERE a.db_id IN
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
     </select>
 
@@ -293,10 +293,10 @@
         UPDATE
         hpeapm."spl_business_db" a
         SET
-        a."exam_remarks" = like '%'||#{remarks}||'%'
+        a."exam_remarks" LIKE '%'||#{remarks}||'%'
         WHERE a."db_id" in
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
 
     </update>
@@ -306,11 +306,11 @@
     <update id="updateYbMsg" parameterType="com.cxsj.mxzd.pojo.spl.ExamParam">
         UPDATE
         hpeapm."spl_business_dy" a
-        SET a."dy_remarks"=like '%'||#{remarks}||'%',
+        SET a."dy_remarks"=#{remarks},
         a."is_del"='0'
         WHERE a."dy_id" in
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
 
     </update>
@@ -324,7 +324,7 @@
         WHERE is_del = '0'
         AND db_id IN
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
     </select>
 
@@ -338,7 +338,7 @@
         AND pro_id IS NOT NULL
         AND dy_id IN
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
     </select>
 
@@ -351,7 +351,7 @@
         WHERE is_del = '0'
         AND dy_id IN
         <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
-            like '%'||#{id}||'%'
+            #{id}
         </foreach>
     </select>
 

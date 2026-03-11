@@ -52,18 +52,16 @@
                write_time AS TIME,
               dock_department AS department,
               dock_phone AS phone
-        FROM
-            "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE delete_status = '1'
-          AND information_type = like CONCAT('%', #{informationType}, '%')
-          AND audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+          AND information_type like CONCAT('%', #{informationType}, '%')
+          AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
     <!--一级业务流程 审计库下拉框当中的数据 -->
     <select id="getDropdownboxNo1TableNew" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT DISTINCT "primary_business_process" AS "lable",
-                        "primary_business_process" AS "value"
+        SELECT DISTINCT "primary_business_process" AS `lable`, `primary_business_process` AS `value`
         FROM audit_elements_business_process
         where "primary_business_process" is not null
           and "primary_business_process" !=''
@@ -72,9 +70,9 @@
 
 
     <select id="selectPrvdBusinessCode" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT "prvd_code" AS prvdCode
-        FROM "audit_code_rule"
-        WHERE "prvd_bus" = like CONCAT('%', #{busiUnitCode}, '%') LIMIT 1
+        SELECT `prvd_code` AS prvdCode
+        FROM `audit_code_rule`
+        WHERE `prvd_bus` like CONCAT('%', #{busiUnitCode}, '%') LIMIT 1
     </select>
 
 
@@ -82,14 +80,14 @@
 
     <select id="selectBusiUnitCode" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam" resultType="java.lang.String">
         SELECT
-        a."busiUnitCode"
+        a.`busiUnitCode`
         FROM
-        hpmgr."bonc_union_userinfos" a
-        LEFT JOIN hpmgr."bonc_cmwa_prvd" b
-        ON a."busiUnitCode" = b.org_code
-        WHERE a.userName = like CONCAT('%', #{dockPeople}, '%')
+        hpmgr.`bonc_union_userinfos` a
+        LEFT JOIN hpmgr.`bonc_cmwa_prvd` b
+        ON a.`busiUnitCode` = b.org_code
+        WHERE a.userName like CONCAT('%', #{dockPeople}, '%')
         <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
-            AND like CONCAT('%', #{dockDepartment}, '%') LIKE '%' || REPLACE(b."org_name", '公司', '') || '%'
+            AND like CONCAT('%', #{dockDepartment}, '%') LIKE '%' || REPLACE(b.`org_name`, '公司', '') || '%'
         </if>
         LIMIT 1
     </select>
@@ -97,23 +95,22 @@
     <!--二级业务流程 审计库下拉框当中的数据 -->
     <select id="getDropdownboxMo2TableNew" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT DISTINCT
-        "secondary_business_process" AS "lable",
-        "secondary_business_process" AS "value"
+        "secondary_business_process" AS `lable`, `secondary_business_process` AS `value`
         FROM
         audit_elements_business_process
         where "secondary_business_process" IS NOT NULL
-        AND "secondary_business_process"!=''
+        AND `secondary_business_process`!=''
         <if test="business1 != null and business1 !=''">
-            and "primary_business_process" = like CONCAT('%', #{business1}, '%')
+            and "primary_business_process" like CONCAT('%', #{business1}, '%')
         </if>
     </select>
 
     <!--根据二级业务流程名称查询二级业务流程编码 -->
     <select id="getBusiness2Number" parameterType="java.util.Map" resultType="java.lang.String">
-        SELECT DISTINCT "secondary_business_process_id" AS "id"
+        SELECT DISTINCT "secondary_business_process_id" AS `id`
         FROM audit_elements_business_process
-        WHERE "secondary_business_process" = like CONCAT('%', #{business2}, '%')
-          and "primary_business_process" = like CONCAT('%', #{business1}, '%')
+        WHERE `secondary_business_process` like CONCAT('%', #{business2}, '%')
+          and "primary_business_process" like CONCAT('%', #{business1}, '%')
     </select>
 
 
@@ -121,8 +118,8 @@
     <!--查询二级业务流程下的审计点个数 -->
     <select id="getauditPointCount" parameterType="java.util.Map" resultType="java.lang.String">
         SELECT COUNT(audit_point_number) AS auditpointcount
-        FROM "audit_elements_info"
-        WHERE secondary_business_process = like CONCAT('%', #{business2}, '%')
+        FROM `audit_elements_info`
+        WHERE secondary_business_process like CONCAT('%', #{business2}, '%')
           AND audit_point_number LIKE '%' || like CONCAT('%', #{depmCode}, '%') || '%'
     </select>
 
@@ -134,32 +131,32 @@
                        THEN '1'
                    ELSE MAX(SUBSTR(audit_model_number, - 3)) + 1
                    END
-        FROM "audit_elements_info"
-        WHERE audit_point_number = like CONCAT('%', #{auditPointNumber}, '%')
+        FROM `audit_elements_info`
+        WHERE audit_point_number like CONCAT('%', #{auditPointNumber}, '%')
     </select>
 
     <!--根据一级业务流程，二级业务流程，审计点名称查询当前审计点是否存在 -->
     <select id="getauditElementsParam" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.lang.String">
         SELECT audit_point_number
-        FROM "audit_elements_info"
-        WHERE primary_business_process = like CONCAT('%', #{primaryBusinessProcess}, '%')
-          AND secondary_business_process = like CONCAT('%', #{secondaryBusinessProcess}, '%')
-          AND audit_point_name = like CONCAT('%', #{auditPointName}, '%')
+        FROM `audit_elements_info`
+        WHERE primary_business_process like CONCAT('%', #{primaryBusinessProcess}, '%')
+          AND secondary_business_process like CONCAT('%', #{secondaryBusinessProcess}, '%')
+          AND audit_point_name like CONCAT('%', #{auditPointName}, '%')
           AND audit_point_number LIKE '%' || like CONCAT('%', #{depmCode}, '%') || '%' LIMIT 1
     </select>
 
 
     <select id="getAuditModelNo" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam" resultType="java.lang.String">
         SELECT audit_model_number
-        FROM "audit_elements_info"
-        WHERE audit_model_name = like CONCAT('%', #{auditModelName}, '%')
-          AND "audit_point_number" = like CONCAT('%', #{auditPointNumber}, '%')
+        FROM `audit_elements_info`
+        WHERE audit_model_name like CONCAT('%', #{auditModelName}, '%')
+          AND `audit_point_number` like CONCAT('%', #{auditPointNumber}, '%')
     </select>
 
     <!--个人中心信息新增维度信息 -->
     <insert id="insertsystemMessage" parameterType="com.cxsj.mxzd.pojo.AuditElementsSystemParam">
-        INSERT INTO "audit_elements_system"
+        INSERT INTO `audit_elements_system`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="auditModelNumber != null ">audit_model_number,</if>
             <if test="codeRequirement != null ">code_requirement,</if>
@@ -187,7 +184,7 @@
 
     <!--批量保存制度信息 -->
     <insert id="insertAllsystemMessage">
-        INSERT INTO "audit_elements_system" (
+        INSERT INTO `audit_elements_system` (
         audit_model_number,
         code_requirement,
         file_name,
@@ -217,67 +214,64 @@
 
     <!--修改制度库信息-->
     <update id="updatesystemMessage" parameterType="com.cxsj.mxzd.pojo.AuditElementsSystemParam">
-        UPDATE
-            "audit_elements_system"
-        SET code_requirement          = like CONCAT('%', #{codeRequirement}, '%'),
-            file_name                 = like CONCAT('%', #{fileName}, '%'),
-            specification_requirement = like CONCAT('%', #{specificationRequirement}, '%'),
-            reference_number          = like CONCAT('%', #{referenceNumber}, '%'),
-            dispatch_time             = like CONCAT('%', #{dispatchTime}, '%'),
-            start_time                = like CONCAT('%', #{startTime}, '%'),
-            end_time                  = like CONCAT('%', #{endTime}, '%')
-        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+        UPDATE `audit_elements_system`
+        SET code_requirement          like CONCAT('%', #{codeRequirement}, '%'),
+            file_name                 like CONCAT('%', #{fileName}, '%'),
+            specification_requirement like CONCAT('%', #{specificationRequirement}, '%'),
+            reference_number          like CONCAT('%', #{referenceNumber}, '%'),
+            dispatch_time             like CONCAT('%', #{dispatchTime}, '%'),
+            start_time                like CONCAT('%', #{startTime}, '%'),
+            end_time                  like CONCAT('%', #{endTime}, '%')
+        WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
           AND delete_status = '1'
     </update>
 
 
     <!--删除制度库信息（设置删除标志为已经删除）-->
     <update id="updatesystemdeleteStaues" parameterType="com.cxsj.mxzd.pojo.AuditElementsSystemParam">
-        UPDATE
-            "audit_elements_system"
+        UPDATE `audit_elements_system`
         SET delete_status = '0'
-        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+        WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
           AND delete_status = '1'
     </update>
 
 
     <!--删除基础模型信息当中的审计模型设计部分数据-->
     <update id="updateAuditElementInfoDeleteStaues" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
-        UPDATE
-            "audit_elements_info"
+        UPDATE `audit_elements_info`
         SET audit_business_logic=NULL,
             expected_risks =NULL,
             expected_data_requirements=NULL,
             expected_data_covers_unit_demand=NULL,
             requirements_involve_the_system=NULL
-        WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+        WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
     </update>
 
 
     <!--根据审计点查询对应的审计模型设计页面基础信息 -->
     <select id="selectAuditElementInfo" resultMap="AuditElementInfoMap" parameterType="java.lang.String">
-        SELECT a."audit_point_number",
-               a."audit_point_name",
-               a."audit_model_number",
-               a."audit_model_name",
-               a."primary_business_process",
-               a."secondary_business_process",
-               a."audit_business_logic",
-               a."execution_logic",
-               a."expected_risks",
-               a."expected_data_requirements",
-               a."expected_data_covers_unit_demand",
-               a."requirements_involve_the_system",
-               a."is_online",
-               COALESCE(b."model_owner", b."dock_people") AS "model_owner",
+        SELECT a.`audit_point_number`,
+               a.`audit_point_name`,
+               a.`audit_model_number`,
+               a.`audit_model_name`,
+               a.`primary_business_process`,
+               a.`secondary_business_process`,
+               a.`audit_business_logic`,
+               a.`execution_logic`,
+               a.`expected_risks`,
+               a.`expected_data_requirements`,
+               a.`expected_data_covers_unit_demand`,
+               a.`requirements_involve_the_system`,
+               a.`is_online`,
+               COALESCE(b.`model_owner`, b.`dock_people`) AS `model_owner`,
                COALESCE(
-                       b."model_owner_depy",
-                       b."dock_deputy"
-                   )                                  AS "model_owner_depy"
-        FROM "hpeapm"."audit_elements_info" a
-                 LEFT JOIN "hpeapm"."spl_model_type" b
-                           ON a."audit_model_number" = b."audit_model_number"
-        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+                       b.`model_owner_depy`,
+                       b.`dock_deputy`
+                   )                                  AS `model_owner_depy`
+        FROM `hpeapm`.`audit_elements_info` a
+                 LEFT JOIN `hpeapm`.`spl_model_type` b
+                           ON a.`audit_model_number` = b.`audit_model_number`
+        WHERE a.`audit_model_number` like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
@@ -286,8 +280,8 @@
     <select id="getsystemMyssage" resultMap="AuditElementsSystemParamMap" parameterType="java.lang.String">
         SELECT *
         FROM audit_elements_system
-        WHERE "audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
-          AND "delete_status" = '1'
+        WHERE `audit_model_number` like CONCAT('%', #{auditModelNumber}, '%')
+          AND `delete_status` = '1'
 
     </select>
 
@@ -370,66 +364,64 @@
         b.modelOwner
         FROM
         (SELECT
-        a."audit_point_number" AS auditPointNumber,
-        a."audit_point_name" AS auditPointName,
-        a."audit_model_number" AS auditModelNumber,
-        a."audit_model_name" AS auditModelName,
-        a."dock_people" AS dockPeople,
+        a.`audit_point_number` AS auditPointNumber,
+        a.`audit_point_name` AS auditPointName,
+        a.`audit_model_number` AS auditModelNumber,
+        a.`audit_model_name` AS auditModelName,
+        a.`dock_people` AS dockPeople,
         a.type_of_information typeOfInformation,
         a.dock_department dockDepartment,
         a.detailed_time detailed_time
-        FROM
-        "audit_elements_operation_steps" a
+        FROM `audit_elements_operation_steps` a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like CONCAT('%', #{isImport}, '%')</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like CONCAT('%', #{dockPeople}, '%')</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE like CONCAT('%', #{dockDepartment}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND a.`is_import` like CONCAT('%', #{isImport}, '%')</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a.`dock_people` like CONCAT('%', #{dockPeople}, '%')</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a.`dock_department` LIKE like CONCAT('%', #{dockDepartment}, '%')</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like CONCAT('%', #{auditPointName}, '%')
+            AND a.`audit_point_name` like CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
+            AND a.`audit_point_number` LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
+            AND a.`audit_model_number` LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like CONCAT('%', #{auditModelName}, '%')
+            AND a.`audit_model_name` like CONCAT('%', #{auditModelName}, '%')
         </if>
         ) a
         JOIN
         (SELECT
-        b."audit_model_number" AS auditModelNumber,
-        b."primary_business_process" AS primaryBusinessProcess,
-        b."secondary_business_process" AS secondaryBusinessProcess,
-        b."audit_business_logic" AS auditBusinessLogic,
-        b."expected_risks" AS expectedRisks,
-        b."execution_logic" AS executionLogic,
-        b."expected_data_requirements" AS expectedDataRequirements,
+        b.`audit_model_number` AS auditModelNumber,
+        b.`primary_business_process` AS primaryBusinessProcess,
+        b.`secondary_business_process` AS secondaryBusinessProcess,
+        b.`audit_business_logic` AS auditBusinessLogic,
+        b.`expected_risks` AS expectedRisks,
+        b.`execution_logic` AS executionLogic,
+        b.`expected_data_requirements` AS expectedDataRequirements,
         b.expected_data_covers_unit_demand AS expectedDataCoversUnitDemand,
         b.requirements_involve_the_system AS requirementsInvolveTheSystem,
         b.is_online AS isOnline,
         b.is_syn AS isSyn,
         b.syn_url AS synUrl,
-        c."model_owner" as modelOwner
-        FROM
-        "audit_elements_info" b
-        LEFT JOIN "spl_model_type" c
-        ON b."audit_model_number"=c."audit_model_number"
+        c.`model_owner` as modelOwner
+        FROM `audit_elements_info` b
+        LEFT JOIN `spl_model_type` c
+        ON b.`audit_model_number`=c.`audit_model_number`
         WHERE 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and b.offline!='1'
         </if>
         <!--<if test="isImport== null"> AND is_online='1'</if>-->
-        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
+        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b.`primary_business_process` =
             like CONCAT('%', #{primaryBusinessProcess}, '%')
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like CONCAT('%', #{secondaryBusinessProcess}, '%')
+            AND b.`secondary_business_process` like CONCAT('%', #{secondaryBusinessProcess}, '%')
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like CONCAT('%', #{informationSources}, '%')
+            AND b.`information_sources` like CONCAT('%', #{informationSources}, '%')
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber
@@ -441,8 +433,7 @@
         left JOIN
         (SELECT
         *
-        FROM
-        "audit_elements_system"
+        FROM `audit_elements_system`
         WHERE delete_status = '1') _def
         ON _abc.audit_model_number = _def.audit_model_number
         ORDER BY _abc.detailed_time DESC
@@ -507,63 +498,61 @@
         b.modelOwner as modelOwner
         FROM
         (SELECT
-        a."audit_point_number" AS auditPointNumber,
-        a."audit_point_name" AS auditPointName,
-        a."audit_model_number" AS auditModelNumber,
-        a."audit_model_name" AS auditModelName,
-        a."dock_people" AS dockPeople,
+        a.`audit_point_number` AS auditPointNumber,
+        a.`audit_point_name` AS auditPointName,
+        a.`audit_model_number` AS auditModelNumber,
+        a.`audit_model_name` AS auditModelName,
+        a.`dock_people` AS dockPeople,
         a.type_of_information typeOfInformation,
         a.dock_department dockDepartment,
         a.detailed_time detailed_time
-        FROM
-        "audit_elements_operation_steps" a
+        FROM `audit_elements_operation_steps` a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like CONCAT('%', #{isImport}, '%')</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like CONCAT('%', #{dockPeople}, '%')</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE like CONCAT('%', #{dockDepartment}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND a.`is_import` like CONCAT('%', #{isImport}, '%')</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a.`dock_people` like CONCAT('%', #{dockPeople}, '%')</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a.`dock_department` LIKE like CONCAT('%', #{dockDepartment}, '%')</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like CONCAT('%', #{auditPointName}, '%')
+            AND a.`audit_point_name` like CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
+            AND a.`audit_point_number` LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
+            AND a.`audit_model_number` LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like CONCAT('%', #{auditModelName}, '%')
+            AND a.`audit_model_name` like CONCAT('%', #{auditModelName}, '%')
         </if>
         ) a
         JOIN
         (SELECT
-        b."audit_model_number" AS auditModelNumber,
-        b."primary_business_process" AS primaryBusinessProcess,
-        b."secondary_business_process" AS secondaryBusinessProcess,
-        b."audit_business_logic" AS auditBusinessLogic,
-        b."expected_risks" AS expectedRisks,
-        b."expected_data_requirements" AS expectedDataRequirements,
+        b.`audit_model_number` AS auditModelNumber,
+        b.`primary_business_process` AS primaryBusinessProcess,
+        b.`secondary_business_process` AS secondaryBusinessProcess,
+        b.`audit_business_logic` AS auditBusinessLogic,
+        b.`expected_risks` AS expectedRisks,
+        b.`expected_data_requirements` AS expectedDataRequirements,
         b.expected_data_covers_unit_demand AS expectedDataCoversUnitDemand,
         b.requirements_involve_the_system AS requirementsInvolveTheSystem,
         b.is_online AS isOnline,
         b.execution_logic AS executionLogic,
         c.model_owner as modelOwner
-        FROM
-        "audit_elements_info" b
-        LEFT JOIN "spl_model_type" c
-        ON b."audit_model_number"=c."audit_model_number"
+        FROM `audit_elements_info` b
+        LEFT JOIN `spl_model_type` c
+        ON b.`audit_model_number`=c.`audit_model_number`
         WHERE 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and b.offline!='1'
         </if>
-        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
+        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b.`primary_business_process` =
             like CONCAT('%', #{primaryBusinessProcess}, '%')
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like CONCAT('%', #{secondaryBusinessProcess}, '%')
+            AND b.`secondary_business_process` like CONCAT('%', #{secondaryBusinessProcess}, '%')
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like CONCAT('%', #{informationSources}, '%')
+            AND b.`information_sources` like CONCAT('%', #{informationSources}, '%')
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber
@@ -575,8 +564,7 @@
         left JOIN
         (SELECT
         *
-        FROM
-        "audit_elements_system"
+        FROM `audit_elements_system`
         WHERE delete_status = '1') _def
         ON _abc.audit_model_number = _def.audit_model_number
         ORDER BY _abc.detailed_time DESC
@@ -611,38 +599,35 @@
             b.requirementsInvolveTheSystem requirementsInvolveTheSystem
             FROM
             (SELECT
-            a."audit_point_number" AS auditPointNumber,
-            a."audit_point_name" AS auditPointName,
-            a."audit_model_number" AS auditModelNumber,
-            a."audit_model_name" AS auditModelName,
-            a."dock_people" AS dockPeople
-            FROM
-            "audit_elements_operation_steps" a
+            a.`audit_point_number` AS auditPointNumber,
+            a.`audit_point_name` AS auditPointName,
+            a.`audit_model_number` AS auditModelNumber,
+            a.`audit_model_name` AS auditModelName,
+            a.`dock_people` AS dockPeople
+            FROM `audit_elements_operation_steps` a
             WHERE a.information_type = '审计模型设计'
             AND a.delete_status = '1'
-            AND a."audit_model_number"=like CONCAT('%', #{auditModelNumber}, '%')
+            AND a.`audit_model_number` like CONCAT('%', #{auditModelNumber}, '%')
             ) a
             JOIN
             (SELECT
             b.
             "audit_model_number" AS auditModelNumber,
-            b."primary_business_process" AS primaryBusinessProcess,
-            b."secondary_business_process" AS secondaryBusinessProcess,
-            b."audit_business_logic" AS auditBusinessLogic,
-            b."expected_risks" AS expectedRisks,
-            b."expected_data_requirements" AS expectedDataRequirements,
+            b.`primary_business_process` AS primaryBusinessProcess,
+            b.`secondary_business_process` AS secondaryBusinessProcess,
+            b.`audit_business_logic` AS auditBusinessLogic,
+            b.`expected_risks` AS expectedRisks,
+            b.`expected_data_requirements` AS expectedDataRequirements,
             b.expected_data_covers_unit_demand AS expectedDataCoversUnitDemand,
             b.requirements_involve_the_system AS requirementsInvolveTheSystem
-            FROM
-            "audit_elements_info" b
+            FROM `audit_elements_info` b
             WHERE 1=1
             ) b
             ON a.auditModelNumber = b.auditModelNumber) _abc
             left JOIN
             (SELECT
             *
-            FROM
-            "audit_elements_system"
+            FROM `audit_elements_system`
             WHERE delete_status = '1') _def
         ON _abc.auditModelNumber = _def.audit_model_number
     </select>
@@ -668,57 +653,55 @@
         b.requirementsInvolveTheSystem requirements_involve_the_system
         FROM
         (SELECT
-        a."audit_point_number" AS auditPointNumber,
-        a."audit_point_name" AS auditPointName,
-        a."audit_model_number" AS auditModelNumber,
-        a."audit_model_name" AS auditModelName,
-        a."dock_people" AS dockPeople,
+        a.`audit_point_number` AS auditPointNumber,
+        a.`audit_point_name` AS auditPointName,
+        a.`audit_model_number` AS auditModelNumber,
+        a.`audit_model_name` AS auditModelName,
+        a.`dock_people` AS dockPeople,
         a.type_of_information as typeOfInformation
-        FROM
-        "audit_elements_operation_steps" a
+        FROM `audit_elements_operation_steps` a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like CONCAT('%', #{isImport}, '%')</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like CONCAT('%', #{dockPeople}, '%')</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" like like CONCAT('%', #{dockDepartment}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND a.`is_import` like CONCAT('%', #{isImport}, '%')</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a.`dock_people` like CONCAT('%', #{dockPeople}, '%')</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a.`dock_department` like like CONCAT('%', #{dockDepartment}, '%')</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like CONCAT('%', #{auditPointName}, '%')
+            AND a.`audit_point_name` like CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
+            AND a.`audit_point_number` LIKE '%' || like CONCAT('%', #{auditPointNumber}, '%') || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
+            AND a.`audit_model_number` LIKE '%' || like CONCAT('%', #{auditModelNumber}, '%') || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like CONCAT('%', #{auditModelName}, '%')
+            AND a.`audit_model_name` like CONCAT('%', #{auditModelName}, '%')
         </if>
         ) a
         JOIN
         (SELECT
-        b."audit_model_number" AS auditModelNumber,
-        b."primary_business_process" AS primaryBusinessProcess,
-        b."secondary_business_process" AS secondaryBusinessProcess,
-        b."audit_business_logic" AS auditBusinessLogic,
-        b."expected_risks" AS expectedRisks,
-        b."expected_data_requirements" AS expectedDataRequirements,
+        b.`audit_model_number` AS auditModelNumber,
+        b.`primary_business_process` AS primaryBusinessProcess,
+        b.`secondary_business_process` AS secondaryBusinessProcess,
+        b.`audit_business_logic` AS auditBusinessLogic,
+        b.`expected_risks` AS expectedRisks,
+        b.`expected_data_requirements` AS expectedDataRequirements,
         b.expected_data_covers_unit_demand AS expectedDataCoversUnitDemand,
         b.requirements_involve_the_system AS requirementsInvolveTheSystem
-        FROM
-        "audit_elements_info" b
+        FROM `audit_elements_info` b
         WHERE 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and b.offline!='1'
         </if>
         <!-- <if test="isImport== null"> AND is_online='1'</if>-->
-        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
+        <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b.`primary_business_process` =
             like CONCAT('%', #{primaryBusinessProcess}, '%')
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like CONCAT('%', #{secondaryBusinessProcess}, '%')
+            AND b.`secondary_business_process` like CONCAT('%', #{secondaryBusinessProcess}, '%')
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like CONCAT('%', #{informationSources}, '%')
+            AND b.`information_sources` like CONCAT('%', #{informationSources}, '%')
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber) _abc
@@ -727,17 +710,17 @@
 
     <!--校验保存的模型是否已经存在 -->
     <select id="selectMdodelCont" resultType="java.lang.String" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
-        SELECT CASE WHEN a.a = 0 AND b.b = 0 THEN '0' ELSE '1' END AS "modelNum"
-        FROM (SELECT COUNT(*) AS "a"
+        SELECT CASE WHEN a.a = 0 AND b.b = 0 THEN '0' ELSE '1' END AS `modelNum`
+        FROM (SELECT COUNT(*) AS `a`
               FROM audit_elements_operation_steps
               WHERE delete_status = 1
-                AND audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
-                AND audit_point_number = like CONCAT('%', #{auditPointNumber}, '%')) a
+                AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+                AND audit_point_number like CONCAT('%', #{auditPointNumber}, '%')) a
                  LEFT JOIN
-             (SELECT COUNT(*) AS "b"
+             (SELECT COUNT(*) AS `b`
               FROM audit_elements_info
-              WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
-                AND audit_point_number = like CONCAT('%', #{auditPointNumber}, '%')) b
+              WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
+                AND audit_point_number like CONCAT('%', #{auditPointNumber}, '%')) b
              ON 1 = 1
     </select>
 
@@ -745,12 +728,12 @@
     <select id="getcodeRequirements" resultType="java.util.Map" parameterType="java.lang.String">
         SELECT DISTINCT
         SYS_UNIQUE_CODE  "id",
-        SYS_NAME AS "name"
+        SYS_NAME AS `name`
         FROM
         hpbus.system_audit_50001_newdate
         WHERE
         1 = 1
-        AND "statis_ym" = ( SELECT DISTINCT MAX ( "statis_ym" ) FROM hpbus.system_audit_50001_newdate )
+        AND `statis_ym` = ( SELECT DISTINCT MAX ( "statis_ym" ) FROM hpbus.system_audit_50001_newdate )
         <if test="dockDepartment!= null and dockDepartment != '' ">
             and "prov_name" like like CONCAT('%', #{dockDepartment}, '%')
             or "prov_name" like '%集团%'
@@ -760,14 +743,14 @@
 
     <!--导出综合查询查询第一节点的信息 -->
     <select id="getMessageBycodeRequirements" resultType="java.util.Map" parameterType="java.lang.String">
-        SELECT SEND_FILE_NAME      AS "fileName",
-               SYS_FIELD_TYP        AS "specificationRequirement",
-               SEND_FILE_UNIQUE_CODE AS "referenceNumber",
-               PRINT_TM              AS "dispatchTime",
-               PRINT_TM              AS "startTime",
-               END_TM                AS "endTime"
+        SELECT SEND_FILE_NAME      AS `fileName`,
+               SYS_FIELD_TYP        AS `specificationRequirement`,
+               SEND_FILE_UNIQUE_CODE AS `referenceNumber`,
+               PRINT_TM              AS `dispatchTime`,
+               PRINT_TM              AS `startTime`,
+               END_TM                AS `endTime`
         FROM hpbus.system_audit_50001_newdate
-        WHERE SYS_UNIQUE_CODE = like CONCAT('%', #{codeRequirementId}, '%')
+        WHERE SYS_UNIQUE_CODE like CONCAT('%', #{codeRequirementId}, '%')
         order by statis_ym  desc
             limit 1
     </select>

@@ -75,9 +75,9 @@
     <select id="selectWriteTime" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT write_time
         FROM hpeapm.audit_elements_operation_steps
-        WHERE audit_model_number = '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND information_type = '模型信息预览'
-          and delete_status = 1
+          and delete_status = '1'
     </select>
 
     <!-- 查询用户基本信息数据   -->
@@ -113,11 +113,12 @@
                      STRING_AGG(c.name, ',') data_content_description
               FROM hpeapm.audit_elements_data_support_v2 c
               WHERE 1 = 1
-                AND c.audit_model_number = '%'||#{auditModelNumber}||'%'
-                AND c.isdel = 1) supp
+                AND c.audit_model_number LIKE '%'||#{auditModelNumber}||'%'
+                AND c.isdel = '1'
+              GROUP BY audit_model_number) supp
              ON info.audit_model_number = supp.audit_model_number
         WHERE 1 = 1
-          AND info.audit_model_number = '%'||#{auditModelNumber}||'%'
+          AND info.audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
     <!-- 根据审计模型编号查询模型评估与开发数据   -->
@@ -125,7 +126,7 @@
         select *
         from hpeapm.audit_elements_online_model
         where 1 = 1
-          AND audit_model_number = '%'||#{auditModelNumber}||'%'
+          AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           and is_deleted = 0
     </select>
 
@@ -203,15 +204,15 @@
         hpeapm.audit_elements_operation_steps
         WHERE delete_status = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like like '%'||#{dockDepartment}||'%'
+            AND dock_department like #{dockDepartment}
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like '%'||#{informationType}||'%'
+            AND information_type =#{informationType}
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         ) a
         JOIN (
         SELECT
@@ -239,34 +240,34 @@
         /*AND is_online='1'*/
         <!-- 一级-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%'||like '%'||#{primaryBusinessProcess}||'%'||'%'
+            AND primary_business_process like '%'||#{primaryBusinessProcess}||'%'
         </if>
 
         <!-- 二级-->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%'||like '%'||#{secondaryBusinessProcess}||'%'||'%'
+            and secondary_business_process like '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||like '%'||#{auditPointNumber}||'%'||'%'
+            and audit_point_number like '%'||#{auditPointNumber}||'%'
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||like '%'||#{auditPointName}||'%'||'%'
+            and audit_point_name like '%'||#{auditPointName}||'%'
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||like '%'||#{auditModelNumber}||'%'||'%'
+            and audit_model_number like '%'||#{auditModelNumber}||'%'
         </if>
 
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||like '%'||#{auditModelName}||'%'||'%'
+            and audit_model_name like '%'||#{auditModelName}||'%'
         </if>
         ) b ON a.audit_model_number = b.audit_model_number
         ORDER BY detailedTime DESC
-        LIMIT like '%'||#{size}||'%' OFFSET like '%'||#{page}||'%'
+        LIMIT #{size} OFFSET #{page}
         ) _abc
         LEFT JOIN (
         SELECT
@@ -289,7 +290,7 @@
         LEFT JOIN (
         SELECT audit_model_number, STRING_AGG(data_content_description, ',')
         data_content_description,MIN(data_access_time) data_access_time
-        FROM hpeapm.audit_elements_data_support WHERE isdel = 1
+        FROM hpeapm.audit_elements_data_support WHERE isdel = '1'
         GROUP BY audit_model_number
         ) mo ON ba.audit_model_number = mo.audit_model_number
         LEFT JOIN
@@ -309,7 +310,7 @@
         FROM
         hpeapm.audit_elements_data_support_v2 c
         WHERE 1 = 1
-        AND c.isdel = 1
+        AND c.isdel = '1'
         GROUP BY audit_model_number
         ) b
         on a.auditModelNumber=b.audit_model_number
@@ -358,15 +359,15 @@
         information_type = '模型信息预览'
         AND delete_status = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like like '%'||#{dockDepartment}||'%'
+            AND dock_department like #{dockDepartment}
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like '%'||#{informationType}||'%'
+            AND information_type =#{informationType}
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         )a
         JOIN(
         SELECT
@@ -389,27 +390,27 @@
         </if>
         /* AND is_online='1'*/
         <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
-            AND primary_business_process = '%'||#{primaryBusinessProcess}||'%'
+            AND primary_business_process LIKE '%'||#{primaryBusinessProcess}||'%'
         </if>
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
-            AND secondary_business_process = '%'||#{secondaryBusinessProcess}||'%'
+            AND secondary_business_process LIKE '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||like '%'||#{auditPointNumber}||'%'||'%'
+            and audit_point_number like '%'||#{auditPointNumber}||'%'
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||like '%'||#{auditPointName}||'%'||'%'
+            and audit_point_name like '%'||#{auditPointName}||'%'
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||like '%'||#{auditModelNumber}||'%'||'%'
+            and audit_model_number like '%'||#{auditModelNumber}||'%'
         </if>
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||like '%'||#{auditModelName}||'%'||'%'
+            and audit_model_name like '%'||#{auditModelName}||'%'
         </if>
         )b ON a.audit_model_number = b.audit_model_number
         )_abc
@@ -433,7 +434,7 @@
         )me ON _abc.auditModelNumber = me.audit_model_number
         LEFT JOIN ( SELECT audit_model_number, STRING_AGG(data_content_description, ',')
         data_content_description,MIN(data_access_time) data_access_time
-        FROM hpeapm.audit_elements_data_support WHERE isdel = 1
+        FROM hpeapm.audit_elements_data_support WHERE isdel = '1'
         GROUP BY audit_model_number ) supp ON _abc.auditModelNumber = supp.audit_model_number
         )a where 1=1
     </select>
@@ -442,6 +443,7 @@
     <insert id="insertOnlineModel">
         insert into hpeapm.audit_elements_online_model
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            audit_model_number,
             <if test="serviceOwnershipSystem != null  and serviceOwnershipSystem != ''">service_ownership_system,</if>
             <if test="modelRunningFrequency != null  and modelRunningFrequency != ''">model_running_frequency,</if>
             <if test="numberUnitsCovered != null  and numberUnitsCovered != ''">number_units_covered,</if>
@@ -455,23 +457,22 @@
             <if test="ascriptionSpecial != null  and ascriptionSpecial != ''">ascription_special,</if>
             <if test="onlineRemarks != null  and onlineRemarks != ''">online_remarks,</if>
             <if test="isDeleted != null  and isDeleted != ''">is_deleted,</if>
-            <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="serviceOwnershipSystem != null  and serviceOwnershipSystem != ''">like '%'||#{serviceOwnershipSystem}||'%',</if>
-            <if test="modelRunningFrequency != null  and modelRunningFrequency != ''">like '%'||#{modelRunningFrequency}||'%',</if>
-            <if test="numberUnitsCovered != null  and numberUnitsCovered != ''">like '%'||#{numberUnitsCovered}||'%',</if>
-            <if test="numberOfProvincial != null and numberOfProvincial != ''">like '%'||#{numberOfProvincial}||'%',</if>
+            #{auditModelNumber},
+            <if test="serviceOwnershipSystem != null  and serviceOwnershipSystem != ''">#{serviceOwnershipSystem},</if>
+            <if test="modelRunningFrequency != null  and modelRunningFrequency != ''">#{modelRunningFrequency},</if>
+            <if test="numberUnitsCovered != null  and numberUnitsCovered != ''">#{numberUnitsCovered},</if>
+            <if test="numberOfProvincial != null and numberOfProvincial != ''">#{numberOfProvincial},</if>
             <if test="numberProfessionalInstitutions != null  and numberProfessionalInstitutions != ''">
-                like '%'||#{numberProfessionalInstitutions}||'%',
+                #{numberProfessionalInstitutions},
             </if>
-            <if test="whetherCuredSystem != null  and whetherCuredSystem != ''">like '%'||#{whetherCuredSystem}||'%',</if>
-            <if test="modelOnlineTime != null  and modelOnlineTime != ''">like '%'||#{modelOnlineTime}||'%',</if>
-            <if test="sourcesAuditPractice != null  and sourcesAuditPractice != ''">like '%'||#{sourcesAuditPractice}||'%',</if>
-            <if test="ascriptionSpecial != null  and ascriptionSpecial != ''">like '%'||#{ascriptionSpecial}||'%',</if>
-            <if test="onlineRemarks != null  and onlineRemarks != ''">like '%'||#{onlineRemarks}||'%',</if>
-            <if test="isDeleted != null  and isDeleted != ''">like '%'||#{isDeleted}||'%',</if>
-            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%'</if>
+            <if test="whetherCuredSystem != null  and whetherCuredSystem != ''">#{whetherCuredSystem},</if>
+            <if test="modelOnlineTime != null  and modelOnlineTime != ''">#{modelOnlineTime},</if>
+            <if test="sourcesAuditPractice != null  and sourcesAuditPractice != ''">#{sourcesAuditPractice},</if>
+            <if test="ascriptionSpecial != null  and ascriptionSpecial != ''">#{ascriptionSpecial},</if>
+            <if test="onlineRemarks != null  and onlineRemarks != ''">#{onlineRemarks},</if>
+            <if test="isDeleted != null  and isDeleted != ''">#{isDeleted},</if>
         </trim>
     </insert>
 
@@ -480,47 +481,47 @@
         UPDATE hpeapm.audit_elements_online_model
         <set>
             <if test="serviceOwnershipSystem != null">
-                service_ownership_system=like '%'||#{serviceOwnershipSystem}||'%',
+                service_ownership_system=#{serviceOwnershipSystem},
             </if>
             <if test="modelRunningFrequency != null">
-                model_running_frequency=like '%'||#{modelRunningFrequency}||'%',
+                model_running_frequency=#{modelRunningFrequency},
             </if>
             <if test="numberUnitsCovered != null">
-                number_units_covered=like '%'||#{numberUnitsCovered}||'%',
+                number_units_covered=#{numberUnitsCovered},
             </if>
             <if test="numberOfProvincial != null">
-                number_of_provincial=like '%'||#{numberOfProvincial}||'%',
+                number_of_provincial=#{numberOfProvincial},
             </if>
             <if test="numberProfessionalInstitutions != null">
-                number_professional_institutions=like '%'||#{numberProfessionalInstitutions}||'%',
+                number_professional_institutions=#{numberProfessionalInstitutions},
             </if>
             <if test="whetherCuredSystem != null">
-                whether_cured_system=like '%'||#{whetherCuredSystem}||'%',
+                whether_cured_system=#{whetherCuredSystem},
             </if>
             <if test="modelOnlineTime != null">
-                model_online_time=like '%'||#{modelOnlineTime}||'%',
+                model_online_time=#{modelOnlineTime},
             </if>
             <if test="sourcesAuditPractice != null">
-                sources_audit_practice=like '%'||#{sourcesAuditPractice}||'%',
+                sources_audit_practice=#{sourcesAuditPractice},
             </if>
             <if test="ascriptionSpecial != null">
-                ascription_special=like '%'||#{ascriptionSpecial}||'%',
+                ascription_special=#{ascriptionSpecial},
             </if>
             <if test="onlineRemarks != null">
-                online_remarks=like '%'||#{onlineRemarks}||'%',
+                online_remarks=#{onlineRemarks},
             </if>
             <if test="isDeleted != null">
-                is_deleted=like '%'||#{isDeleted}||'%'
+                is_deleted=#{isDeleted}
             </if>
         </set>
-        where audit_model_number = '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <!--  删除（修改当前数据的状态）  -->
     <update id="deleteOnlineModel">
         UPDATE hpeapm.audit_elements_online_model
         set is_deleted = 1
-        where audit_model_number = '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <!--  导出数据  -->
@@ -595,15 +596,15 @@
         WHERE
         delete_status = '1' AND information_type ='模型信息预览'
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like like '%'||#{dockDepartment}||'%'
+            AND dock_department like #{dockDepartment}
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like '%'||#{informationType}||'%'
+            AND information_type =#{informationType}
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = '%'||#{isImport}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND "is_import" LIKE '%'||#{isImport}||'%'</if>
         ) a
         JOIN (
         SELECT distinct
@@ -628,31 +629,31 @@
         </if>
         <!-- 一级-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%'||#{}||'%',like '%'||#{primaryBusinessProcess}||'%',like '%'||#{}||'%'
+            AND primary_business_process #{},#{primaryBusinessProcess},#{}
         </if>
 
         <!-- 二级-->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%'||#{}||'%',like '%'||#{secondaryBusinessProcess}||'%',like '%'||#{}||'%'
+            and secondary_business_process #{},#{secondaryBusinessProcess},#{}
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||#{}||'%',like '%'||#{auditPointNumber}||'%',like '%'||#{}||'%'
+            and audit_point_number #{},#{auditPointNumber},#{}
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||#{}||'%',like '%'||#{auditPointName}||'%',like '%'||#{}||'%'
+            and audit_point_name #{},#{auditPointName},#{}
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||#{}||'%',like '%'||#{auditModelNumber}||'%',like '%'||#{}||'%'
+            and audit_model_number #{},#{auditModelNumber},#{}
 
         </if>
 
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||#{}||'%',like '%'||#{auditModelName}||'%',like '%'||#{}||'%'
+            and audit_model_name #{},#{auditModelName},#{}
         </if>
         ) b ON a.audit_model_number = b.audit_model_number
         ORDER BY detailedTime DESC
@@ -678,7 +679,7 @@
         LEFT JOIN (
         SELECT audit_model_number, STRING_AGG( data_content_description, ',' )
         data_content_description,MIN(data_access_time) data_access_time
-        FROM hpeapm.audit_elements_data_support WHERE isdel = 1
+        FROM hpeapm.audit_elements_data_support WHERE isdel = '1'
         GROUP BY audit_model_number
         ) mo ON ba.audit_model_number = mo.audit_model_number
         ) a
@@ -690,7 +691,7 @@
         FROM
         hpeapm.audit_elements_data_support_v2 c
         WHERE 1 = 1
-        AND c.isdel = 1
+        AND c.isdel = '1'
         GROUP BY audit_model_number
         ) b
         on a.auditModelNumber=b.audit_model_number
@@ -756,7 +757,7 @@
         and is_del=0
         AND audit_model_number IN
         <foreach collection="auditModelNumberList" item="item" index="index" open="(" close=")" separator=",">
-            like '%'||#{item}||'%'
+            #{item}
         </foreach>
         ORDER BY "order"
     </select>
@@ -767,9 +768,9 @@
         UPDATE
         hpeapm."audit_element_case" a
         SET a."is_del" = '1'
-        WHERE a."audit_model_number" = '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
         <if test="type != null">
-            and a."type" = '%'||#{type}||'%'
+            and a."type" LIKE '%'||#{type}||'%'
         </if>
     </update>
 
@@ -780,14 +781,14 @@
         audit_project, type, "order", audit_model_number)
         values
         <foreach collection="caseDates" item="case" index="index" open="(" separator="), (" close=")">
-            like '%'||#{case.problemDetailDescription}||'%',
-            like '%'||#{case.problemSummary}||'%',
-            like '%'||#{case.auditPeriod}||'%',
-            like '%'||#{case.involvedUnit}||'%',
-            like '%'||#{case.auditProject}||'%',
-            like '%'||#{case.type}||'%',
-            like '%'||#{case.order}||'%',
-            like '%'||#{case.auditModelNumber}||'%'
+            #{case.problemDetailDescription},
+            #{case.problemSummary},
+            #{case.auditPeriod},
+            #{case.involvedUnit},
+            #{case.auditProject},
+            #{case.type},
+            #{case.order},
+            #{case.auditModelNumber}
         </foreach>
     </insert>
 

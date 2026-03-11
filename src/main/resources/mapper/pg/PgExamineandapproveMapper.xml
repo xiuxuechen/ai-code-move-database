@@ -12,10 +12,10 @@
         hpeapm."spl_business_examine"
         WHERE is_complete = '0'
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND audit_model_number = like '%'||#{auditModelNumber}||'%'
+            AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
         <if test="examinID != null and examinID !=''">
-            AND id!=like '%'||#{examinID}||'%'
+            AND id!=#{examinID}
         </if>
         LIMIT 1
     </select>
@@ -32,7 +32,7 @@
         SELECT a."examine_id" examinID,
                a."ope_type"   opeType
         FROM hpeapm."spl_workitem_his" a
-        WHERE a."work_id" = like '%'||#{workId}||'%'
+        WHERE a."work_id" LIKE '%'||#{workId}||'%'
     </select>
 
 
@@ -40,8 +40,8 @@
         SELECT a."examine_id" examinID,
                a."ope_type"   opeType
         FROM hpeapm."spl_workitem_his" a
-        WHERE a."examine_id" = like '%'||#{examineId}||'%'
-          AND a."ope_user_id" = like '%'||#{userId}||'%'
+        WHERE a."examine_id" LIKE '%'||#{examineId}||'%'
+          AND a."ope_user_id" LIKE '%'||#{userId}||'%'
     </select>
 
 
@@ -49,7 +49,7 @@
     <select id="getModelCount" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT COUNT(audit_model_number) AS num
         FROM hpeapm."audit_elements_info" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -59,7 +59,7 @@
                a."dock_deputy" AS defExamUserDept,
                a."dock_dept"   AS dockDepartment
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -68,7 +68,7 @@
         SELECT audit_model_name AS modelName
         FROM hpeapm.audit_elements_info
         WHERE 1 = 1
-          AND audit_model_number = like '%'||#{auditModelNumber}||'%'
+          AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -76,7 +76,7 @@
     <select id="selectDyModelName" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT audit_model_name AS modelName
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -86,7 +86,7 @@
                examine_id AS examineId
         FROM hpeapm."spl_model_type"
         WHERE 1 = 1
-          AND audit_model_number = like '%'||#{auditModelNumber}||'%'
+          AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -95,7 +95,7 @@
         SELECT loginId   AS userId,
                loginName AS userName
         FROM hpmgr.bonc_union_userinfos
-        WHERE deputyAccountNumber = like '%'||#{deputyAccountNumber}||'%' LIMIT 1
+        WHERE deputyAccountNumber LIKE '%'||#{deputyAccountNumber}||'%' LIMIT 1
     </select>
 
 
@@ -104,11 +104,11 @@
         SELECT b."loginId"             AS userId,
                b."deputyAccountNumber" AS deputyAccountNumber,
                b."userName"            AS userName,
-               b.busiUnitCode          AS busiUnitCode
+               b."busiunitcode"          AS "busiunitcode"
         FROM hpeapm."spl_model_type" a
                  LEFT JOIN hpmgr."bonc_union_userinfos" b
                            ON a.def_exam_userDept = b."deputyAccountNumber"
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -119,12 +119,12 @@
             b."loginId" AS userId,
             b."deputyAccountNumber" AS deputyAccountNumber,
             b."userName" AS userName,
-            b.busiUnitCode AS busiUnitCode
+            b."busiunitcode" AS "busiunitcode"
         FROM
             hpeapm."spl_model_type" a
                 LEFT JOIN hpmgr."bonc_union_userinfos" b
                           ON a."def2_exam_userdepy" = b."deputyAccountNumber"
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -132,29 +132,24 @@
     <select id="selectModelMsgByModelNubmer" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT *
         FROM hpeapm."spl_model_type" a
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
     <!--新增第一步增加一条信息 -->
     <insert id="insertModelMessage" parameterType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
-        INSERT INTO hpeapm."spl_model_type" (id,
-                                             audit_point_number,
+        INSERT INTO hpeapm."spl_model_type" (audit_point_number,
                                              audit_point_name,
                                              audit_model_number,
                                              audit_model_name,
-                                             type_of_information,
                                              dock_people,
                                              dock_deputy,
                                              dock_dept,
                                              write_time,
                                              audit_model_type,
                                              model_owner,
-                                             model_owner_depy,
-                                             continue_to_enter,
-                                             creat_time,
-                                             online_type) VALUES (like '%'||#{examinID}||'%',like '%'||#{auditPointNumber}||'%', like '%'||#{auditPointName}||'%', like '%'||#{auditModelNumber}||'%', like '%'||#{auditModelName}||'%',
-            like '%'||#{typeOfInformation}||'%', like '%'||#{dockPeople}||'%', like '%'||#{dockDeputy}||'%', like '%'||#{deckDept}||'%',like '%'||#{writeTime}||'%', like '%'||#{auditModelType}||'%',like '%'||#{modelOwner}||'%',like '%'||#{modelOwnerDepy}||'%', like '%'||#{continueToEnter}||'%',CURRENT_TIMESTAMP,like '%'||#{onlineType}||'%')
+                                             model_owner_depy) VALUES (#{auditPointNumber}, #{auditPointName}, #{auditModelNumber}, #{auditModelName},
+            #{dockPeople}, #{dockDeputy}, #{deckDept},CURRENT_TIMESTAMP, #{auditModelType},#{modelOwner},#{modelOwnerDepy})
     </insert>
 
 
@@ -163,56 +158,46 @@
         UPDATE
         hpeapm."spl_model_type"
         SET
-        creat_time=CURRENT_TIMESTAMP
+        write_time=CURRENT_TIMESTAMP
         <if test="auditModelType != null and  auditModelType !=''">
-            ,audit_model_type = like '%'||#{auditModelType}||'%'
+            ,audit_model_type = #{auditModelType}
         </if>
         <if test="dockDeputy != null and  dockDeputy !=''">
-            ,dock_deputy = like '%'||#{dockDeputy}||'%'
+            ,dock_deputy = #{dockDeputy}
         </if>
         <if test="dockPeople != null and  dockPeople !=''">
-            ,dock_people = like '%'||#{dockPeople}||'%'
+            ,dock_people = #{dockPeople}
         </if>
         <if test="deckDept != null and  deckDept !=''">
-            ,dock_dept = like '%'||#{deckDept}||'%'
-        </if>
-        <if test="writeTime != null and  writeTime !=''">
-            ,write_time = like '%'||#{writeTime}||'%'
-        </if>
-        <if test="typeOfInformation != null and  typeOfInformation !=''">
-            ,type_of_information = like '%'||#{typeOfInformation}||'%'
-        </if>
-        <if test="continueToEnter != null and  continueToEnter !=''">
-            ,continue_to_enter = like '%'||#{continueToEnter}||'%'
+            ,dock_dept = #{deckDept}
         </if>
         <if test="defExamUser != null and  defExamUser !=''">
-            ,def_exam_user = like '%'||#{defExamUser}||'%'
+            ,def_exam_user = #{defExamUser}
         </if>
         <if test="defExamUserDept != null and  defExamUserDept !=''">
-            ,def_exam_userDept = like '%'||#{defExamUserDept}||'%'
+            ,def_exam_userDept LIKE '%'||#{defExamUserDept}||'%'
         </if>
         <if test="def2ExamUser != null and  def2ExamUser !=''">
-            ,def2_exam_user = like '%'||#{def2ExamUser}||'%'
+            ,def2_exam_user LIKE '%'||#{def2ExamUser}||'%'
         </if>
         <if test="def2ExamUserDepy != null and  def2ExamUserDepy !=''">
-            ,def2_exam_userdepy = like '%'||#{def2ExamUserDepy}||'%'
+            ,def2_exam_userdepy LIKE '%'||#{def2ExamUserDepy}||'%'
         </if>
         <if test="shareUser != null and  shareUser !=''">
-            ,share_user = like '%'||#{shareUser}||'%'
+            ,share_user LIKE '%'||#{shareUser}||'%'
         </if>
         <if test="shareUserDepy != null and  shareUserDepy !=''">
-            ,share_user_depy = like '%'||#{shareUserDepy}||'%'
+            ,share_user_depy LIKE '%'||#{shareUserDepy}||'%'
         </if>
         <if test="onlineType != null and  onlineType !=''">
-            ,online_type = like '%'||#{onlineType}||'%'
         </if>
         <if test="modelOwner != null and  modelOwner !=''">
-            ,model_owner = like '%'||#{modelOwner}||'%'
+            ,model_owner LIKE '%'||#{modelOwner}||'%'
         </if>
         <if test="modelOwnerDepy != null and  modelOwnerDepy !=''">
-            ,model_owner_depy = like '%'||#{modelOwnerDepy}||'%'
+            ,model_owner_depy LIKE '%'||#{modelOwnerDepy}||'%'
         </if>
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -241,24 +226,24 @@
             create_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null and  id !=''">like '%'||#{id}||'%',</if>
-            <if test="process_instId != null and  process_instId !=''">like '%'||#{process_instId}||'%',</if>
-            <if test="activity_instId != null and  activity_instId !=''">like '%'||#{activity_instId}||'%',</if>
-            <if test="workItem_Id != null and  workItem_Id !=''">like '%'||#{workItem_Id}||'%',</if>
-            <if test="audit_model_number != null and  audit_model_number !=''">like '%'||#{audit_model_number}||'%',</if>
-            <if test="submit_user != null  and submit_user != ''">like '%'||#{submit_user}||'%',</if>
-            <if test="sub_depy != null  and sub_depy != ''">like '%'||#{sub_depy}||'%',</if>
-            <if test="submit_time != null  and submit_time != ''">like '%'||#{submit_time}||'%',</if>
-            <if test="submit_remarks != null  and submit_remarks != ''">like '%'||#{submit_remarks}||'%',</if>
-            <if test="examine_user != null  and examine_user != ''">like '%'||#{examine_user}||'%',</if>
-            <if test="exam_depy != null  and exam_depy != ''">like '%'||#{exam_depy}||'%',</if>
-            <if test="examine_dept != null  and examine_dept != ''">like '%'||#{examine_dept}||'%',</if>
-            <if test="examine_time != null">like '%'||#{examine_time}||'%',</if>
-            <if test="examine_type != null">like '%'||#{examine_type}||'%',</if>
-            <if test="examine_result != null  and createPerson != ''">like '%'||#{examine_result}||'%',</if>
-            <if test="examine_message_id != null  and examine_message_id != ''">like '%'||#{examine_message_id}||'%',</if>
-            <if test="is_complete != null  and is_complete != ''">like '%'||#{is_complete}||'%',</if>
-            <if test="examine_category != null  and examine_category != ''">like '%'||#{examine_category}||'%',</if>
+            <if test="id != null and  id !=''">#{id},</if>
+            <if test="process_instId != null and  process_instId !=''">#{process_instId},</if>
+            <if test="activity_instId != null and  activity_instId !=''">#{activity_instId},</if>
+            <if test="workItem_Id != null and  workItem_Id !=''">#{workItem_Id},</if>
+            <if test="audit_model_number != null and  audit_model_number !=''">#{audit_model_number},</if>
+            <if test="submit_user != null  and submit_user != ''">#{submit_user},</if>
+            <if test="sub_depy != null  and sub_depy != ''">#{sub_depy},</if>
+            <if test="submit_time != null  and submit_time != ''">#{submit_time},</if>
+            <if test="submit_remarks != null  and submit_remarks != ''">#{submit_remarks},</if>
+            <if test="examine_user != null  and examine_user != ''">#{examine_user},</if>
+            <if test="exam_depy != null  and exam_depy != ''">#{exam_depy},</if>
+            <if test="examine_dept != null  and examine_dept != ''">#{examine_dept},</if>
+            <if test="examine_time != null">#{examine_time},</if>
+            <if test="examine_type != null">#{examine_type},</if>
+            <if test="examine_result != null  and createPerson != ''">#{examine_result},</if>
+            <if test="examine_message_id != null  and examine_message_id != ''">#{examine_message_id},</if>
+            <if test="is_complete != null  and is_complete != ''">#{is_complete},</if>
+            <if test="examine_category != null  and examine_category != ''">#{examine_category},</if>
             CURRENT_TIMESTAMP
         </trim>
     </insert>
@@ -270,32 +255,32 @@
         hpeapm."spl_business_examine"
         <set>
             <if test="audit_model_number != null and  audit_model_number !=''">,audit_model_number =
-                like '%'||#{audit_model_number}||'%'
+                #{audit_model_number}
             </if>
-            <if test="submit_user != null and  submit_user !=''">,submit_user = like '%'||#{submit_user}||'%'</if>
-            <if test="sub_depy != null and  sub_depy !=''">,sub_depy = like '%'||#{sub_depy}||'%'</if>
-            <if test="submit_time != null and  submit_time !=''">,submit_time = like '%'||#{submit_time}||'%'</if>
-            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks = like '%'||#{submit_remarks}||'%'</if>
-            <if test="examine_type != null and  examine_type !=''">,examine_type = like '%'||#{examine_type}||'%'</if>
-            <if test="submit_user != null and  submit_user !=''">,submit_user = like '%'||#{submit_user}||'%'</if>
-            <if test="submit_time != null and  submit_time !=''">,submit_time = like '%'||#{submit_time}||'%'</if>
-            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks = like '%'||#{submit_remarks}||'%'</if>
-            <if test="exam_depy != null  and exam_depy != ''">,exam_depy=like '%'||#{exam_depy}||'%'</if>
-            <if test="examine_user != null and  examine_user !=''">,examine_user = like '%'||#{examine_user}||'%'</if>
-            <if test="process_instId != null and  process_instId !=''">,process_instId = like '%'||#{process_instId}||'%'</if>
-            <if test="workItem_Id != null and  workItem_Id !=''">,workItem_Id = like '%'||#{workItem_Id}||'%'</if>
-            <if test="examine_dept != null and  examine_dept !=''">,examine_dept = like '%'||#{examine_dept}||'%'</if>
-            <if test="examine_time != null and  examine_time !=''">,examine_time = like '%'||#{examine_time}||'%'</if>
-            <if test="examine_result != null and  examine_result !=''">,examine_result = like '%'||#{examine_result}||'%'</if>
+            <if test="submit_user != null and  submit_user !=''">,submit_user LIKE '%'||#{submit_user}||'%'</if>
+            <if test="sub_depy != null and  sub_depy !=''">,sub_depy LIKE '%'||#{sub_depy}||'%'</if>
+            <if test="submit_time != null and  submit_time !=''">,submit_time LIKE '%'||#{submit_time}||'%'</if>
+            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks LIKE '%'||#{submit_remarks}||'%'</if>
+            <if test="examine_type != null and  examine_type !=''">,examine_type LIKE '%'||#{examine_type}||'%'</if>
+            <if test="submit_user != null and  submit_user !=''">,submit_user LIKE '%'||#{submit_user}||'%'</if>
+            <if test="submit_time != null and  submit_time !=''">,submit_time LIKE '%'||#{submit_time}||'%'</if>
+            <if test="submit_remarks != null and  submit_remarks !=''">,submit_remarks LIKE '%'||#{submit_remarks}||'%'</if>
+            <if test="exam_depy != null  and exam_depy != ''">,exam_depy=#{exam_depy}</if>
+            <if test="examine_user != null and  examine_user !=''">,examine_user LIKE '%'||#{examine_user}||'%'</if>
+            <if test="process_instId != null and  process_instId !=''">,process_instId LIKE '%'||#{process_instId}||'%'</if>
+            <if test="workItem_Id != null and  workItem_Id !=''">,workItem_Id LIKE '%'||#{workItem_Id}||'%'</if>
+            <if test="examine_dept != null and  examine_dept !=''">,examine_dept LIKE '%'||#{examine_dept}||'%'</if>
+            <if test="examine_time != null and  examine_time !=''">,examine_time LIKE '%'||#{examine_time}||'%'</if>
+            <if test="examine_result != null and  examine_result !=''">,examine_result LIKE '%'||#{examine_result}||'%'</if>
             <if test="examine_message_id != null and  examine_message_id !=''">,examine_message_id =
-                like '%'||#{examine_message_id}||'%'
+                #{examine_message_id}
             </if>
-            <if test="is_complete != null and  is_complete !=''">,is_complete = like '%'||#{is_complete}||'%'</if>
-            <if test="now_category != null and  now_category !=''">,now_category = like '%'||#{now_category}||'%'</if>
-            <if test="examine_category != null and  examine_category !=''">,examine_category = like '%'||#{examine_category}||'%'</if>
+            <if test="is_complete != null and  is_complete !=''">,is_complete LIKE '%'||#{is_complete}||'%'</if>
+            <if test="now_category != null and  now_category !=''">,now_category LIKE '%'||#{now_category}||'%'</if>
+            <if test="examine_category != null and  examine_category !=''">,examine_category LIKE '%'||#{examine_category}||'%'</if>
         </set>
         where
-        id=like '%'||#{id}||'%'
+        id=#{id}
     </update>
 
 
@@ -303,14 +288,14 @@
         UPDATE
             hpeapm."spl_business_dy" a
         SET a."is_del" = '0'
-        WHERE a."pro_id" = like '%'||#{dyProId}||'%'
+        WHERE a."pro_id" LIKE '%'||#{dyProId}||'%'
     </update>
 
 
     <!--个人中心信息新增维度信息 -->
     <insert id="insertsplMessageBf" parameterType="java.util.Map">
         INSERT INTO hpeapm."spl_message_bf"
-        VALUES (like '%'||#{id}||'%', like '%'||#{examine_type}||'%', like '%'||#{audit_model_number}||'%', like '%'||#{examine_message}||'%', like '%'||#{examine_node}||'%')
+        VALUES (#{id}, #{examine_type}, #{audit_model_number}, #{examine_message}, #{examine_node})
     </insert>
 
 
@@ -321,7 +306,7 @@
                audit_model_number,
                audit_model_name
         FROM hpeapm.audit_elements_info
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -336,14 +321,14 @@
     <select id="getModelShangxianType" resultType="java.lang.String">
         SELECT COALESCE(is_syn, 0) AS isSyn
         FROM hpeapm."audit_elements_info"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
     <select id="selectModelJcMsg" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT *
         FROM hpeapm."audit_elements_info"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%' LIMIT 1
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%' LIMIT 1
     </select>
 
 
@@ -352,7 +337,7 @@
         UPDATE
             hpeapm.audit_elements_info
         SET is_online = '1'
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -360,29 +345,29 @@
     <update id="updateexamineandId" parameterType="com.cxsj.mxzd.pojo.spl.ExamineandapproveParam">
         UPDATE
             hpeapm."spl_model_type"
-        SET examine_id =like '%'||#{examinID}||'%'
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        SET examine_id =#{examinID}
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <!--新建模型将原有删除的模型清除-->
     <delete id="deleteModelYuanyou" parameterType="java.lang.String">
         DELETE
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </delete>
 
 
     <update id="updateMaintenDbType" parameterType="java.lang.String">
         UPDATE hpeapm."spl_mainten_db"
         SET is_tx='0'
-        WHERE model_no = like '%'||#{auditModelNumber}||'%'
+        WHERE model_no LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
     <delete id="delSplMaintenDb" parameterType="java.lang.String">
         DELETE
         FROM hpeapm."spl_mainten_db"
-        WHERE model_no = like '%'||#{auditModelNumber}||'%'
+        WHERE model_no LIKE '%'||#{auditModelNumber}||'%'
     </delete>
 
 
@@ -390,23 +375,23 @@
     <select id="selectExaminMsg" resultType="java.util.Map" parameterType="java.lang.String">
         SELECT *
         FROM hpeapm.spl_business_examine
-        WHERE id = like '%'||#{examinID}||'%'
+        WHERE id LIKE '%'||#{examinID}||'%'
     </select>
 
 
     <!--根据模型录入人查询该模型对应的用户信息 -->
     <select id="selectDockPeopleMsg" resultType="java.util.Map" parameterType="java.lang.String">
         SELECT a.deputyAccountNumber AS deputyAccountNumber,
-               b.busiUnitCode        AS busiUnitCode,
-               b.provinceName        AS provinceName,
+               b."busiunitcode"        AS "busiunitcode",
+               b.provincename        AS provincename,
                b.deptname            AS deptname,
                a.userId              AS userId,
                a."userName"          AS userName
         FROM hpmgr."bonc_union_userinfos" a
                  LEFT JOIN hpmgr."bonc_union_orginfos" b
-                           ON a."busiUnitCode" = b."busiUnitCode"
+                           ON a.busiunitcode = b.busiunitcode
         WHERE 1 = 1
-          AND userName = like '%'||#{dockDepartment}||'%' LIMIT 1
+          AND userName LIKE '%'||#{dockDepartment}||'%' LIMIT 1
     </select>
 
 
@@ -414,7 +399,7 @@
     <select id="selectModelId" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT "id" AS id
         FROM hpeapm."spl_model_type"
-        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -422,7 +407,7 @@
     <select id="selectModelMessage" resultType="java.lang.String">
         SELECT COUNT(*) AS a
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -432,7 +417,7 @@
                submit_remarks     AS remarks,
                audit_model_number AS auditModelNumber
         FROM hpeapm."spl_business_examine"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND is_complete = '0'
     </select>
 
@@ -443,19 +428,19 @@
         hpeapm."spl_model_type"
         SET
         <if test="def2ExamUser != null and  def2ExamUser !=''">
-            def2_exam_user = like '%'||#{def2ExamUser}||'%',
+            def2_exam_user LIKE '%'||#{def2ExamUser}||'%',
         </if>
         <if test="def2ExamUserDepy != null and  def2ExamUserDepy !=''">
-            def2_exam_userdepy = like '%'||#{def2ExamUserDepy}||'%',
+            def2_exam_userdepy LIKE '%'||#{def2ExamUserDepy}||'%',
         </if>
-        def_exam_user = like '%'||#{defExamUser}||'%',
-        def_exam_userDept=like '%'||#{defExamUserDept}||'%'
+        def_exam_user LIKE '%'||#{defExamUser}||'%',
+        def_exam_userDept=#{defExamUserDept}
         WHERE 1=1
         <if test="auditModelNumbers != null and auditModelNumbers.size > 0">
             and audit_model_number in
             <foreach collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")"
                      separator=",">
-                like '%'||#{auditModelNumber}||'%'
+                #{auditModelNumber}
             </foreach>
         </if>
     </update>
@@ -466,7 +451,7 @@
         SELECT type_of_information AS "step",
                audit_model_type    AS type
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -474,7 +459,7 @@
     <select id="getModelTypeExam" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT audit_model_type AS modelTypeExam
         FROM hpeapm."spl_model_type"
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -482,8 +467,8 @@
         SELECT GROUP_(c.name) data_content_description
         FROM hpeapm.audit_elements_data_support_v2 c
         WHERE 1 = 1
-          AND c.audit_model_number = like '%'||#{auditModelNumber}||'%'
-          AND c.isdel = 1
+          AND c.audit_model_number LIKE '%'||#{auditModelNumber}||'%'
+          AND c.isdel = '1'
     </select>
 
 
@@ -517,11 +502,11 @@
                                                   source_code,
                                                   belong_cmwa,
                                                   version,
-                                                  allow_down) VALUE
-            ( like '%'||#{business1}||'%',like '%'||#{business2}||'%',like '%'||#{source}||'%',like '%'||#{businessArea}||'%',like '%'||#{field}||'%',like '%'||#{auditPointNo}||'%',like '%'||#{auditPointName}||'%',like '%'||#{modelNo}||'%',like '%'||#{modelName}||'%',like '%'||#{model_type}||'%',like '%'||#{auditCode}||'%',like '%'||#{source_domain}||'%',
-            like '%'||#{model_online_time}||'%',like '%'||#{audit_scope}||'%',like '%'||#{model_url}||'%',like '%'||#{model_OnlineJi_Time}||'%',like '%'||#{model_logic}||'%',like '%'||#{home_system}||'%',like '%'||#{data_source}||'%',like '%'||#{datastart_time}||'%',
-            like '%'||#{modelrunning_frequency}||'%',like '%'||#{is_cured}||'%',like '%'||#{order}||'%',like '%'||#{cmwaExportPath}||'%',
-            like '%'||#{cmcaFileType}||'%',like '%'||#{cmcaSubjectId}||'%',like '%'||#{sourceCode}||'%',like '%'||#{belongCmwa}||'%',like '%'||#{version}||'%',like '%'||#{allowDown}||'%'
+                                                  allow_down) VALUES
+            ( #{business1},#{business2},#{source},#{businessArea},#{field},#{auditPointNo},#{auditPointName},#{modelNo},#{modelName},#{model_type},#{auditCode},#{source_domain},
+            #{model_online_time},#{audit_scope},#{model_url},#{model_OnlineJi_Time},#{model_logic},#{home_system},#{data_source},#{datastart_time},
+            #{modelrunning_frequency},#{is_cured},#{order},#{cmwaExportPath},
+            #{cmcaFileType},#{cmcaSubjectId},#{sourceCode},#{belongCmwa},#{version},#{allowDown}
             )
     </insert>
 
@@ -529,19 +514,19 @@
     <!--根据登录用户id查询审批用户详细信息 -->
     <select id="selectLoginUserMsg" resultType="java.util.Map" parameterType="java.lang.String">
         SELECT a.deputyAccountNumber AS deputyAccountNumber,
-               b.busiUnitCode        AS busiUnitCode,
-               b.provinceName        AS provinceName,
+               b."busiunitcode"        AS "busiunitcode",
+               b.provincename        AS provincename,
                b.deptname            AS deptname,
                a.userId              AS userId,
                a."userName"          AS userName,
                c.login_id            as loginId
         FROM hpmgr."bonc_union_userinfos" a
                  LEFT JOIN hpmgr."bonc_union_orginfos" b
-                           ON a."busiUnitCode" = b."busiUnitCode"
+                           ON a.busiunitcode = b.busiunitcode
                  LEFT JOIN hpmgr.bonc_user_role_info as c
                            on a.deputyAccountNumber = c.deputy_accountNumber
         WHERE 1 = 1
-          AND a.deputyAccountNumber = like '%'||#{deputyAccountNumber}||'%'
+          AND a.deputyAccountNumber LIKE '%'||#{deputyAccountNumber}||'%'
         ORDER BY orgLevel DESC LIMIT 1
     </select>
 
@@ -549,7 +534,7 @@
     <select id="getIsSupperUser" resultType="java.lang.Integer" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         SELECT COUNT(*) AS num
         FROM hpeapm."audit_show_qx" a
-        WHERE a."userDepy" = like '%'||#{defExamUser}||'%'
+        WHERE a."userDepy" LIKE '%'||#{defExamUser}||'%'
     </select>
 
 
@@ -595,40 +580,40 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="workId != null">
-                like '%'||#{workId,jdbcType=VARCHAR}||'%',
+                #{workId,jdbcType=VARCHAR},
             </if>
             <if test="examineId != null">
-                like '%'||#{examineId,jdbcType=VARCHAR}||'%',
+                #{examineId,jdbcType=VARCHAR},
             </if>
             <if test="roleName != null">
-                like '%'||#{roleName,jdbcType=VARCHAR}||'%',
+                #{roleName,jdbcType=VARCHAR},
             </if>
             <if test="deptName != null">
-                like '%'||#{deptName,jdbcType=VARCHAR}||'%',
+                #{deptName,jdbcType=VARCHAR},
             </if>
             <if test="opeType != null">
-                like '%'||#{opeType,jdbcType=VARCHAR}||'%',
+                #{opeType,jdbcType=VARCHAR},
             </if>
             <if test="opeUser != null">
-                like '%'||#{opeUser,jdbcType=VARCHAR}||'%',
+                #{opeUser,jdbcType=VARCHAR},
             </if>
             <if test="opeUserId != null">
-                like '%'||#{opeUserId,jdbcType=VARCHAR}||'%',
+                #{opeUserId,jdbcType=VARCHAR},
             </if>
             <if test="opeTime != null">
-                like '%'||#{opeTime}||'%',
+                #{opeTime},
             </if>
             <if test="nextUserId != null">
-                like '%'||#{nextUserId,jdbcType=VARCHAR}||'%',
+                #{nextUserId,jdbcType=VARCHAR},
             </if>
             <if test="nextUser != null">
-                like '%'||#{nextUser,jdbcType=VARCHAR}||'%',
+                #{nextUser,jdbcType=VARCHAR},
             </if>
             <if test="reolyType != null">
-                like '%'||#{reolyType,jdbcType=VARCHAR}||'%',
+                #{reolyType,jdbcType=VARCHAR},
             </if>
             <if test="reolyRemarks != null">
-                like '%'||#{reolyRemarks,jdbcType=VARCHAR}||'%',
+                #{reolyRemarks,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -638,13 +623,13 @@
         update hpeapm.spl_workitem_his
         <set>
             <if test="reolyType != null">
-                reoly_type = like '%'||#{reolyType,jdbcType=VARCHAR}||'%',
+                reoly_type LIKE '%'||#{reolyType,jdbcType=VARCHAR}||'%',
             </if>
             <if test="reolyRemarks != null">
-                reoly_remarks = like '%'||#{reolyRemarks,jdbcType=VARCHAR}||'%',
+                reoly_remarks LIKE '%'||#{reolyRemarks,jdbcType=VARCHAR}||'%',
             </if>
         </set>
-        where work_id = like '%'||#{workId,jdbcType=VARCHAR}||'%'
+        where work_id LIKE '%'||#{workId,jdbcType=VARCHAR}||'%'
     </update>
 
 

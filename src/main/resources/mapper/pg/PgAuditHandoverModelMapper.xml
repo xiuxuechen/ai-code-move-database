@@ -48,26 +48,26 @@
     <select id="selectAuditHandoverModel" resultMap="AuditHandoverModelMap">
         <include refid="AuditHandoverModelVo"/>
         <where>
-            <if test="id != null ">and id = like '%'||#{id}||'%'</if>
-            <if test="auditPoint != null ">and audit_point like '%' || like '%'||#{auditPoint}||'%' || '%'</if>
+            <if test="id != null ">and id LIKE '%'||#{id}||'%'</if>
+            <if test="auditPoint != null ">and audit_point like '%' || #{auditPoint} || '%'</if>
             <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">and audit_prospective_point like
-                '%' || like '%'||#{auditProspectivePoint}||'%' || '%'
+                '%' || #{auditProspectivePoint} || '%'
             </if>
-            <if test="auditSystemName != null  and auditSystemName != ''">and audit_system_name = like '%'||#{auditSystemName}||'%'
+            <if test="auditSystemName != null  and auditSystemName != ''">and audit_system_name LIKE '%'||#{auditSystemName}||'%'
             </if>
             <if test="auditSystemContent != null  and auditSystemContent != ''">and audit_system_content like
-                '%' || like '%'||#{auditSystemContent}||'%' || '%'
+                '%' || #{auditSystemContent} || '%'
             </if>
             <if test="auditConfirmationFindings != null ">and audit_confirmation_findings =
-                like '%'||#{auditConfirmationFindings}||'%'
+                #{auditConfirmationFindings}
             </if>
-            <if test="auditModelNameSend != null ">and audit_model_name_send = like '%'||#{auditModelNameSend}||'%'</if>
-            <if test="auditModelLogic != null ">and audit_model_logic = like '%'||#{auditModelLogic}||'%'</if>
-            <if test="auditModelNumber != null ">and audit_model_number = like '%'||#{auditModelNumber}||'%'</if>
-            <if test="createPerson != null ">and create_person = like '%'||#{createPerson}||'%'</if>
-            <if test="createTime != null ">and create_time = like '%'||#{createTime}||'%'</if>
-            <if test="updatePerson != null ">and update_person = like '%'||#{updatePerson}||'%'</if>
-            <if test="updateTime != null ">and update_time = like '%'||#{updateTime}||'%'</if>
+            <if test="auditModelNameSend != null ">and audit_model_name_send LIKE '%'||#{auditModelNameSend}||'%'</if>
+            <if test="auditModelLogic != null ">and audit_model_logic LIKE '%'||#{auditModelLogic}||'%'</if>
+            <if test="auditModelNumber != null ">and audit_model_number LIKE '%'||#{auditModelNumber}||'%'</if>
+            <if test="createPerson != null ">and create_person LIKE '%'||#{createPerson}||'%'</if>
+            <if test="createTime != null ">and create_time LIKE '%'||#{createTime}||'%'</if>
+            <if test="updatePerson != null ">and update_person LIKE '%'||#{updatePerson}||'%'</if>
+            <if test="updateTime != null ">and update_time LIKE '%'||#{updateTime}||'%'</if>
             and isdel =1
         </where>
     </select>
@@ -87,27 +87,25 @@
             <if test="auditModelLogic != null  and auditModelLogic != ''">audit_model_logic,</if>
             <if test="auditModelNumber != null  and auditModelNumber != ''">audit_model_number,</if>
             <if test="createPerson != null  and createPerson != ''">create_person,</if>
-            <!--<if test="createTime != null  and createTime != ''">create_time,</if>-->
-            CURRENT_TIMESTAMP as create_time,
+            create_time,
             <if test="updatePerson != null  and updatePerson != ''">update_person,</if>
-            <!--<if test="updateTime != null  and updateTime != ''">update_time,</if>-->
-            CURRENT_TIMESTAMP as update_time,
+            update_time,
             <if test="isdel != null  and isdel != ''">isdel,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="auditPoint != null ">like '%'||#{auditPoint}||'%',</if>
-            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">like '%'||#{auditProspectivePoint}||'%',</if>
-            <if test="auditSystemName != null  and auditSystemName != ''">like '%'||#{auditSystemName}||'%',</if>
-            <if test="auditSystemContent != null  and auditSystemContent != ''">like '%'||#{auditSystemContent}||'%',</if>
-            <if test="auditConfirmationFindings != null  ">like '%'||#{auditConfirmationFindings}||'%',</if>
-            <if test="auditModelNameSend != null  ">like '%'||#{auditModelNameSend}||'%',</if>
-            <if test="auditModelLogic != null  and auditModelLogic != ''">like '%'||#{auditModelLogic}||'%',</if>
-            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%',</if>
-            <if test="createPerson != null  and createPerson != ''">like '%'||#{createPerson}||'%',</if>
+            <if test="auditPoint != null ">#{auditPoint},</if>
+            <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">#{auditProspectivePoint},</if>
+            <if test="auditSystemName != null  and auditSystemName != ''">#{auditSystemName},</if>
+            <if test="auditSystemContent != null  and auditSystemContent != ''">#{auditSystemContent},</if>
+            <if test="auditConfirmationFindings != null  ">#{auditConfirmationFindings},</if>
+            <if test="auditModelNameSend != null  ">#{auditModelNameSend},</if>
+            <if test="auditModelLogic != null  and auditModelLogic != ''">#{auditModelLogic},</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">#{auditModelNumber},</if>
+            <if test="createPerson != null  and createPerson != ''">#{createPerson},</if>
             now(),
-            <if test="updatePerson != null  and updatePerson != ''">like '%'||#{updatePerson}||'%',</if>
+            <if test="updatePerson != null  and updatePerson != ''">#{updatePerson},</if>
             now(),
-            <if test="isdel != null  and isdel != ''">like '%'||#{isdel}||'%',</if>
+            <if test="isdel != null  and isdel != ''">#{isdel},</if>
 
         </trim>
     </insert>
@@ -117,40 +115,40 @@
     <update id="updateAuditHandoverModel">
         UPDATE hpeapm.audit_elements_handover_model
         <trim prefix="SET" suffixOverrides=",">
-            <if test="auditPoint != null ">audit_point=like '%'||#{auditPoint}||'%',</if>
+            <if test="auditPoint != null ">audit_point=#{auditPoint},</if>
             <if test="auditProspectivePoint != null  and auditProspectivePoint != ''">
-                audit_prospective_point=like '%'||#{auditProspectivePoint}||'%',
+                audit_prospective_point=#{auditProspectivePoint},
             </if>
-            <if test="auditSystemName != null  and auditSystemName != ''">audit_system_name=like '%'||#{auditSystemName}||'%',</if>
+            <if test="auditSystemName != null  and auditSystemName != ''">audit_system_name=#{auditSystemName},</if>
             <if test="auditSystemContent != null  and auditSystemContent != ''">
-                audit_system_content=like '%'||#{auditSystemContent}||'%',
+                audit_system_content=#{auditSystemContent},
             </if>
-            <if test="auditConfirmationFindings != null">audit_confirmation_findings=like '%'||#{auditConfirmationFindings}||'%',</if>
-            <if test="auditModelNameSend != null">audit_model_name_send=like '%'||#{auditModelNameSend}||'%',</if>
-            <if test="auditModelLogic != null">audit_model_logic=like '%'||#{auditModelLogic}||'%',</if>
-            <if test="auditModelNumber != null">audit_model_number=like '%'||#{auditModelNumber}||'%',</if>
-            <if test="createPerson != null  and createPerson != ''">create_person=like '%'||#{createPerson}||'%',</if>
-            <if test="createTime != null  and createTime != ''">create_time=like '%'||#{createTime}||'%',</if>
+            <if test="auditConfirmationFindings != null">audit_confirmation_findings=#{auditConfirmationFindings},</if>
+            <if test="auditModelNameSend != null">audit_model_name_send=#{auditModelNameSend},</if>
+            <if test="auditModelLogic != null">audit_model_logic=#{auditModelLogic},</if>
+            <if test="auditModelNumber != null">audit_model_number=#{auditModelNumber},</if>
+            <if test="createPerson != null  and createPerson != ''">create_person=#{createPerson},</if>
+            <if test="createTime != null  and createTime != ''">create_time=#{createTime},</if>
             <if test="updatePerson != null  and updatePerson != ''">update_person,</if>
-            <if test="updateTime != null  and updateTime != ''">update_time=like '%'||#{updateTime}||'%',</if>
-            <if test="isdel != null  and isdel != ''">isdel=like '%'||#{isdel}||'%',</if>
+            <if test="updateTime != null  and updateTime != ''">update_time=#{updateTime},</if>
+            <if test="isdel != null  and isdel != ''">isdel=#{isdel},</if>
         </trim>
-        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <!--删除  AND st.type_of_information='审计模型来源信息'-->
     <update id="deleteByAuditModelNumber">
         UPDATE hpeapm.audit_elements_handover_model
         SET isdel=0
-        where audit_model_number = like '%'||#{auditModelNumber}||'%'
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
     <select id="selectByAuditModelNumber" parameterType="com.cxsj.mxzd.commom.ParamData"
             resultMap="AuditHandoverModelMap">
         select *
         from hpeapm.audit_elements_handover_model
-        where audit_model_number = like '%'||#{auditModelNumber}||'%'
-          AND isdel = 1;
+        where audit_model_number LIKE '%'||#{auditModelNumber}||'%'
+          AND isdel = '1';
     </select>
 
 
@@ -234,13 +232,13 @@
         delete_status = '1'
         AND information_type = '审计模型来源信息'
         <if test="isImport!= null and isImport !='' ">
-            AND "is_import" = like '%'||#{isImport}||'%'
+            AND "is_import" LIKE '%'||#{isImport}||'%'
         </if>
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = like '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department LIKE like '%'||#{dockDepartment}||'%'
+            AND dock_department LIKE #{dockDepartment}
         </if>
         ),
         filtered_info AS (
@@ -264,43 +262,43 @@
             AND offline!='1'
         </if>
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process LIKE '%'||like '%'||#{primaryBusinessProcess}||'%'||'%'
+            AND primary_business_process LIKE '%'||#{primaryBusinessProcess}||'%'
         </if>
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            AND secondary_business_process LIKE '%'||like '%'||#{secondaryBusinessProcess}||'%'||'%'
+            AND secondary_business_process LIKE '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <if test="informationSources != null and informationSources!=''">
-            AND information_sources = like '%'||#{informationSources}||'%'
+            AND information_sources LIKE '%'||#{informationSources}||'%'
         </if>
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            AND audit_point_number LIKE '%'||like '%'||#{auditPointNumber}||'%'||'%'
+            AND audit_point_number LIKE '%'||#{auditPointNumber}||'%'
         </if>
         <if test="auditPointName != null and auditPointName!=''">
-            AND audit_point_name LIKE '%'||like '%'||#{auditPointName}||'%'||'%'
+            AND audit_point_name LIKE '%'||#{auditPointName}||'%'
         </if>
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            AND audit_model_number LIKE '%'||like '%'||#{auditModelNumber}||'%'||'%'
+            AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
         <if test="auditModelName != null and auditModelName!=''">
-            AND audit_model_name LIKE '%'||like '%'||#{auditModelName}||'%'||'%'
+            AND audit_model_name LIKE '%'||#{auditModelName}||'%'
         </if>
         ),
         org_info AS (
         SELECT DISTINCT
-        "busiUnitCode" || "orgCode" AS "id",
-        "provinceName" || '-' || "orgName" AS "name"
+        busiunitcode || "orgcode" AS "id",
+        "provincename" || '-' || "orgname" AS "name"
         FROM
         hpmgr."bonc_union_orginfos"
         WHERE
-        "busiUnitCode" = 'CM000'
+        busiunitcode = 'CM000'
         UNION ALL
         SELECT DISTINCT
-        "busiUnitCode" AS "id",
-        "provinceName" AS "name"
+        busiunitcode AS "id",
+        "provincename" AS "name"
         FROM
         hpmgr."bonc_union_orginfos"
         WHERE
-        "busiUnitCode"  != 'CM000'
+        busiunitcode  != 'CM000'
         )
         SELECT
         a.auditPointNumber,
@@ -343,9 +341,9 @@
         JOIN
         filtered_info b ON a.audit_model_number = b.audit_model_number
         ORDER BY a.detailed_time DESC
-        LIMIT like '%'||#{size}||'%' OFFSET like '%'||#{page}||'%'
+        LIMIT #{size} OFFSET #{page}
         ) a
-        LEFT JOIN "hpeapm"."xbpj_company_model" b ON a.second_model_number = b."ModelNo"
+        LEFT JOIN "hpeapm"."xbpj_company_model" b ON a.second_model_number = b."modelno"
         LEFT JOIN org_info c ON a.share_unit = c."id"
         ORDER BY a.detailedTime DESC
     </select>
@@ -381,13 +379,13 @@
         delete_status = '1'
         AND information_type ='审计模型来源信息'
         <if test="isImport!= null and isImport !='' ">
-            AND "is_import" = like '%'||#{isImport}||'%'
+            AND "is_import" LIKE '%'||#{isImport}||'%'
         </if>
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = like '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department like like '%'||#{dockDepartment}||'%'
+            AND dock_department like #{dockDepartment}
         </if>
         ) a
         JOIN (
@@ -409,31 +407,31 @@
         </if>
         <!-- 一级业务过程 -->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%'||like '%'||#{primaryBusinessProcess}||'%'||'%'
+            AND primary_business_process like '%'||#{primaryBusinessProcess}||'%'
         </if>
         <!-- 二级业务过程 -->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%'||like '%'||#{secondaryBusinessProcess}||'%'||'%'
+            and secondary_business_process like '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <!-- 信息源 -->
         <if test="informationSources != null and informationSources!=''">
-            and information_sources= like '%'||#{informationSources}||'%'
+            and information_sourcesLIKE '%'||#{informationSources}||'%'
         </if>
         <!-- 审计点编号 -->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||like '%'||#{auditPointNumber}||'%'||'%'
+            and audit_point_number like '%'||#{auditPointNumber}||'%'
         </if>
         <!-- 审计点名称 -->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||like '%'||#{auditPointName}||'%'||'%'
+            and audit_point_name like '%'||#{auditPointName}||'%'
         </if>
         <!-- 审计模型编号 -->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||like '%'||#{auditModelNumber}||'%'||'%'
+            and audit_model_number like '%'||#{auditModelNumber}||'%'
         </if>
         <!-- 审计模型名称 -->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||like '%'||#{auditModelName}||'%'||'%'
+            and audit_model_name like '%'||#{auditModelName}||'%'
             escape '|'
         </if>
         ) b ON a.audit_model_number = b.audit_model_number
@@ -519,7 +517,7 @@
         _abc.detailedTime,
         _abc.writeTime,
         cc."name" shareUnit,
-        bb."ModelName" as secondModelNumber
+        bb."modelname" as secondModelNumber
         FROM
         (
         SELECT
@@ -555,13 +553,13 @@
         delete_status = '1'
         AND information_type ='审计模型来源信息'
         <if test="isImport!= null and isImport !='' ">
-            AND "is_import" = like '%'||#{isImport}||'%'
+            AND "is_import" LIKE '%'||#{isImport}||'%'
         </if>
         <if test="dockPeople != null and dockPeople !=''">
-            AND dock_people = like '%'||#{dockPeople}||'%'
+            AND dock_people LIKE '%'||#{dockPeople}||'%'
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND dock_department LIKE like '%'||#{dockDepartment}||'%'
+            AND dock_department LIKE #{dockDepartment}
         </if>
         ) a
         JOIN (
@@ -586,62 +584,62 @@
         </if>
         <!-- 一级-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess!=''">
-            AND primary_business_process like '%' || like '%'||#{primaryBusinessProcess}||'%' || '%'
+            AND primary_business_process like '%' || #{primaryBusinessProcess} || '%'
         </if>
 
         <!-- 二级-->
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess!=''">
-            and secondary_business_process like '%' || like '%'||#{secondaryBusinessProcess}||'%' || '%'
+            and secondary_business_process like '%' || #{secondaryBusinessProcess} || '%'
         </if>
         <!-- 来源-->
         <if test="informationSources != null and informationSources!=''">
-            and information_sources= like '%'||#{informationSources}||'%'
+            and information_sourcesLIKE '%'||#{informationSources}||'%'
         </if>
         <!-- 审计点编号-->
         <if test="auditPointNumber != null and auditPointNumber!=''">
-            and audit_point_number like '%'||#{}||'%',like '%'||#{auditPointNumber}||'%',like '%'||#{}||'%'
+            and audit_point_number #{},#{auditPointNumber},#{}
         </if>
         <!-- 审计点名称-->
         <if test="auditPointName != null and auditPointName!=''">
-            and audit_point_name like '%'||#{}||'%',like '%'||#{auditPointName}||'%',like '%'||#{}||'%'
+            and audit_point_name #{},#{auditPointName},#{}
         </if>
 
         <!-- 审计模型编号-->
         <if test="auditModelNumber != null and auditModelNumber!=''">
-            and audit_model_number like '%'||#{}||'%',like '%'||#{auditModelNumber}||'%',like '%'||#{}||'%'
+            and audit_model_number #{},#{auditModelNumber},#{}
 
         </if>
 
         <!-- 审计模型名称-->
         <if test="auditModelName != null and auditModelName!=''">
-            and audit_model_name like '%'||#{}||'%',like '%'||#{auditModelName}||'%',like '%'||#{}||'%'
+            and audit_model_name #{},#{auditModelName},#{}
         </if>
 
 
         <if test="informationSources != null and informationSources!=''">
-            and information_sources= like '%'||#{informationSources}||'%'
+            and information_sourcesLIKE '%'||#{informationSources}||'%'
         </if>
         ) b ON a.audit_model_number = b.audit_model_number
         ORDER BY detailedTime DESC
         ) _abc
         LEFT JOIN hpeapm."xbpj_company_model" bb
-        ON _abc.second_model_number = bb."ModelNo"
+        ON _abc.second_model_number = bb."modelno"
         LEFT JOIN (
         (SELECT DISTINCT
-        (busiUnitCode, orgCode) AS id,
-        (provinceName, '-', orgName) AS "name"
+        ("busiunitcode", orgcode) AS id,
+        (provincename, '-', orgname) AS "name"
         FROM
         hpmgr."bonc_union_orginfos"
-        WHERE "busiUnitCode" = 'CM000')
+        WHERE busiunitcode = 'CM000')
         UNION
         ALL
         (SELECT DISTINCT
-        "busiUnitCode" AS id,
-        "provinceName" AS "name"
+        busiunitcode AS id,
+        "provincename" AS "name"
         FROM
         hpmgr."bonc_union_orginfos"
-        WHERE "busiUnitCode" != 'CM000'
-        ORDER BY "busiUnitCode")
+        WHERE busiunitcode != 'CM000'
+        ORDER BY busiunitcode)
         ) cc
         ON _abc.share_unit = cc."id"
         ) a
@@ -662,18 +660,18 @@
         values
         <foreach collection="list" item="auditHandoverModel" separator=",">
             (
-            like '%'||#{auditHandoverModel.id}||'%',
-            like '%'||#{auditHandoverModel.auditPoint}||'%',
-            like '%'||#{auditHandoverModel.auditProspectivePoint}||'%',
-            like '%'||#{auditHandoverModel.auditSystemName}||'%',
-            like '%'||#{auditHandoverModel.auditSystemContent}||'%',
-            like '%'||#{auditHandoverModel.auditConfirmationFindings}||'%',
-            like '%'||#{auditHandoverModel.auditModelNameSend}||'%',
-            like '%'||#{auditHandoverModel.auditModelLogic}||'%',
-            like '%'||#{auditHandoverModel.auditModelNumber}||'%',
-            like '%'||#{auditHandoverModel.createPerson}||'%',
+            #{auditHandoverModel.id},
+            #{auditHandoverModel.auditPoint},
+            #{auditHandoverModel.auditProspectivePoint},
+            #{auditHandoverModel.auditSystemName},
+            #{auditHandoverModel.auditSystemContent},
+            #{auditHandoverModel.auditConfirmationFindings},
+            #{auditHandoverModel.auditModelNameSend},
+            #{auditHandoverModel.auditModelLogic},
+            #{auditHandoverModel.auditModelNumber},
+            #{auditHandoverModel.createPerson},
             now(),
-            like '%'||#{auditHandoverModel.updatePerson}||'%',
+            #{auditHandoverModel.updatePerson},
             now(),
             1)
         </foreach>
@@ -683,40 +681,40 @@
 
     <select id="selectAllPrvd" resultType="java.util.Map">
         (SELECT DISTINCT
-             (busiUnitCode, orgCode) AS id,
-             (provinceName, '-', orgName) AS "name"
+             ("busiunitcode", orgcode) AS id,
+             (provincename, '-', orgname) AS "name"
          FROM
              hpmgr."bonc_union_orginfos"
-         WHERE "busiUnitCode" = 'CM000'
+         WHERE busiunitcode = 'CM000'
         )
         UNION
             ALL
         (SELECT DISTINCT
-             "busiUnitCode" AS id,
-             "provinceName" AS "name"
+             busiunitcode AS id,
+             "provincename" AS "name"
          FROM
              hpmgr."bonc_union_orginfos"
-         WHERE "busiUnitCode" != 'CM000'
-         ORDER BY "busiUnitCode")
+         WHERE busiunitcode != 'CM000'
+         ORDER BY busiunitcode)
     </select>
 
 
 
     <select id="selectAllModel" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT
-            aa.ModelNo AS id,
+            aa."modelno" AS id,
             aa.ModelName AS "name"
         FROM
             hpeapm."xbpj_company_model" aa
-        WHERE aa."modeling_dept" = like '%'||#{prvdId}||'%'
-          <if test="orgCode!=null and orgCode !=''">
-              AND AA."org_code" = like '%'||#{orgCode}||'%'
+        WHERE aa."modeling_dept" LIKE '%'||#{prvdId}||'%'
+          <if test="orgcode!=null and orgcode !=''">
+              AND AA."org_code" LIKE '%'||#{orgcode}||'%'
           </if>
         <if test="secondModelNumber!=null and secondModelNumber !=''">
-            AND AA."ModelNo" = like '%'||#{secondModelNumber}||'%'
+            AND AA."modelno" LIKE '%'||#{secondModelNumber}||'%'
         </if>
         <if test="secondModelName!=null and secondModelName !=''">
-            AND AA."ModelName" = like '%'||#{secondModelName}||'%'
+            AND AA."ModelName" LIKE '%'||#{secondModelName}||'%'
         </if>
         ORDER BY aa."model_online_time" DESC,id
     </select>

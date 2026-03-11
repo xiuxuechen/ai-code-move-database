@@ -31,7 +31,7 @@
         audit_elements_data_cut_in
         WHERE 1=1
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND audit_model_number=like CONCAT('%', #{auditModelNumber}, '%')
+            AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </if>
         AND isdel=1
     </select>
@@ -44,7 +44,7 @@
             audit_elements_data_cut_in
             WHERE 1=1
             <if test="auditModelNumber != null and auditModelNumber !=''">
-                AND audit_model_number=like CONCAT('%', #{auditModelNumber}, '%')
+                AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
             </if>
             AND isdel=1 AND remark is not null and  remark !=''  limit 1
         </select>-->
@@ -55,17 +55,17 @@
         UPDATE audit_elements_data_cut_in
         <trim prefix="SET" suffixOverrides=",">
             <if test="dataContentDescriptionXq != null  and dataContentDescriptionXq != ''">
-                data_content_description_xq=like CONCAT('%', #{dataContentDescriptionXq}, '%'),
+                data_content_description_xq like CONCAT('%', #{dataContentDescriptionXq}, '%'),
             </if>
-            <if test="involvedSystem != null  and involvedSystem != ''">involved_system=like CONCAT('%', #{involvedSystem}, '%'),</if>
-            <if test="scopeOfDataXq != null  and scopeOfDataXq != ''">scope_of_data_xq=like CONCAT('%', #{scopeOfDataXq}, '%'),</if>
+            <if test="involvedSystem != null  and involvedSystem != ''">involved_system like CONCAT('%', #{involvedSystem}, '%'),</if>
+            <if test="scopeOfDataXq != null  and scopeOfDataXq != ''">scope_of_data_xq like CONCAT('%', #{scopeOfDataXq}, '%'),</if>
             <if test="isdel != null  and isdel != ''">isdel,</if>
         </trim>
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+            WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </if>
         <if test="id != null and id !=''">
-            AND id=like CONCAT('%', #{id}, '%')
+            AND id like CONCAT('%', #{id}, '%')
         </if>
     </update>
 
@@ -91,7 +91,7 @@
     <update id="updateAuditCutInDeleteStatus" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
         UPDATE audit_elements_data_cut_in set isdel=0
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+            WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </if>
     </update>
 
@@ -99,16 +99,16 @@
     <!--新增，修改，或者删除审计支撑的时候先将审计支撑所有数据状态置位0-->
     <delete id="deleteAuditSuppInCut" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
         <if test="auditModelNumber != null and auditModelNumber !=''">
-   delete from  audit_supp_in_cut     WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+   delete from  audit_supp_in_cut     WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </if>
     </delete>
 
 
     <!--根据模型编号修改数据能力支撑数据资产管理-->
     <!--  <update id="updateCutInRamk" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
-          UPDATE audit_elements_data_cut_in set  remark=like CONCAT('%', #{remark}, '%'),existing_data_of_model=like CONCAT('%', #{existingDataOfModelId}, '%')
+          UPDATE audit_elements_data_cut_in set  remark like CONCAT('%', #{remark}, '%'),existing_data_of_model like CONCAT('%', #{existingDataOfModelId}, '%')
           <if test="auditModelNumber != null and auditModelNumber !=''">
-              WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+              WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
           </if>
         AND isdel=1
       </update>-->
@@ -151,12 +151,12 @@
 
 
     <update id="updateSupportInCut" parameterType="com.cxsj.mxzd.pojo.DataCutInfo">
-        UPDATE audit_supp_in_cut set cut_id=like CONCAT('%', #{cutId}, '%')
+        UPDATE audit_supp_in_cut set cut_id like CONCAT('%', #{cutId}, '%')
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+            WHERE audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </if>
         <if test="suppId != null and suppId !=''">
-            and supp_id = like CONCAT('%', #{suppId}, '%')
+            and supp_id like CONCAT('%', #{suppId}, '%')
         </if>
     </update>
 

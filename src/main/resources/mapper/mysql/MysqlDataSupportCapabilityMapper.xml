@@ -125,35 +125,35 @@
                a.execution_logic            AS executionLogic,
                a.subordinate_to_system      AS dataToSystem,
                a.expected_risks             AS expectedAuditFind,
-               a."model_code"               AS modelCode,
+               a.`model_code`               AS modelCode,
                a.model_code_file_id         AS modelCodeFileId,
                a.business_area                 businessArea,
                a.source_domain                 sourceDomain,
-               a."audit_model_number"       AS modelNumber,
-               b."audit_model_number"       AS modelNumber,
-               b."assetCode"                AS assetcode,
-               b."code"                     AS englishName,
-               b."name"                     AS "chineseName",
-               b."interId"                  AS interid,
-               b."interName"                AS innerName,
-               c."dock_people"                 autoPeople,
-               c."dock_deputy"                 autoDeputy,
-               c."dock_dept"                   autoDeptName
+               a.`audit_model_number`       AS modelNumber,
+               b.`audit_model_number`       AS modelNumber,
+               b.`assetCode`                AS assetcode,
+               b.`code`                     AS englishName,
+               b.`name`                     AS `chineseName`,
+               b.`interId`                  AS interid,
+               b.`interName`                AS innerName,
+               c.`dock_people`                 autoPeople,
+               c.`dock_deputy`                 autoDeputy,
+               c.`dock_dept`                   autoDeptName
         FROM (SELECT *
               FROM audit_elements_info
-              WHERE "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
+              WHERE `audit_model_number` = CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
              ) a
                  LEFT JOIN
              (SELECT *
               FROM spl_model_type
-              WHERE "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')) c
-             ON a."audit_model_number" = c."audit_model_number"
+              WHERE `audit_model_number` = CONCAT('%', #{auditModelNumber}, '%')) c
+             ON a.`audit_model_number` = c.`audit_model_number`
                  LEFT JOIN
              (SELECT *
-              FROM "audit_elements_data_support_v2"
+              FROM `audit_elements_data_support_v2`
               WHERE isdel = '1'
-                AND "audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')) b
-             ON a."audit_model_number" = b."audit_model_number"
+                AND `audit_model_number` = CONCAT('%', #{auditModelNumber}, '%')) b
+             ON a.`audit_model_number` = b.`audit_model_number`
 
     </select>
 
@@ -165,150 +165,114 @@
         FROM
         (
         SELECT
-        "_abc"."auditPointNumber" AS "auditPointNumber",
-        "_abc"."auditPointName" AS "auditPointName",
-        "_abc"."auditModelNumber" AS "auditModelNumber",
-        "_abc"."auditModelName" AS "auditModelName",
-        "_abc"."dockPeople" AS "dockPeople",
-        "_abc"."dockDepartment" AS "dockDepartment",
-        "_abc"."primaryBusinessProcess" AS "primaryBusinessProcess",
-        "_abc"."secondaryBusinessProcess" AS "secondaryBusinessProcess",
-        "_abc"."informationSources" AS "informationSources",
-        "_abc"."typeOfInformation" AS "typeOfInformation",
-        "_abc"."detailedTime" AS "detailedTime",
-        "_abc"."isOnline" AS "isOnline",
-        "supp"."code" AS "dataCode",
-        "supp"."assetCode" AS "assetCode",
-        "supp"."name" AS "name",
-        "supp"."originalSystemcode" AS "originalSystemcode",
-        "supp"."originalSystem" AS "originalSystem",
-        "supp"."interId" AS "interId",
-        "supp"."interName" AS "interName",
-        "supp"."status" AS "dataStatus",
-        "supp"."objLevelCode" AS "objLevelCode",
-        "supp"."busiType" AS "busiType",
-        "is_acc" AS "isAcc",
-        "supp"."data_supporter" AS "dataSupporter",
-        "cut"."data_content_description_xq" AS "dataContentDescriptionXq",
-        "cut"."involved_system" AS "involvedSystem",
-        "cut"."scope_of_data_xq" AS "scopeOfDataXq",
-        CASE WHEN "_abc"."existing_data_of_model"=1
-        THEN '是' WHEN "_abc"."existing_data_of_model"=0 THEN '否' ELSE '部分满足' END AS "existingDataOfModel",
-        "_abc"."remark" AS "remark"
+        `_abc`.`auditPointNumber` AS `auditPointNumber`,
+        `_abc`.`auditPointName` AS `auditPointName`,
+        `_abc`.`auditModelNumber` AS `auditModelNumber`,
+        `_abc`.`auditModelName` AS `auditModelName`,
+        `_abc`.`dockPeople` AS `dockPeople`,
+        `_abc`.`dockDepartment` AS `dockDepartment`,
+        `_abc`.`primaryBusinessProcess` AS `primaryBusinessProcess`,
+        `_abc`.`secondaryBusinessProcess` AS `secondaryBusinessProcess`,
+        `_abc`.`informationSources` AS `informationSources`,
+        `_abc`.`typeOfInformation` AS `typeOfInformation`,
+        `_abc`.`detailedTime` AS `detailedTime`,
+        `_abc`.`isOnline` AS `isOnline`,
+        `supp`.`code` AS `dataCode`,
+        `supp`.`assetCode` AS `assetCode`,
+        `supp`.`name` AS `name`,
+        `supp`.`originalSystemcode` AS `originalSystemcode`,
+        `supp`.`originalSystem` AS `originalSystem`,
+        `supp`.`interId` AS `interId`,
+        `supp`.`interName` AS `interName`,
+        `supp`.`status` AS `dataStatus`,
+        `supp`.`objLevelCode` AS `objLevelCode`,
+        `supp`.`busiType` AS `busiType`, `is_acc` AS `isAcc`,
+        `supp`.`data_supporter` AS `dataSupporter`,
+        `cut`.`data_content_description_xq` AS `dataContentDescriptionXq`,
+        `cut`.`involved_system` AS `involvedSystem`,
+        `cut`.`scope_of_data_xq` AS `scopeOfDataXq`,
+        CASE WHEN `_abc`.`existing_data_of_model`=1
+        THEN '是' WHEN `_abc`.`existing_data_of_model`=0 THEN '否' ELSE '部分满足' END AS `existingDataOfModel`,
+        `_abc`.`remark` AS `remark`
         FROM
         (
         SELECT
-        "b"."audit_point_number" AS "auditPointNumber",
-        "b"."audit_point_name" AS "auditPointName",
-        "b"."audit_model_number" AS "auditModelNumber",
-        "b"."audit_model_name" AS "auditModelName",
-        "b"."primary_business_process" AS "primaryBusinessProcess",
-        "b"."secondary_business_process" AS "secondaryBusinessProcess",
-        "b"."is_online" AS "isOnline",
-        "b"."information_sources" AS "informationSources",
-        "a"."dock_people" AS "dockPeople",
-        "a"."dock_department" AS "dockDepartment",
-        "a"."type_of_information" AS "typeOfInformation",
-        "b"."existing_data_of_model" AS "existing_data_of_model",
-        "support_remark" AS "remark",
-        "a"."detailed_time" AS "detailedTime"
+        `b`.`audit_point_number` AS `auditPointNumber`,
+        `b`.`audit_point_name` AS `auditPointName`,
+        `b`.`audit_model_number` AS `auditModelNumber`,
+        `b`.`audit_model_name` AS `auditModelName`,
+        `b`.`primary_business_process` AS `primaryBusinessProcess`,
+        `b`.`secondary_business_process` AS `secondaryBusinessProcess`,
+        `b`.`is_online` AS `isOnline`,
+        `b`.`information_sources` AS `informationSources`,
+        `a`.`dock_people` AS `dockPeople`,
+        `a`.`dock_department` AS `dockDepartment`,
+        `a`.`type_of_information` AS `typeOfInformation`,
+        `b`.`existing_data_of_model` AS `existing_data_of_model`, `support_remark` AS `remark`,
+        `a`.`detailed_time` AS `detailedTime`
         FROM
         (
-        SELECT
-        "audit_model_number",
-        "dock_people",
-        "dock_department",
-        "type_of_information",
-        "detailed_time"
+        SELECT `audit_model_number`, `dock_people`, `dock_department`, `type_of_information`, `detailed_time`
         FROM
-        "hpeapm"."audit_elements_operation_steps"
-        WHERE
-        "information_type" = '数据支撑能力'
-        AND "delete_status" = '1'
+        `hpeapm`.`audit_elements_operation_steps`
+        WHERE `information_type` = '数据支撑能力'
+        AND `delete_status` = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND "dock_people" LIKE CONCAT('%', #{dockPeople}, '%')
+            AND `dock_people` LIKE CONCAT('%', #{dockPeople}, '%')
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+            AND `dock_department` LIKE CONCAT('%', #{dockDepartment}, '%')
         </if>
         <if test="isImport!= null and isImport !='' ">
-            AND "is_import" LIKE CONCAT('%', #{isImport}, '%')
+            AND `is_import` LIKE CONCAT('%', #{isImport}, '%')
         </if>
         )a
         JOIN(
-        SELECT
-        "primary_business_process",
-        "secondary_business_process",
-        "information_sources",
-        "audit_point_number",
-        "audit_point_name",
-        "audit_model_number",
-        "audit_model_name",
-        "existing_data_of_model",
-        "is_online",
-        "support_remark"
+        SELECT `primary_business_process`, `secondary_business_process`, `information_sources`, `audit_point_number`, `audit_point_name`, `audit_model_number`, `audit_model_name`, `existing_data_of_model`, `is_online`, `support_remark`
         FROM
-        "hpeapm"."audit_elements_info"
+        `hpeapm`.`audit_elements_info`
         where 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and "offline"!='1'
         </if>
-        <!--<if test="isImport== null"> AND "is_online"='1'</if>-->
+        <!--<if test="isImport== null"> AND `is_online`='1'</if>-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
-            AND "primary_business_process" LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
+            AND `primary_business_process` LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
         </if>
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
-            AND "secondary_business_process" LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
+            AND `secondary_business_process` LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
         </if>
         <if test="informationSources != null and informationSources !=''">
-            AND "information_sources" LIKE CONCAT('%', #{informationSources}, '%')
+            AND `information_sources` LIKE CONCAT('%', #{informationSources}, '%')
         </if>
         <if test="auditPointNumber != null and auditPointNumber !=''">
-            AND "audit_point_number" LIKE CONCAT('%', #{auditPointNumber}, '%')
+            AND `audit_point_number` LIKE CONCAT('%', #{auditPointNumber}, '%')
         </if>
         <if test="auditPointName != null and auditPointName!=''">
-            AND "audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+            AND `audit_point_name` LIKE CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND "audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+            AND `audit_model_number` LIKE CONCAT('%', #{auditModelNumber}, '%')
         </if>
         <if test="auditModelName != null and auditModelName !=''">
-            AND "audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+            AND `audit_model_name` LIKE CONCAT('%', #{auditModelName}, '%')
         </if>
-        )b ON "a"."audit_model_number" = "b"."audit_model_number"
-        ORDER BY "a"."detailed_time" desc
+        )b ON `a`.`audit_model_number` = `b`.`audit_model_number`
+        ORDER BY `a`.`detailed_time` desc
         
         )_abc
         LEFT JOIN(
-        SELECT
-        "assetCode",
-        "code",
-        "name",
-        "originalSystemcode",
-        "originalSystem",
-        "interId",
-        "interName",
-        "objLevelCode",
-        "busiType",
-        "status",
-        "data_supporter",
-        "audit_model_number",
-        "is_acc"
+        SELECT `assetCode`, `code`, `name`, `originalSystemcode`, `originalSystem`, `interId`, `interName`, `objLevelCode`, `busiType`, `status`, `data_supporter`, `audit_model_number`, `is_acc`
         FROM
-        "hpeapm"."audit_elements_data_support_v2"
-        WHERE "isdel" = '1'
-        )supp ON "_abc"."auditModelNumber" = "supp"."audit_model_number"
+        `hpeapm`.`audit_elements_data_support_v2`
+        WHERE `isdel` = '1'
+        )supp ON `_abc`.`auditModelNumber` = `supp`.`audit_model_number`
         LEFT JOIN(
-        SELECT
-        "data_content_description_xq",
-        "involved_system",
-        "scope_of_data_xq",
-        "audit_model_number"
+        SELECT `data_content_description_xq`, `involved_system`, `scope_of_data_xq`, `audit_model_number`
         FROM
-        "hpeapm"."audit_elements_data_cut_in"
-        WHERE
-        "isdel" = '1'
-        )cut ON "supp"."audit_model_number" = "cut"."audit_model_number"
+        `hpeapm`.`audit_elements_data_cut_in`
+        WHERE `isdel` = '1'
+        )cut ON `supp`.`audit_model_number` = `cut`.`audit_model_number`
         )a where 1=1 ORDER BY "detailedTime" desc
     </select>
 
@@ -321,112 +285,81 @@
         FROM
         (
         SELECT
-        COUNT(DISTINCT "_abc"."auditModelNumber") AS "result"
+        COUNT(DISTINCT `_abc`.`auditModelNumber`) AS `result`
         FROM
         (
         SELECT
-        "b"."audit_point_number" AS "auditPointNumber",
-        "b"."audit_point_name" AS "auditPointName",
-        "b"."audit_model_number" AS "auditModelNumber",
-        "b"."audit_model_name" AS "auditModelName",
-        "b"."primary_business_process" AS "primaryBusinessProcess",
-        "b"."secondary_business_process" AS "secondaryBusinessProcess",
-        "b"."information_sources" AS "informationSources",
-        "a"."dock_people" AS "dockPeople",
-        "a"."dock_department" AS "dockDepartment",
-        "b"."existing_data_of_model" AS "existing_data_of_model",
-        "support_remark" AS "remark"
+        `b`.`audit_point_number` AS `auditPointNumber`,
+        `b`.`audit_point_name` AS `auditPointName`,
+        `b`.`audit_model_number` AS `auditModelNumber`,
+        `b`.`audit_model_name` AS `auditModelName`,
+        `b`.`primary_business_process` AS `primaryBusinessProcess`,
+        `b`.`secondary_business_process` AS `secondaryBusinessProcess`,
+        `b`.`information_sources` AS `informationSources`,
+        `a`.`dock_people` AS `dockPeople`,
+        `a`.`dock_department` AS `dockDepartment`,
+        `b`.`existing_data_of_model` AS `existing_data_of_model`, `support_remark` AS `remark`
         FROM
         (
-        SELECT
-        "audit_model_number",
-        "dock_people",
-        "dock_department"
+        SELECT `audit_model_number`, `dock_people`, `dock_department`
         FROM
-        "hpeapm"."audit_elements_operation_steps"
-        WHERE
-        "information_type" = '数据支撑能力'
-        AND "delete_status" = '1'
+        `hpeapm`.`audit_elements_operation_steps`
+        WHERE `information_type` = '数据支撑能力'
+        AND `delete_status` = '1'
         <if test="dockPeople != null and dockPeople !=''">
-            AND "dock_people" LIKE CONCAT('%', #{dockPeople}, '%')
+            AND `dock_people` LIKE CONCAT('%', #{dockPeople}, '%')
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+            AND `dock_department` LIKE CONCAT('%', #{dockDepartment}, '%')
         </if>
         <if test="isImport!= null and isImport !='' ">
-            AND "is_import" LIKE CONCAT('%', #{isImport}, '%')
+            AND `is_import` LIKE CONCAT('%', #{isImport}, '%')
         </if>
         )a
         JOIN(
-        SELECT
-        "primary_business_process",
-        "secondary_business_process",
-        "information_sources",
-        "audit_point_number",
-        "audit_point_name",
-        "audit_model_number",
-        "audit_model_name",
-        "existing_data_of_model",
-        "support_remark"
+        SELECT `primary_business_process`, `secondary_business_process`, `information_sources`, `audit_point_number`, `audit_point_name`, `audit_model_number`, `audit_model_name`, `existing_data_of_model`, `support_remark`
         FROM
-        "hpeapm"."audit_elements_info"
+        `hpeapm`.`audit_elements_info`
         WHERE 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
-            AND "offline" != '1'
+            AND `offline` != '1'
         </if>
         <!-- <if test="isImport== null"> AND is_online='1'</if>-->
         <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
-            AND "primary_business_process" LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
+            AND `primary_business_process` LIKE CONCAT('%', #{primaryBusinessProcess}, '%')
         </if>
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
-            AND "secondary_business_process" LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
+            AND `secondary_business_process` LIKE CONCAT('%', #{secondaryBusinessProcess}, '%')
         </if>
         <if test="informationSources != null and informationSources !=''">
-            AND "information_sources" LIKE CONCAT('%', #{informationSources}, '%')
+            AND `information_sources` LIKE CONCAT('%', #{informationSources}, '%')
         </if>
         <if test="auditPointNumber != null and auditPointNumber !=''">
-            AND "audit_point_number" LIKE CONCAT('%', #{auditPointNumber}, '%')
+            AND `audit_point_number` LIKE CONCAT('%', #{auditPointNumber}, '%')
         </if>
         <if test="auditPointName != null and auditPointName!=''">
-            AND "audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+            AND `audit_point_name` LIKE CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND "audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+            AND `audit_model_number` LIKE CONCAT('%', #{auditModelNumber}, '%')
         </if>
         <if test="auditModelName != null and auditModelName !=''">
-            AND "audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+            AND `audit_model_name` LIKE CONCAT('%', #{auditModelName}, '%')
         </if>
-        )b ON "a"."audit_model_number" = "b"."audit_model_number"
+        )b ON `a`.`audit_model_number` = `b`.`audit_model_number`
         )_abc
         LEFT JOIN(
-        SELECT
-        "data_interface_name",
-        "data_content_description",
-        "scope_of_data",
-        "data_domain",
-        "data_access_source",
-        "data_attribution_system",
-        "data_access_time",
-        "data_retention_cycle",
-        "structured_data_not",
-        "audit_model_number",
-        "data_supporter"
+        SELECT `data_interface_name`, `data_content_description`, `scope_of_data`, `data_domain`, `data_access_source`, `data_attribution_system`, `data_access_time`, `data_retention_cycle`, `structured_data_not`, `audit_model_number`, `data_supporter`
         FROM
-        "hpeapm"."audit_elements_data_support"
-        WHERE
-        "isdel" = '1'
-        )supp ON "_abc"."auditModelNumber" = "supp"."audit_model_number"
+        `hpeapm`.`audit_elements_data_support`
+        WHERE `isdel` = '1'
+        )supp ON `_abc`.`auditModelNumber` = `supp`.`audit_model_number`
         LEFT JOIN(
-        SELECT
-        "data_content_description_xq",
-        "involved_system",
-        "scope_of_data_xq",
-        "audit_model_number"
+        SELECT `data_content_description_xq`, `involved_system`, `scope_of_data_xq`, `audit_model_number`
         FROM
-        "hpeapm"."audit_elements_data_cut_in"
-        WHERE
-        "isdel" = '1'
-        )cut ON "supp"."audit_model_number" = "cut"."audit_model_number"
+        `hpeapm`.`audit_elements_data_cut_in`
+        WHERE `isdel` = '1'
+        )cut ON `supp`.`audit_model_number` = `cut`.`audit_model_number`
         )a WHERE 1=1
     </select>
 
@@ -485,21 +418,17 @@
         from (
         SELECT
         id,
-        assetCode,
-        "code",
-        "name",
+        assetCode, `code`, `name`,
         originalSystemcode,
         originalSystem,
         interId,
         interName,
         objLevelCode,
-        busiType,
-        "status",
+        busiType, `status`,
         data_supporter,
         audit_model_number,
         is_acc
-        FROM
-        "audit_elements_data_support_v2"
+        FROM `audit_elements_data_support_v2`
         WHERE 1 = 1
         AND isdel='1'
         <if test="auditModelNumber != null and auditModelNumber !=''">
@@ -519,8 +448,7 @@
         involved_system,
         scope_of_data_xq,
         audit_model_number
-        FROM
-        "audit_elements_data_cut_in"
+        FROM `audit_elements_data_cut_in`
         WHERE
         isdel = '1'
         <if test="auditModelNumber != null and auditModelNumber !=''">
@@ -548,21 +476,17 @@
         from (
         SELECT
         id,
-        assetCode,
-        "code",
-        "name",
+        assetCode, `code`, `name`,
         originalSystemcode,
         originalSystem,
         interId,
         interName,
         objLevelCode,
-        busiType,
-        "status",
+        busiType, `status`,
         data_supporter,
         audit_model_number,
         is_acc
-        FROM
-        "audit_elements_data_support_v2"
+        FROM `audit_elements_data_support_v2`
         WHERE 1 = 1
         AND isdel='1'
         <if test="auditModelNumber != null and auditModelNumber !=''">
@@ -581,8 +505,7 @@
         involved_system,
         scope_of_data_xq,
         audit_model_number
-        FROM
-        "audit_elements_data_cut_in"
+        FROM `audit_elements_data_cut_in`
         WHERE
         isdel = '1'
         <if test="auditModelNumber != null and auditModelNumber !=''">
@@ -645,8 +568,7 @@
         audit_model_name,
         existing_data_of_model,
         support_remark
-        FROM
-        "audit_elements_info"
+        FROM `audit_elements_info`
         where 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and offline!='1'
@@ -679,58 +601,57 @@
     <!--审计点名称下拉框 -->
     <select id="getDropdownAuditPointName" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT DISTINCT
-        a."audit_point_name" AS auditPointNumber,
-        a."audit_point_name" AS auditPointName
-        FROM
-        "audit_elements_info" a
-        LEFT JOIN "spl_model_type" b
-        ON a."audit_model_number" = b."audit_model_number"
-        WHERE a."audit_point_name" IS NOT NULL
-        AND a."audit_point_name" != ''
+        a.`audit_point_name` AS auditPointNumber,
+        a.`audit_point_name` AS auditPointName
+        FROM `audit_elements_info` a
+        LEFT JOIN `spl_model_type` b
+        ON a.`audit_model_number` = b.`audit_model_number`
+        WHERE a.`audit_point_name` IS NOT NULL
+        AND a.`audit_point_name` != ''
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND b."dock_dept" LIKE CONCAT('%', #{dockDepartment}, '%')
+            AND b.`dock_dept` LIKE CONCAT('%', #{dockDepartment}, '%')
         </if>
     </select>
 
 
     <select id="getDropdownAuditModelName" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT DISTINCT
-        a.audit_model_name AS "auditModelNumber",
-        a.audit_model_name AS "auditModelName"
+        a.audit_model_name AS `auditModelNumber`,
+        a.audit_model_name AS `auditModelName`
         FROM
-        "hpeapm"."audit_elements_info" a
-        LEFT JOIN "hpeapm"."spl_model_type" b
-        ON a."audit_model_number" = b."audit_model_number"
+        `hpeapm`.`audit_elements_info` a
+        LEFT JOIN `hpeapm`.`spl_model_type` b
+        ON a.`audit_model_number` = b.`audit_model_number`
         WHERE a.audit_model_name IS NOT NULL
         AND a.audit_model_name != ''
         <if test="auditPointName != null and auditPointName !=''">
             AND a.audit_point_name LIKE CONCAT('%', #{auditPointName}, '%')
         </if>
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND b."dock_dept" LIKE CONCAT('%', #{dockDepartment}, '%')
+            AND b.`dock_dept` LIKE CONCAT('%', #{dockDepartment}, '%')
         </if>
     </select>
 
 
 
     <select id="selectModelNameToPointName" parameterType="java.util.List" resultType="java.util.Map">
-        SELECT DISTINCT b."audit_model_name" AS "auditModelNumber",
-                        b."audit_model_name" AS "auditModelName"
-        FROM "hpeapm"."spl_mainten_db" a
-                 LEFT JOIN "hpeapm"."audit_elements_info" b
-                           ON a."model_no" = b."audit_model_number"
-        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
-          AND b."audit_point_name" LIKE CONCAT('%', #{auditPointName}, '%')
+        SELECT DISTINCT b.`audit_model_name` AS `auditModelNumber`,
+                        b.`audit_model_name` AS `auditModelName`
+        FROM `hpeapm`.`spl_mainten_db` a
+                 LEFT JOIN `hpeapm`.`audit_elements_info` b
+                           ON a.`model_no` = b.`audit_model_number`
+        WHERE a.`role_id` = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b.`audit_point_name` LIKE CONCAT('%', #{auditPointName}, '%')
     </select>
 
 
 
     <select id="selectGlMsg" parameterType="java.lang.String" resultType="com.cxsj.mxzd.pojo.ASuppInParam">
-        SELECT a."cut_id"             AS cutId,
-               a."audit_model_number" AS auditModelNumber
+        SELECT a.`cut_id`             AS cutId,
+               a.`audit_model_number` AS auditModelNumber
         FROM audit_supp_in_cut a
-        WHERE a."audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
-          AND a."cut_id" IS NOT NULL
+        WHERE a.`audit_model_number` LIKE CONCAT('%', #{auditModelNumber}, '%')
+          AND a.`cut_id` IS NOT NULL
     </select>
 
 
@@ -739,7 +660,7 @@
         FROM
         audit_supp_in_cut
         WHERE 1=1
-        AND "audit_model_number" in
+        AND `audit_model_number` in
         <foreach collection="auditModelSet" item="auditModel" index="index" open="(" close=")" separator=",">
             CONCAT('%', #{auditModel}, '%')
         </foreach>
@@ -751,36 +672,34 @@
         SELECT DISTINCT
         "dock_people"
         FROM
-        "hpeapm"."audit_elements_operation_steps"
-        WHERE "dock_people" IS NOT NULL
-        AND "dock_people" !=''
+        `hpeapm`.`audit_elements_operation_steps`
+        WHERE `dock_people` IS NOT NULL
+        AND `dock_people` !=''
         <if test="dockDepartment!= null and dockDepartment !=''">
-            AND "dock_department" LIKE CONCAT('%', #{dockDepartment}, '%')
+            AND `dock_department` LIKE CONCAT('%', #{dockDepartment}, '%')
         </if>
-        AND "delete_status"=1
+        AND `delete_status`=1
     </select>
 
 
     <!--一级业务流程 审计库下拉框当中的数据 -->
     <select id="getDropdownboxNo1TableNew" parameterType="java.util.Map" resultType="java.util.Map">
-        SELECT DISTINCT "primary_business_process_id" AS "id",
-                        "primary_business_process"    AS "name"
-        FROM "hpeapm"."audit_elements_business_process"
-        WHERE "primary_business_process" IS NOT NULL
-          AND "primary_business_process" !=''
+        SELECT DISTINCT "primary_business_process_id" AS `id`, `primary_business_process`    AS `name`
+        FROM `hpeapm`.`audit_elements_business_process`
+        WHERE `primary_business_process` IS NOT NULL
+          AND `primary_business_process` !=''
     </select>
 
     <!--二级业务流程 审计库下拉框当中的数据 -->
     <select id="getDropdownboxMo2TableNew" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT DISTINCT
-        "secondary_business_process_id" AS "id",
-        "secondary_business_process" AS "name"
+        "secondary_business_process_id" AS `id`, `secondary_business_process` AS `name`
         FROM
-        "hpeapm"."audit_elements_business_process"
-        WHERE "secondary_business_process" IS NOT NULL
-        AND "secondary_business_process" !=''
+        `hpeapm`.`audit_elements_business_process`
+        WHERE `secondary_business_process` IS NOT NULL
+        AND `secondary_business_process` !=''
         <if test="business1 != null and business1 !=''">
-            AND "primary_business_process" LIKE CONCAT('%', #{business1}, '%')
+            AND `primary_business_process` LIKE CONCAT('%', #{business1}, '%')
         </if>
     </select>
 
@@ -820,20 +739,16 @@
         SELECT
         id,
         audit_model_number,
-        assetCode,
-        "code",
-        "name",
+        assetCode, `code`, `name`,
         originalSystemcode,
         originalSystem,
         interId,
         interName,
         objLevelCode,
         busiType,
-        is_acc AS is_acc,
-        "status" AS "status",
+        is_acc AS is_acc, `status` AS `status`,
         data_supporter
-        FROM
-        "audit_elements_data_support_v2"
+        FROM `audit_elements_data_support_v2`
         WHERE 1 = 1
         <if test="auditModelNumber != null and auditModelNumber !=''">
             AND audit_model_number LIKE CONCAT('%', #{auditModelNumber}, '%')
@@ -898,8 +813,8 @@
 
     <!--插入数据能力支撑数据资产管理-->
     <insert id="insertAuditSupportDataBase" parameterType="com.cxsj.mxzd.pojo.DataSupportInfo">
-        INSERT INTO "audit_elements_data_support_v2"
-        (id, audit_model_number, assetCode, code, "name", originalSystemcode, originalSystem, interId, interName,
+        INSERT INTO `audit_elements_data_support_v2`
+        (id, audit_model_number, assetCode, code, `name`, originalSystemcode, originalSystem, interId, interName,
          objLevelCode, busiType, status, data_supporter, is_acc)
         VALUES (#{id}, #{auditModelNumber}, #{assetCode}, #{dataCode}, #{name}, #{originalSystemcode},
                 #{originalSystem}, #{interId}, #{interName}, #{objLevelCode}, #{busiType}, #{dataStatus},
@@ -908,7 +823,7 @@
 
 
     <insert id="insertAllDataSup" parameterType="java.util.Map">
-        INSERT INTO "audit_elements_data_support_v2"
+        INSERT INTO `audit_elements_data_support_v2`
         (id,audit_model_number,assetCode,code,"name",originalSystemcode,originalSystem,interId,interName,
         objLevelCode,busiType,status,data_supporter,is_acc)
         VALUES
@@ -923,20 +838,20 @@
 
     <select id="selectAllDataSupport" resultType="com.cxsj.mxzd.pojo.DataSupportInfo">
         SELECT a.id                                    AS id,
-               a."audit_model_number"                  AS auditModelNumber,
-               REPLACE(a."assetCode", '\n', '')        AS assetCode,
-               REPLACE(a."code", '\n', '')             AS dataCode,
-               REPLACE(a."name", '\n', '')             AS "name",
+               a.`audit_model_number`                  AS auditModelNumber,
+               REPLACE(a.`assetCode`, '\n', '')        AS assetCode,
+               REPLACE(a.`code`, '\n', '')             AS dataCode,
+               REPLACE(a.`name`, '\n', '')             AS `name`,
                REPLACE(a.originalSystemcode, '\n', '') AS originalSystemcode,
-               REPLACE(a."originalSystem", '\n', '')   AS originalSystem,
-               REPLACE(a."interId", '\n', '')          AS interId,
+               REPLACE(a.`originalSystem`, '\n', '')   AS originalSystem,
+               REPLACE(a.`interId`, '\n', '')          AS interId,
                REPLACE(a.interName, '\n', '')          AS interName,
                REPLACE(a.objLevelCode, '\n', '')       AS objLevelCode,
                REPLACE(a.busiType, '\n', '')           AS busiType,
-               REPLACE(a."status", '\n', '')           AS dataStatus,
-               REPLACE(a."data_supporter", '\n', '')   AS dataSupporter,
-               REPLACE(a."is_acc", '\n', '')           AS isAcc
-        FROM "audit_elements_data_support_v2" a
+               REPLACE(a.`status`, '\n', '')           AS dataStatus,
+               REPLACE(a.`data_supporter`, '\n', '')   AS dataSupporter,
+               REPLACE(a.`is_acc`, '\n', '')           AS isAcc
+        FROM `audit_elements_data_support_v2` a
         WHERE a.isdel = '1'
     </select>
 
@@ -1177,16 +1092,15 @@
     <select id="selectAssCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        assetCode AS "label",
-        assetCode AS "value"
-        FROM
-        "audit_assets_data"
+        assetCode AS `label`,
+        assetCode AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="dataCode != null and dataCode !=''">
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1215,16 +1129,15 @@
     <select id="selectDataCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        code AS "label",
-        code AS "value"
-        FROM
-        "audit_assets_data"
+        code AS `label`,
+        code AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1253,10 +1166,9 @@
     <select id="selectNameList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        name AS "label",
-        name AS "value"
-        FROM
-        "audit_assets_data"
+        name AS `label`,
+        name AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1289,12 +1201,12 @@
 
 
     <select id="selectSourceSys" resultType="java.util.Map">
-        SELECT DISTINCT sys_x2 AS "label",
-                        sys_x2 AS "value"
+        SELECT DISTINCT sys_x2 AS `label`,
+                        sys_x2 AS `value`
         FROM map_system_list
         WHERE approv_status = 'success'
           AND CURRENT_TIMESTAMP BETWEEN "start_time"
-            AND "end_time"
+            AND `end_time`
           AND effec_status = 'Y'
     </select>
 
@@ -1302,10 +1214,9 @@
     <select id="selectOriginalSystemcodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        originalSystemcode AS "label",
-        originalSystemcode AS "value"
-        FROM
-        "audit_assets_data"
+        originalSystemcode AS `label`,
+        originalSystemcode AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1314,7 +1225,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystem != null and originalSystem !=''">
             AND originalSystem=#{originalSystem}
@@ -1340,10 +1251,9 @@
     <select id="selectOriginalSystemList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        originalSystem AS "label",
-        originalSystem AS "value"
-        FROM
-        "audit_assets_data"
+        originalSystem AS `label`,
+        originalSystem AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1352,7 +1262,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1378,10 +1288,9 @@
     <select id="selectInterIdList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        interId AS "label",
-        interId AS "value"
-        FROM
-        "audit_assets_data"
+        interId AS `label`,
+        interId AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1390,7 +1299,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1416,10 +1325,9 @@
     <select id="selectInterNameList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        interName AS "label",
-        interName AS "value"
-        FROM
-        "audit_assets_data"
+        interName AS `label`,
+        interName AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1428,7 +1336,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1454,10 +1362,9 @@
     <select id="selectObjLevelCodeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        objLevelCode AS "label",
-        objLevelCode AS "value"
-        FROM
-        "audit_assets_data"
+        objLevelCode AS `label`,
+        objLevelCode AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1466,7 +1373,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1492,10 +1399,9 @@
     <select id="selectBusiTypeList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        busiType AS "label",
-        busiType AS "value"
-        FROM
-        "audit_assets_data"
+        busiType AS `label`,
+        busiType AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1504,7 +1410,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1530,10 +1436,9 @@
     <select id="selectDataStatusList" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam"
             resultType="java.util.Map">
         SELECT DISTINCT
-        status AS "label",
-        status AS "value"
-        FROM
-        "audit_assets_data"
+        status AS `label`,
+        status AS `value`
+        FROM `audit_assets_data`
         where 1=1
         <if test="assetCode != null and assetCode !=''">
             AND assetCode LIKE CONCAT('%', #{assetCode}, '%')
@@ -1542,7 +1447,7 @@
             AND code=#{dataCode}
         </if>
         <if test="name != null and name !=''">
-            AND "name"=#{name}
+            AND `name`=#{name}
         </if>
         <if test="originalSystemcode != null and originalSystemcode !=''">
             AND originalSystemcode=#{originalSystemcode}
@@ -1593,35 +1498,34 @@
         b.sourcesAuditPractice AS sourcesAuditPractice
         FROM
         (SELECT
-        a."primary_business_process" AS primaryBusinessProcess,
-        a."secondary_business_process" AS secondaryBusinessProcess,
-        a."audit_point_name" auditPointName,
-        a."audit_point_number" auditPointNumber,
-        a."audit_model_name" auditModelName,
-        a."audit_model_number" auditModelNumber,
-        b."assetCode" AS assetCode,
-        b."code" AS "code",
-        b."name" AS "name",
-        b."originalSystemcode" AS originalSystemcode,
-        b."originalSystem" originalSystem,
-        b."interId" interId,
-        b."interName" interName
-        FROM
-        "audit_elements_info" a
-        LEFT JOIN "audit_elements_data_support_v2" b
-        ON a."audit_model_number" = b."audit_model_number"
-        WHERE b."isdel" = '1'
+        a.`primary_business_process` AS primaryBusinessProcess,
+        a.`secondary_business_process` AS secondaryBusinessProcess,
+        a.`audit_point_name` auditPointName,
+        a.`audit_point_number` auditPointNumber,
+        a.`audit_model_name` auditModelName,
+        a.`audit_model_number` auditModelNumber,
+        b.`assetCode` AS assetCode,
+        b.`code` AS `code`,
+        b.`name` AS `name`,
+        b.`originalSystemcode` AS originalSystemcode,
+        b.`originalSystem` originalSystem,
+        b.`interId` interId,
+        b.`interName` interName
+        FROM `audit_elements_info` a
+        LEFT JOIN `audit_elements_data_support_v2` b
+        ON a.`audit_model_number` = b.`audit_model_number`
+        WHERE b.`isdel` = '1'
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND a."audit_model_number" LIKE CONCAT('%', #{auditModelNumber}, '%')
+            AND a.`audit_model_number` LIKE CONCAT('%', #{auditModelNumber}, '%')
         </if>
         <if test="auditModelName != null and auditModelName !=''">
-            AND a."audit_model_name" LIKE CONCAT('%', #{auditModelName}, '%')
+            AND a.`audit_model_name` LIKE CONCAT('%', #{auditModelName}, '%')
         </if>
         <if test="primaryBusinessProcess != null and primaryBusinessProcess !=''">
-            AND a."primary_business_process"=#{primaryBusinessProcess}
+            AND a.`primary_business_process`=#{primaryBusinessProcess}
         </if>
         <if test="secondaryBusinessProcess != null and secondaryBusinessProcess !=''">
-            AND a."secondary_business_process"=#{secondaryBusinessProcess}
+            AND a.`secondary_business_process`=#{secondaryBusinessProcess}
         </if>
         <if test="assetCode != null and assetCode !=''">
             AND b.assetCode=#{assetCode}
@@ -1637,8 +1541,7 @@
         (SELECT
         sources_audit_practice AS sourcesAuditPractice,
         audit_model_number
-        FROM
-        "audit_elements_online_model"
+        FROM `audit_elements_online_model`
         WHERE is_deleted = '0'
         ) b
         ON a.auditModelNumber = b.audit_model_number
@@ -1653,13 +1556,13 @@
 
     <delete id="deleteDataSupportData">
         DELETE
-        FROM "audit_elements_data_support_v2"
+        FROM `audit_elements_data_support_v2`
         WHERE isdel = '1'
     </delete>
 
 
     <insert id="inertAessData" parameterType="java.util.Map">
-        INSERT INTO "audit_assets_data"
+        INSERT INTO `audit_assets_data`
         VALUES
         <foreach collection="list" item="itemList" separator=",">
             (#{itemList.assetCode}, #{itemList.code}, #{itemList.name}, #{itemList.originalSystemcode},
@@ -1671,24 +1574,20 @@
 
     <select id="selectAccessMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.DataSupportInfo">
         SELECT DISTINCT
-        assetCode AS assetCode,
-        "code" AS dataCode,
-        "name" AS "name",
+        assetCode AS assetCode, `code` AS dataCode, `name` AS `name`,
         originalSystemcode AS originalSystemcode,
         originalSystem AS originalSystem,
         interId AS interId,
         interName AS interName,
         objLevelCode AS objLevelCode,
-        busiType AS busiType,
-        "status" AS dataStatus
-        FROM
-        "audit_assets_data"
+        busiType AS busiType, `status` AS dataStatus
+        FROM `audit_assets_data`
         WHERE 1 = 1
         <if test="code != null and code !=''">
-            AND "code" LIKE CONCAT('%', #{code}, '%')
+            AND `code` LIKE CONCAT('%', #{code}, '%')
         </if>
         <if test="name != null and name !=''">
-            AND "name" LIKE CONCAT('%', #{name}, '%')
+            AND `name` LIKE CONCAT('%', #{name}, '%')
         </if>
         LIMIT 1
     </select>
@@ -1758,8 +1657,7 @@
             resultType="java.lang.String">
         SELECT
         id
-        FROM
-        "spl_model_type" a
+        FROM `spl_model_type` a
         WHERE audit_model_number IN
         <foreach collection="auditModelNumbers" item="auditModelNumber" index="index" open="(" close=")" separator=",">
             CONCAT('%', #{auditModelNumber}, '%')

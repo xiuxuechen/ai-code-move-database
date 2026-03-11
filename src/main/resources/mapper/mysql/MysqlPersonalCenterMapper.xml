@@ -47,8 +47,8 @@
     <!--查询个人中心相关信息-->
     <select id="getAuditPointNameList" resultType="java.util.Map">
         SELECT audit_point_name AS id,
-               audit_point_name AS "name"
-        FROM "audit_elements_info"
+               audit_point_name AS `name`
+        FROM `audit_elements_info`
     </select>
 
     <select id="selectPersonalMessage" parameterType="java.util.Map" resultMap="SqlModelTypeMap">
@@ -68,7 +68,7 @@
         SELECT
         *
         FROM
-        "hpeapm"."spl_model_type"
+        `hpeapm`.`spl_model_type`
         WHERE 1=1
         <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
             AND dock_deputy like '%' || #{deputyAccountNumber} || '%'
@@ -97,7 +97,7 @@
             LIMIT #{size} OFFSET #{page}
         </if>
         ) a
-        LEFT JOIN "hpeapm"."audit_elements_model_evaluation" cc
+        LEFT JOIN `hpeapm`.`audit_elements_model_evaluation` cc
         ON a.audit_model_number = cc.audit_model_number
         and cc.is_deleted = 0
         LEFT JOIN
@@ -105,7 +105,7 @@
         SELECT
         *
         FROM
-        "hpeapm"."spl_business_examine"
+        `hpeapm`.`spl_business_examine`
         ) b
         ON a.examine_id = b.id
     </select>
@@ -117,28 +117,28 @@
         SELECT
         count(*) as "count"
         FROM
-        "hpeapm"."spl_model_type"
+        `hpeapm`.`spl_model_type`
         WHERE 1=1
         <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
-            AND "dock_deputy" like '%' || #{deputyAccountNumber} || '%'
+            AND `dock_deputy` like '%' || #{deputyAccountNumber} || '%'
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
-            AND "audit_point_number" like '%' || #{auditPointNumber} || '%'
+            AND `audit_point_number` like '%' || #{auditPointNumber} || '%'
         </if>
         <if test=" auditPointName!= null and auditPointName!= '' ">
-            AND "audit_point_name" like '%' || #{auditPointName} || '%'
+            AND `audit_point_name` like '%' || #{auditPointName} || '%'
         </if>
         <if test="auditModelNumber!= null  and auditModelNumber!= ''">
-            AND "audit_model_number" like '%' || #{auditModelNumber} || '%'
+            AND `audit_model_number` like '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName!= '' ">
-            AND "audit_model_name" like '%' || #{auditModelName} || '%'
+            AND `audit_model_name` like '%' || #{auditModelName} || '%'
         </if>
         <if test="writeTime!= null and writeTime!= '' ">
-            AND "write_time" like '%' || #{writeTime} || '%'
+            AND `write_time` like '%' || #{writeTime} || '%'
         </if>
         <if test="auditModelType!= null and auditModelType!= '' ">
-            AND "audit_model_type" like '%' || #{auditModelType} || '%'
+            AND `audit_model_type` like '%' || #{auditModelType} || '%'
         </if>
     </select>
 
@@ -147,56 +147,56 @@
     <!--查询待办事项-->
     <select id="selectDbMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
         SELECT
-        a."db_id" as "dbYbId",
-        a."db_type" as "dbType",
-        b."audit_point_name" AS "auditPointName",
-        b."audit_point_number" AS "auditPointNumber",
-        b."audit_model_number" AS "auditModelNumber",
-        b."audit_model_name" AS "auditModelName",
-        b."type_of_information" AS "typeOfInformation",
-        b."dock_people" AS "dockPeople",
-        b."dock_deputy" AS "dockDeputy",
-        b."dock_dept" AS "deckDept",
-        b."creat_time" AS "writeTime",
-        b."audit_model_type" AS "auditModelType",
-        b."continue_to_enter" AS "continueToEnter",
-        c."examine_user" AS "examineUser",
-        c."exam_depy" AS "examDepy",
-        c."examine_dept" AS "examineDept",
-        '1' AS "isExamine",
-        c."examine_type" AS "sptype",
-        c."submit_remarks" AS "remarks",
-        c."id" AS "examinID"
+        a.`db_id` as "dbYbId",
+        a.`db_type` as "dbType",
+        b.`audit_point_name` AS `auditPointName`,
+        b.`audit_point_number` AS `auditPointNumber`,
+        b.`audit_model_number` AS `auditModelNumber`,
+        b.`audit_model_name` AS `auditModelName`,
+        b.`type_of_information` AS `typeOfInformation`,
+        b.`dock_people` AS `dockPeople`,
+        b.`dock_deputy` AS `dockDeputy`,
+        b.`dock_dept` AS `deckDept`,
+        b.`creat_time` AS `writeTime`,
+        b.`audit_model_type` AS `auditModelType`,
+        b.`continue_to_enter` AS `continueToEnter`,
+        c.`examine_user` AS `examineUser`,
+        c.`exam_depy` AS `examDepy`,
+        c.`examine_dept` AS `examineDept`,
+        '1' AS `isExamine`,
+        c.`examine_type` AS `sptype`,
+        c.`submit_remarks` AS `remarks`,
+        c.`id` AS `examinID`
         FROM
-        "hpeapm"."spl_business_db" a
-        LEFT JOIN "hpeapm"."spl_model_type" b
-        ON a."model_no" = b."audit_model_number"
-        LEFT JOIN "hpeapm"."spl_business_examine" c
-        ON b."examine_id" = c."id"
-        AND a."exam_id" = c."id"
-        WHERE a."is_del" = '1'
+        `hpeapm`.`spl_business_db` a
+        LEFT JOIN `hpeapm`.`spl_model_type` b
+        ON a.`model_no` = b.`audit_model_number`
+        LEFT JOIN `hpeapm`.`spl_business_examine` c
+        ON b.`examine_id` = c.`id`
+        AND a.`exam_id` = c.`id`
+        WHERE a.`is_del` = '1'
         <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
-            AND a."db_deputy" like '%' || #{deputyAccountNumber} || '%'
+            AND a.`db_deputy` like '%' || #{deputyAccountNumber} || '%'
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
-            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+            AND b.`audit_point_number` like '%' || #{auditPointNumber} || '%'
         </if>
         <if test=" auditPointName!= null and auditPointName!= '' ">
-            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+            AND b.`audit_point_name` like '%' || #{auditPointName} || '%'
         </if>
         <if test="auditModelNumber!= null  and auditModelNumber!= ''">
-            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+            AND b.`audit_model_number` like '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName!= '' ">
-            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+            AND b.`audit_model_name` like '%' || #{auditModelName} || '%'
         </if>
         <if test="writeTime!= null and writeTime!= '' ">
-            AND b."write_time" like '%' || #{writeTime} || '%'
+            AND b.`write_time` like '%' || #{writeTime} || '%'
         </if>
         <if test="auditModelType!= null and auditModelType!= '' ">
-            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+            AND b.`audit_model_type` like '%' || #{auditModelType} || '%'
         </if>
-        order by b."creat_time" desc
+        order by b.`creat_time` desc
         <if test="page!= null and size != null ">
             LIMIT #{size} OFFSET #{page}
         </if>
@@ -205,35 +205,35 @@
     <!--查询待办事项数量-->
     <select id="selectDbMsgCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT
-        COUNT(*) AS "count"
+        COUNT(*) AS `count`
         FROM
-        "hpeapm"."spl_business_db" a
-        LEFT JOIN "hpeapm"."spl_model_type" b
-        ON a."model_no" = b."audit_model_number"
-        LEFT JOIN "hpeapm"."spl_business_examine" c
-        ON b."examine_id" = c."id"
-        AND a."exam_id" = c."id"
-        WHERE a."is_del" = '1'
+        `hpeapm`.`spl_business_db` a
+        LEFT JOIN `hpeapm`.`spl_model_type` b
+        ON a.`model_no` = b.`audit_model_number`
+        LEFT JOIN `hpeapm`.`spl_business_examine` c
+        ON b.`examine_id` = c.`id`
+        AND a.`exam_id` = c.`id`
+        WHERE a.`is_del` = '1'
         <if test="deputyAccountNumber!= null and deputyAccountNumber!= ''  ">
-            AND a."db_deputy" like '%' || #{deputyAccountNumber} || '%'
+            AND a.`db_deputy` like '%' || #{deputyAccountNumber} || '%'
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
-            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+            AND b.`audit_point_number` like '%' || #{auditPointNumber} || '%'
         </if>
         <if test=" auditPointName!= null and auditPointName!= '' ">
-            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+            AND b.`audit_point_name` like '%' || #{auditPointName} || '%'
         </if>
         <if test="auditModelNumber!= null  and auditModelNumber!= ''">
-            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+            AND b.`audit_model_number` like '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName!= '' ">
-            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+            AND b.`audit_model_name` like '%' || #{auditModelName} || '%'
         </if>
         <if test="writeTime!= null and writeTime!= '' ">
-            AND b."write_time" like '%' || #{writeTime} || '%'
+            AND b.`write_time` like '%' || #{writeTime} || '%'
         </if>
         <if test="auditModelType!= null and auditModelType!= '' ">
-            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+            AND b.`audit_model_type` like '%' || #{auditModelType} || '%'
         </if>
     </select>
 
@@ -242,54 +242,54 @@
     <!--查询待办事项-->
     <select id="selectMaintenDbMsg" parameterType="java.util.Map" resultType="com.cxsj.mxzd.pojo.spl.SqlModelTypeParam">
         SELECT
-        a."db_id" as "dbYbId",
-        b."audit_point_name" AS "auditPointName",
-        b."audit_point_number" AS "auditPointNumber",
-        b."audit_model_number" AS "auditModelNumber",
-        b."audit_model_name" AS "auditModelName",
-        b."type_of_information" AS "typeOfInformation",
-        b."dock_people" AS "dockPeople",
-        b."dock_deputy" AS "dockDeputy",
-        b."dock_dept" AS "deckDept",
-        b."creat_time" AS "writeTime",
-        b."audit_model_type" AS "auditModelType",
-        b."continue_to_enter" AS "continueToEnter",
-        c."examine_user" AS "examineUser",
-        c."exam_depy" AS "examDepy",
-        c."examine_dept" AS "examineDept",
-        a."is_tx" AS "examineType",
-        '3' AS "isExamine",
-        c."examine_type" AS "sptype",
-        c."submit_remarks" AS "remarks",
-        c."id" AS "examinID"
+        a.`db_id` as "dbYbId",
+        b.`audit_point_name` AS `auditPointName`,
+        b.`audit_point_number` AS `auditPointNumber`,
+        b.`audit_model_number` AS `auditModelNumber`,
+        b.`audit_model_name` AS `auditModelName`,
+        b.`type_of_information` AS `typeOfInformation`,
+        b.`dock_people` AS `dockPeople`,
+        b.`dock_deputy` AS `dockDeputy`,
+        b.`dock_dept` AS `deckDept`,
+        b.`creat_time` AS `writeTime`,
+        b.`audit_model_type` AS `auditModelType`,
+        b.`continue_to_enter` AS `continueToEnter`,
+        c.`examine_user` AS `examineUser`,
+        c.`exam_depy` AS `examDepy`,
+        c.`examine_dept` AS `examineDept`,
+        a.`is_tx` AS `examineType`,
+        '3' AS `isExamine`,
+        c.`examine_type` AS `sptype`,
+        c.`submit_remarks` AS `remarks`,
+        c.`id` AS `examinID`
         FROM
-        "hpeapm"."spl_mainten_db" a
-        LEFT JOIN "hpeapm"."spl_model_type" b
-        ON a."model_no" = b."audit_model_number"
-        LEFT JOIN "hpeapm"."spl_business_examine" c
-        ON b."examine_id" = c."id"
-        AND a."exam_id" = c."id"
-        WHERE a."role_id" like '%' || #{dockDeputy} || '%'
+        `hpeapm`.`spl_mainten_db` a
+        LEFT JOIN `hpeapm`.`spl_model_type` b
+        ON a.`model_no` = b.`audit_model_number`
+        LEFT JOIN `hpeapm`.`spl_business_examine` c
+        ON b.`examine_id` = c.`id`
+        AND a.`exam_id` = c.`id`
+        WHERE a.`role_id` like '%' || #{dockDeputy} || '%'
         <if test="txType!= null and  txType !='' ">
-            AND a."is_tx" = CONCAT('%', #{txType}, '%')
+            AND a.`is_tx` = CONCAT('%', #{txType}, '%')
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
-            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+            AND b.`audit_point_number` like '%' || #{auditPointNumber} || '%'
         </if>
         <if test=" auditPointName!= null and auditPointName!= '' ">
-            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+            AND b.`audit_point_name` like '%' || #{auditPointName} || '%'
         </if>
         <if test="auditModelNumber!= null  and auditModelNumber!= ''">
-            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+            AND b.`audit_model_number` like '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName!= '' ">
-            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+            AND b.`audit_model_name` like '%' || #{auditModelName} || '%'
         </if>
         <if test="writeTime!= null and writeTime!= '' ">
-            AND b."write_time" like '%' || #{writeTime} || '%'
+            AND b.`write_time` like '%' || #{writeTime} || '%'
         </if>
         <if test="auditModelType!= null and auditModelType!= '' ">
-            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+            AND b.`audit_model_type` like '%' || #{auditModelType} || '%'
         </if>
         <if test="page!= null and size != null ">
             LIMIT #{size} OFFSET #{page}
@@ -299,35 +299,35 @@
     <!--查询待办事项数量-->
     <select id="selectMainTenDbCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT
-        COUNT(*) AS "count"
+        COUNT(*) AS `count`
         FROM
-        "hpeapm"."spl_mainten_db" a
-        LEFT JOIN "hpeapm"."spl_model_type" b
-        ON a."model_no" = b."audit_model_number"
-        LEFT JOIN "hpeapm"."spl_business_examine" c
-        ON b."examine_id" = c."id"
-        AND a."exam_id" = c."id"
-        WHERE a."role_id" like '%' || #{dockDeputy} || '%'
+        `hpeapm`.`spl_mainten_db` a
+        LEFT JOIN `hpeapm`.`spl_model_type` b
+        ON a.`model_no` = b.`audit_model_number`
+        LEFT JOIN `hpeapm`.`spl_business_examine` c
+        ON b.`examine_id` = c.`id`
+        AND a.`exam_id` = c.`id`
+        WHERE a.`role_id` like '%' || #{dockDeputy} || '%'
         <if test="txType!= null and  txType!='' ">
-            AND a."is_tx" = CONCAT('%', #{txType}, '%')
+            AND a.`is_tx` = CONCAT('%', #{txType}, '%')
         </if>
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
-            AND b."audit_point_number" like '%' || #{auditPointNumber} || '%'
+            AND b.`audit_point_number` like '%' || #{auditPointNumber} || '%'
         </if>
         <if test=" auditPointName!= null and auditPointName!= '' ">
-            AND b."audit_point_name" like '%' || #{auditPointName} || '%'
+            AND b.`audit_point_name` like '%' || #{auditPointName} || '%'
         </if>
         <if test="auditModelNumber!= null  and auditModelNumber!= ''">
-            AND b."audit_model_number" like '%' || #{auditModelNumber} || '%'
+            AND b.`audit_model_number` like '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName!= '' ">
-            AND b."audit_model_name" like '%' || #{auditModelName} || '%'
+            AND b.`audit_model_name` like '%' || #{auditModelName} || '%'
         </if>
         <if test="writeTime!= null and writeTime!= '' ">
-            AND b."write_time" like '%' || #{writeTime} || '%'
+            AND b.`write_time` like '%' || #{writeTime} || '%'
         </if>
         <if test="auditModelType!= null and auditModelType!= '' ">
-            AND b."audit_model_type" like '%' || #{auditModelType} || '%'
+            AND b.`audit_model_type` like '%' || #{auditModelType} || '%'
         </if>
     </select>
 
@@ -368,38 +368,37 @@
     <!--查询待阅事项-->
     <select id="selectDyMsg" parameterType="java.util.Map" resultMap="HisExamineMap">
         SELECT
-        a."id" AS examinID ,
-        b."audit_point_number" AS auditPointNumber,
-        b."audit_point_name" AS auditPointName,
-        b."audit_model_number" AS auditModelNumber,
-        b."audit_model_name" AS auditModelName,
-        b."type_of_information" AS typeOfInformation,
-        a."examine_user" AS examineUser,
-        b."dock_people" AS dockPeople,
-        b."dock_dept" AS deckDept,
-        a."submit_remarks" as remarks,
-        a."examine_result" examineResult,
-        a."examine_type" examineType,
-        b."write_time" AS writeTime,
-        b."audit_model_type" AS auditModelType,
+        a.`id` AS examinID ,
+        b.`audit_point_number` AS auditPointNumber,
+        b.`audit_point_name` AS auditPointName,
+        b.`audit_model_number` AS auditModelNumber,
+        b.`audit_model_name` AS auditModelName,
+        b.`type_of_information` AS typeOfInformation,
+        a.`examine_user` AS examineUser,
+        b.`dock_people` AS dockPeople,
+        b.`dock_dept` AS deckDept,
+        a.`submit_remarks` as remarks,
+        a.`examine_result` examineResult,
+        a.`examine_type` examineType,
+        b.`write_time` AS writeTime,
+        b.`audit_model_type` AS auditModelType,
         '2' AS isExamine,
-        a."submit_remarks" AS submitRemarks,
-        a."examine_result" as examineResult,
-        a."examine_type" as examineType,
-        c."role_name" roleName,
-        c."dept_name" DeptName,
-        c."ope_type" opeType,
-        c."ope_user" opeUser,
-        COALESCE(c."next_user", '无') newUser,
-        c."reoly_type" reolyType,
-        c."reoly_remarks" reolyRemarks,
-        TO_CHAR(c."ope_time", 'YYYY-MM-DD HH24:MI:SS') opeTime
-        FROM
-        "spl_business_examine" a
-        LEFT JOIN "spl_model_type" b
-        ON a."audit_model_number" = b."audit_model_number"
-        LEFT JOIN "spl_workitem_his" c
-        ON a."id" = c."examine_id"
+        a.`submit_remarks` AS submitRemarks,
+        a.`examine_result` as examineResult,
+        a.`examine_type` as examineType,
+        c.`role_name` roleName,
+        c.`dept_name` DeptName,
+        c.`ope_type` opeType,
+        c.`ope_user` opeUser,
+        COALESCE(c.`next_user`, '无') newUser,
+        c.`reoly_type` reolyType,
+        c.`reoly_remarks` reolyRemarks,
+        TO_CHAR(c.`ope_time`, 'YYYY-MM-DD HH24:MI:SS') opeTime
+        FROM `spl_business_examine` a
+        LEFT JOIN `spl_model_type` b
+        ON a.`audit_model_number` = b.`audit_model_number`
+        LEFT JOIN `spl_workitem_his` c
+        ON a.`id` = c.`examine_id`
         where 1=1
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
             AND b.audit_point_number like '%' || #{auditPointNumber} || '%'
@@ -419,7 +418,7 @@
         <if test="auditModelType!= null and auditModelType!= '' ">
             AND b.audit_model_type like '%' || #{auditModelType} || '%'
         </if>
-        ORDER BY a.submit_time desc,a."create_time" desc,c."ope_time" desc
+        ORDER BY a.submit_time desc,a.`create_time` desc,c.`ope_time` desc
         <if test="page!= null and size != null ">
             LIMIT #{size} OFFSET #{page}
         </if>
@@ -430,10 +429,9 @@
     <select id="selectDyMsgCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT
         COUNT(*) AS num
-        FROM
-        "spl_business_examine" a
-        LEFT JOIN "spl_model_type" b
-        ON a."audit_model_number" = b."audit_model_number"
+        FROM `spl_business_examine` a
+        LEFT JOIN `spl_model_type` b
+        ON a.`audit_model_number` = b.`audit_model_number`
         WHERE 1=1
         <if test="auditPointNumber!= null and  auditPointNumber!= ''">
             AND b.audit_point_number like '%' || #{auditPointNumber} || '%'
@@ -460,7 +458,7 @@
     <select id="selectInformationExistence" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
             resultType="java.lang.Integer">
         SELECT COUNT(*) "COUNT"
-        FROM "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE information_type like '%' || #{informationType} || '%'
           AND audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
           AND delete_status = '1'
@@ -469,8 +467,8 @@
     <!--查询模型的的最大完成状态-->
     <select id="selectBeststatus" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
             resultType="java.lang.String">
-        SELECT "status" as status
-        FROM "audit_elements_operation_steps"
+        SELECT `status` as status
+        FROM `audit_elements_operation_steps`
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           and delete_status = '1'
         ORDER BY "status" DESC LIMIT 1
@@ -479,7 +477,7 @@
 
     <!--个人中心信息新增维度信息 -->
     <insert id="insertPersonalCenterMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
-        INSERT INTO "audit_elements_operation_steps" (dock_phone,
+        INSERT INTO `audit_elements_operation_steps` (dock_phone,
                                                              dock_people,
                                                              write_time,
                                                              dock_department,
@@ -488,8 +486,7 @@
                                                              audit_model_number,
                                                              audit_model_name,
                                                              information_type,
-                                                             type_of_information,
-                                                             "status",
+                                                             type_of_information, `status`,
                                                              continue_to_enter,
                                                              current_input,
                                                              is_import,
@@ -504,10 +501,8 @@
     <!--新增的时候修改其他节点的状态值-->
     <update id="updatePersonalCenterStatue" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         <if test="status == 0 ">
-            UPDATE
-            "audit_elements_operation_steps"
-            SET
-            "status" = '0',
+            UPDATE `audit_elements_operation_steps`
+            SET `status` = '0',
             continue_to_enter = '0',
             current_input = '0',
             type_of_information='模型信息预览'
@@ -516,8 +511,7 @@
             and delete_status='1'
         </if>
         <if test="status != 0">
-            UPDATE
-            "audit_elements_operation_steps"
+            UPDATE `audit_elements_operation_steps`
             SET
             type_of_information= CONCAT('%', #{typeOfInformation}, '%')
             WHERE
@@ -529,8 +523,7 @@
 
     <!--修改节点信息的时候修改信息值-->
     <update id="updatePersonalCenterMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
-        UPDATE
-            "audit_elements_operation_steps"
+        UPDATE `audit_elements_operation_steps`
         SET dock_people= CONCAT('%', #{dockPeople}, '%'),
             dock_phone= CONCAT('%', #{dockPhone}, '%'),
             write_time= CONCAT('%', #{writeTime}, '%'),
@@ -542,10 +535,8 @@
 
     <!--删除的时候修改删除标识以及复原其他的节点的状态值-->
     <update id="updateMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
-        UPDATE
-            "audit_elements_operation_steps"
-        SET continue_to_enter = CONCAT('%', #{continueToEnter}, '%'),
-            "status"           = CONCAT('%', #{status}, '%'),
+        UPDATE `audit_elements_operation_steps`
+        SET continue_to_enter = CONCAT('%', #{continueToEnter}, '%'), `status`           = CONCAT('%', #{status}, '%'),
             current_input      = CONCAT('%', #{currentInput}, '%')
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           AND delete_status != '0'
@@ -554,10 +545,8 @@
     <!--删除的时候修改删除标识以及复原其他的节点的状态值-->
     <update id="updatePersonalCenterDeleteStatus" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         <if test="status== 0">
-            UPDATE
-            "audit_elements_operation_steps"
-            SET
-            "status" =
+            UPDATE `audit_elements_operation_steps`
+            SET `status` =
             CASE
             WHEN information_type = '审计模型设计'
             THEN '1'
@@ -599,8 +588,7 @@
         </if>
 
         <if test="status != 0">
-            UPDATE
-            "audit_elements_operation_steps"
+            UPDATE `audit_elements_operation_steps`
             SET
             type_of_information= CONCAT('%', #{typeOfInformation}, '%')
             WHERE
@@ -612,8 +600,7 @@
 
     <!--修改删除状态值-->
     <update id="updatePersonalCenterdeleteStatusJd" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
-        UPDATE
-            "audit_elements_operation_steps"
+        UPDATE `audit_elements_operation_steps`
         SET delete_status='0'
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           and information_type  like CONCAT('%', #{informationType}, '%')
@@ -623,7 +610,7 @@
 
     <select id="getWriteTimeByAuditModelNumber" parameterType="java.lang.String" resultMap="PersonalCenterMap">
         SELECT write_time
-        FROM "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           AND delete_status = '1'
           and "status" = '2'
@@ -632,7 +619,7 @@
 
     <select id="selectStatusCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(*) 'COUNT'
-        FROM "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE delete_status = '1'
           AND audit_model_number  like CONCAT('%', #{pointModelNumber}, '%')
           AND information_type  like CONCAT('%', #{typeOfInformation}, '%')
@@ -642,7 +629,7 @@
     <select id="selectCenterCount" parameterType="com.cxsj.mxzd.pojo.PersonalCenter"
             resultType="java.lang.String">
         SELECT COUNT(*) con
-        FROM "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           AND delete_status!=0
     </select>
@@ -650,14 +637,13 @@
 
     <delete id="deleteInfoMessage" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
         DELETE
-        FROM "audit_elements_info"
+        FROM `audit_elements_info`
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
     </delete>
 
 
     <update id="updateEndUpdateTime" parameterType="com.cxsj.mxzd.pojo.PersonalCenter">
-        UPDATE
-            "audit_elements_operation_steps"
+        UPDATE `audit_elements_operation_steps`
         SET end_createtime = CURRENT_TIMESTAMP
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
     </update>
@@ -665,8 +651,7 @@
 
     <!--修改删除状态值-->
     <update id="deleteModelMessageSp" parameterType="java.lang.String">
-        UPDATE
-            "audit_elements_operation_steps"
+        UPDATE `audit_elements_operation_steps`
         SET delete_status='0'
         WHERE audit_model_number like '%' || #{auditModelNumber} || '%'
           and delete_status = '1'
@@ -674,8 +659,8 @@
 
 
     <select id="selectUser" resultType="java.lang.String">
-        SELECT dock_dept AS "user"
-        FROM "spl_model_type"
+        SELECT dock_dept AS `user`
+        FROM `spl_model_type`
         WHERE audit_model_number  like CONCAT('%', #{audit_model_number}, '%')
     </select>
 
@@ -684,7 +669,7 @@
         SELECT dock_phone      AS dockPhone,
                dock_people     AS dockPeople,
                dock_department AS dockDepartment
-        FROM "audit_elements_operation_steps"
+        FROM `audit_elements_operation_steps`
         WHERE information_type = '审计模型部署'
           AND audit_model_number  like CONCAT('%', #{auditModelNumber}, '%')
           AND delete_status != '0'
@@ -692,24 +677,24 @@
 
 
     <select id="selectMaintenPointNames" resultType="java.util.Map">
-        SELECT DISTINCT b."audit_point_name" AS "label",
-                        b."audit_point_name" AS "value"
+        SELECT DISTINCT b.`audit_point_name` AS `label`,
+                        b.`audit_point_name` AS `value`
         FROM
             spl_mainten_db a
                 LEFT JOIN audit_elements_info b
-                          ON a."model_no" = b."audit_model_number"
-        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
-          AND b."audit_point_name" IS NOT NULL
+                          ON a.`model_no` = b.`audit_model_number`
+        WHERE a.`role_id` = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b.`audit_point_name` IS NOT NULL
     </select>
 
     <select id="selectMaintenmodelNames" resultType="java.util.Map">
-        SELECT DISTINCT b."audit_model_name" AS "auditModelNumber",
-                        b."audit_model_name" AS "auditModelName"
+        SELECT DISTINCT b.`audit_model_name` AS `auditModelNumber`,
+                        b.`audit_model_name` AS `auditModelName`
         FROM spl_mainten_db a
                  LEFT JOIN audit_elements_info b
-                           ON a."model_no" = b."audit_model_number"
-        WHERE a."role_id" = '6E1774EFE55D4F96857ECFBC30573E73'
-          AND b."audit_point_name" IS NOT NULL
+                           ON a.`model_no` = b.`audit_model_number`
+        WHERE a.`role_id` = '6E1774EFE55D4F96857ECFBC30573E73'
+          AND b.`audit_point_name` IS NOT NULL
     </select>
 
 

@@ -55,8 +55,8 @@
         FROM
             hpeapm."audit_elements_operation_steps"
         WHERE delete_status = '1'
-          AND information_type = like '%'||#{informationType}||'%'
-          AND audit_model_number = like '%'||#{auditModelNumber}||'%'
+          AND information_type LIKE '%'||#{informationType}||'%'
+          AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -74,7 +74,7 @@
     <select id="selectPrvdBusinessCode" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT "prvd_code" AS prvdCode
         FROM hpeapm."audit_code_rule"
-        WHERE "prvd_bus" = like '%'||#{busiUnitCode}||'%' LIMIT 1
+        WHERE "prvd_bus" LIKE '%'||#{"busiunitcode"}||'%' LIMIT 1
     </select>
 
 
@@ -82,14 +82,14 @@
 
     <select id="selectBusiUnitCode" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam" resultType="java.lang.String">
         SELECT
-        a."busiUnitCode"
+        a.busiunitcode
         FROM
         hpmgr."bonc_union_userinfos" a
         LEFT JOIN hpmgr."bonc_cmwa_prvd" b
-        ON a."busiUnitCode" = b.org_code
-        WHERE a.userName = like '%'||#{dockPeople}||'%'
+        ON a.busiunitcode = b.org_code
+        WHERE a.userName LIKE '%'||#{dockPeople}||'%'
         <if test="dockDepartment!= null and dockDepartment !='集团公司' ">
-            AND like '%'||#{dockDepartment}||'%' LIKE '%' || REPLACE(b."org_name", '公司', '') || '%'
+            AND #{dockDepartment} LIKE '%' || REPLACE(b."org_name", '公司', '') || '%'
         </if>
         LIMIT 1
     </select>
@@ -104,7 +104,7 @@
         where "secondary_business_process" IS NOT NULL
         AND "secondary_business_process"!=''
         <if test="business1 != null and business1 !=''">
-            and "primary_business_process" = like '%'||#{business1}||'%'
+            and "primary_business_process" LIKE '%'||#{business1}||'%'
         </if>
     </select>
 
@@ -112,8 +112,8 @@
     <select id="getBusiness2Number" parameterType="java.util.Map" resultType="java.lang.String">
         SELECT DISTINCT "secondary_business_process_id" AS "id"
         FROM hpeapm.audit_elements_business_process
-        WHERE "secondary_business_process" = like '%'||#{business2}||'%'
-          and "primary_business_process" = like '%'||#{business1}||'%'
+        WHERE "secondary_business_process" LIKE '%'||#{business2}||'%'
+          and "primary_business_process" LIKE '%'||#{business1}||'%'
     </select>
 
 
@@ -122,8 +122,8 @@
     <select id="getauditPointCount" parameterType="java.util.Map" resultType="java.lang.String">
         SELECT COUNT(audit_point_number) AS auditpointcount
         FROM hpeapm."audit_elements_info"
-        WHERE secondary_business_process = like '%'||#{business2}||'%'
-          AND audit_point_number LIKE '%' || like '%'||#{depmCode}||'%' || '%'
+        WHERE secondary_business_process LIKE '%'||#{business2}||'%'
+          AND audit_point_number LIKE '%' || #{depmCode} || '%'
     </select>
 
 
@@ -135,7 +135,7 @@
                    ELSE MAX(SUBSTR(audit_model_number, - 3)) + 1
                    END
         FROM hpeapm."audit_elements_info"
-        WHERE audit_point_number = like '%'||#{auditPointNumber}||'%'
+        WHERE audit_point_number LIKE '%'||#{auditPointNumber}||'%'
     </select>
 
     <!--根据一级业务流程，二级业务流程，审计点名称查询当前审计点是否存在 -->
@@ -143,18 +143,18 @@
             resultType="java.lang.String">
         SELECT audit_point_number
         FROM hpeapm."audit_elements_info"
-        WHERE primary_business_process = like '%'||#{primaryBusinessProcess}||'%'
-          AND secondary_business_process = like '%'||#{secondaryBusinessProcess}||'%'
-          AND audit_point_name = like '%'||#{auditPointName}||'%'
-          AND audit_point_number LIKE '%' || like '%'||#{depmCode}||'%' || '%' LIMIT 1
+        WHERE primary_business_process LIKE '%'||#{primaryBusinessProcess}||'%'
+          AND secondary_business_process LIKE '%'||#{secondaryBusinessProcess}||'%'
+          AND audit_point_name LIKE '%'||#{auditPointName}||'%'
+          AND audit_point_number LIKE '%' || #{depmCode} || '%' LIMIT 1
     </select>
 
 
     <select id="getAuditModelNo" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam" resultType="java.lang.String">
         SELECT audit_model_number
         FROM hpeapm."audit_elements_info"
-        WHERE audit_model_name = like '%'||#{auditModelName}||'%'
-          AND "audit_point_number" = like '%'||#{auditPointNumber}||'%'
+        WHERE audit_model_name LIKE '%'||#{auditModelName}||'%'
+          AND "audit_point_number" LIKE '%'||#{auditPointNumber}||'%'
     </select>
 
     <!--个人中心信息新增维度信息 -->
@@ -172,15 +172,15 @@
             <if test="standardBasis != null ">standard_basis,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="auditModelNumber != null ">like '%'||#{auditModelNumber}||'%',</if>
-            <if test="codeRequirement != null ">like '%'||#{codeRequirement}||'%',</if>
-            <if test="fileName != null ">like '%'||#{fileName}||'%',</if>
-            <if test="specificationRequirement != null ">like '%'||#{specificationRequirement}||'%',</if>
-            <if test="referenceNumber != null ">like '%'||#{referenceNumber}||'%',</if>
-            <if test="dispatchTime != null ">like '%'||#{dispatchTime}||'%',</if>
-            <if test="startTime != null ">like '%'||#{startTime}||'%',</if>
-            <if test="endTime != null ">like '%'||#{endTime}||'%',</if>
-            <if test="standardBasis != null ">like '%'||#{standardBasis}||'%',</if>
+            <if test="auditModelNumber != null ">#{auditModelNumber},</if>
+            <if test="codeRequirement != null ">#{codeRequirement},</if>
+            <if test="fileName != null ">#{fileName},</if>
+            <if test="specificationRequirement != null ">#{specificationRequirement},</if>
+            <if test="referenceNumber != null ">#{referenceNumber},</if>
+            <if test="dispatchTime != null ">#{dispatchTime},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="standardBasis != null ">#{standardBasis},</if>
         </trim>
     </insert>
 
@@ -201,15 +201,15 @@
         VALUES
         <foreach collection="list" item="emp" separator=",">
             (
-            like '%'||#{emp.auditModelNumber}||'%',
-            like '%'||#{emp.codeRequirement}||'%',
-            like '%'||#{emp.fileName}||'%',
-            like '%'||#{emp.specificationRequirement}||'%',
-            like '%'||#{emp.referenceNumber}||'%',
-            like '%'||#{emp.dispatchTime}||'%',
-            like '%'||#{emp.startTime}||'%',
-            like '%'||#{emp.endTime}||'%',
-            like '%'||#{emp.standardBasis}||'%'
+            #{emp.auditModelNumber},
+            #{emp.codeRequirement},
+            #{emp.fileName},
+            #{emp.specificationRequirement},
+            #{emp.referenceNumber},
+            #{emp.dispatchTime},
+            #{emp.startTime},
+            #{emp.endTime},
+            #{emp.standardBasis}
             )
         </foreach>
     </insert>
@@ -219,14 +219,14 @@
     <update id="updatesystemMessage" parameterType="com.cxsj.mxzd.pojo.AuditElementsSystemParam">
         UPDATE
             hpeapm."audit_elements_system"
-        SET code_requirement          = like '%'||#{codeRequirement}||'%',
-            file_name                 = like '%'||#{fileName}||'%',
-            specification_requirement = like '%'||#{specificationRequirement}||'%',
-            reference_number          = like '%'||#{referenceNumber}||'%',
-            dispatch_time             = like '%'||#{dispatchTime}||'%',
-            start_time                = like '%'||#{startTime}||'%',
-            end_time                  = like '%'||#{endTime}||'%'
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        SET code_requirement          LIKE '%'||#{codeRequirement}||'%',
+            file_name                 LIKE '%'||#{fileName}||'%',
+            specification_requirement LIKE '%'||#{specificationRequirement}||'%',
+            reference_number          LIKE '%'||#{referenceNumber}||'%',
+            dispatch_time             LIKE '%'||#{dispatchTime}||'%',
+            start_time                LIKE '%'||#{startTime}||'%',
+            end_time                  LIKE '%'||#{endTime}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND delete_status = '1'
     </update>
 
@@ -236,7 +236,7 @@
         UPDATE
             hpeapm."audit_elements_system"
         SET delete_status = '0'
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           AND delete_status = '1'
     </update>
 
@@ -250,7 +250,7 @@
             expected_data_requirements=NULL,
             expected_data_covers_unit_demand=NULL,
             requirements_involve_the_system=NULL
-        WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+        WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
     </update>
 
 
@@ -277,7 +277,7 @@
         FROM "hpeapm"."audit_elements_info" a
                  LEFT JOIN "hpeapm"."spl_model_type" b
                            ON a."audit_model_number" = b."audit_model_number"
-        WHERE a."audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE a."audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
     </select>
 
 
@@ -286,7 +286,7 @@
     <select id="getsystemMyssage" resultMap="AuditElementsSystemParamMap" parameterType="java.lang.String">
         SELECT *
         FROM hpeapm.audit_elements_system
-        WHERE "audit_model_number" = like '%'||#{auditModelNumber}||'%'
+        WHERE "audit_model_number" LIKE '%'||#{auditModelNumber}||'%'
           AND "delete_status" = '1'
 
     </select>
@@ -382,20 +382,20 @@
         hpeapm."audit_elements_operation_steps" a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like '%'||#{isImport}||'%'</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like '%'||#{dockPeople}||'%'</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE like '%'||#{dockDepartment}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND a."is_import" LIKE '%'||#{isImport}||'%'</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" LIKE '%'||#{dockPeople}||'%'</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE #{dockDepartment}</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like '%'||#{auditPointName}||'%'
+            AND a."audit_point_name" LIKE '%'||#{auditPointName}||'%'
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like '%'||#{auditPointNumber}||'%' || '%'
+            AND a."audit_point_number" LIKE '%' || #{auditPointNumber} || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like '%'||#{auditModelNumber}||'%' || '%'
+            AND a."audit_model_number" LIKE '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like '%'||#{auditModelName}||'%'
+            AND a."audit_model_name" LIKE '%'||#{auditModelName}||'%'
         </if>
         ) a
         JOIN
@@ -423,19 +423,19 @@
         </if>
         <!--<if test="isImport== null"> AND is_online='1'</if>-->
         <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
-            like '%'||#{primaryBusinessProcess}||'%'
+            #{primaryBusinessProcess}
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like '%'||#{secondaryBusinessProcess}||'%'
+            AND b."secondary_business_process" LIKE '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like '%'||#{informationSources}||'%'
+            AND b."information_sources" LIKE '%'||#{informationSources}||'%'
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber
         ) abc ORDER BY abc.detailed_time DESC
         <if test="page!= null and size != null ">
-            LIMIT like '%'||#{size}||'%' OFFSET like '%'||#{page}||'%'
+            LIMIT #{size} OFFSET #{page}
         </if>
         ) _abc
         left JOIN
@@ -519,20 +519,20 @@
         hpeapm."audit_elements_operation_steps" a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like '%'||#{isImport}||'%'</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like '%'||#{dockPeople}||'%'</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE like '%'||#{dockDepartment}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND a."is_import" LIKE '%'||#{isImport}||'%'</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" LIKE '%'||#{dockPeople}||'%'</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" LIKE #{dockDepartment}</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like '%'||#{auditPointName}||'%'
+            AND a."audit_point_name" LIKE '%'||#{auditPointName}||'%'
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like '%'||#{auditPointNumber}||'%' || '%'
+            AND a."audit_point_number" LIKE '%' || #{auditPointNumber} || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like '%'||#{auditModelNumber}||'%' || '%'
+            AND a."audit_model_number" LIKE '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like '%'||#{auditModelName}||'%'
+            AND a."audit_model_name" LIKE '%'||#{auditModelName}||'%'
         </if>
         ) a
         JOIN
@@ -557,19 +557,19 @@
             and b.offline!='1'
         </if>
         <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
-            like '%'||#{primaryBusinessProcess}||'%'
+            #{primaryBusinessProcess}
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like '%'||#{secondaryBusinessProcess}||'%'
+            AND b."secondary_business_process" LIKE '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like '%'||#{informationSources}||'%'
+            AND b."information_sources" LIKE '%'||#{informationSources}||'%'
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber
         ) abc ORDER BY abc.detailed_time DESC
         <if test="page!= null and size != null ">
-            LIMIT like '%'||#{size}||'%' OFFSET like '%'||#{page}||'%'
+            LIMIT #{size} OFFSET #{page}
         </if>
         ) _abc
         left JOIN
@@ -620,7 +620,7 @@
             hpeapm."audit_elements_operation_steps" a
             WHERE a.information_type = '审计模型设计'
             AND a.delete_status = '1'
-            AND a."audit_model_number"=like '%'||#{auditModelNumber}||'%'
+            AND a."audit_model_number"=#{auditModelNumber}
             ) a
             JOIN
             (SELECT
@@ -678,20 +678,20 @@
         hpeapm."audit_elements_operation_steps" a
         WHERE a.information_type = '审计模型设计'
         AND a.delete_status = '1'
-        <if test="isImport!= null and isImport !='' ">AND a."is_import" = like '%'||#{isImport}||'%'</if>
-        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" = like '%'||#{dockPeople}||'%'</if>
-        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" like like '%'||#{dockDepartment}||'%'</if>
+        <if test="isImport!= null and isImport !='' ">AND a."is_import" LIKE '%'||#{isImport}||'%'</if>
+        <if test="dockPeople!= null and dockPeople !='' ">AND a."dock_people" LIKE '%'||#{dockPeople}||'%'</if>
+        <if test="dockDepartment!= null and dockDepartment != '' ">AND a."dock_department" like #{dockDepartment}</if>
         <if test="auditPointName!= null and auditPointName != '' ">
-            AND a."audit_point_name" = like '%'||#{auditPointName}||'%'
+            AND a."audit_point_name" LIKE '%'||#{auditPointName}||'%'
         </if>
         <if test="auditPointNumber!= null and auditPointNumber != '' ">
-            AND a."audit_point_number" LIKE '%' || like '%'||#{auditPointNumber}||'%' || '%'
+            AND a."audit_point_number" LIKE '%' || #{auditPointNumber} || '%'
         </if>
         <if test="auditModelNumber!= null and auditModelNumber != '' ">
-            AND a."audit_model_number" LIKE '%' || like '%'||#{auditModelNumber}||'%' || '%'
+            AND a."audit_model_number" LIKE '%' || #{auditModelNumber} || '%'
         </if>
         <if test="auditModelName!= null and auditModelName != '' ">
-            AND a."audit_model_name" = like '%'||#{auditModelName}||'%'
+            AND a."audit_model_name" LIKE '%'||#{auditModelName}||'%'
         </if>
         ) a
         JOIN
@@ -712,13 +712,13 @@
         </if>
         <!-- <if test="isImport== null"> AND is_online='1'</if>-->
         <if test="primaryBusinessProcess!= null and primaryBusinessProcess != '' ">AND b."primary_business_process" =
-            like '%'||#{primaryBusinessProcess}||'%'
+            #{primaryBusinessProcess}
         </if>
         <if test="secondaryBusinessProcess!= null and secondaryBusinessProcess != '' ">
-            AND b."secondary_business_process" = like '%'||#{secondaryBusinessProcess}||'%'
+            AND b."secondary_business_process" LIKE '%'||#{secondaryBusinessProcess}||'%'
         </if>
         <if test="informationSources!= null and informationSources != '' ">
-            AND b."information_sources" = like '%'||#{informationSources}||'%'
+            AND b."information_sources" LIKE '%'||#{informationSources}||'%'
         </if>
         ) b
         ON a.auditModelNumber = b.auditModelNumber) _abc
@@ -730,14 +730,14 @@
         SELECT CASE WHEN a.a = 0 AND b.b = 0 THEN '0' ELSE '1' END AS "modelNum"
         FROM (SELECT COUNT(*) AS "a"
               FROM hpeapm.audit_elements_operation_steps
-              WHERE delete_status = 1
-                AND audit_model_number = like '%'||#{auditModelNumber}||'%'
-                AND audit_point_number = like '%'||#{auditPointNumber}||'%') a
+              WHERE delete_status = '1'
+                AND audit_model_number LIKE '%'||#{auditModelNumber}||'%'
+                AND audit_point_number LIKE '%'||#{auditPointNumber}||'%') a
                  LEFT JOIN
              (SELECT COUNT(*) AS "b"
               FROM hpeapm.audit_elements_info
-              WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
-                AND audit_point_number = like '%'||#{auditPointNumber}||'%') b
+              WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
+                AND audit_point_number LIKE '%'||#{auditPointNumber}||'%') b
              ON 1 = 1
     </select>
 
@@ -752,7 +752,7 @@
         1 = 1
         AND "statis_ym" = ( SELECT DISTINCT MAX ( "statis_ym" ) FROM hpbus.system_audit_50001_newdate )
         <if test="dockDepartment!= null and dockDepartment != '' ">
-            and "prov_name" like like '%'||#{dockDepartment}||'%'
+            and "prov_name" like #{dockDepartment}
             or "prov_name" like '%集团%'
         </if>
     </select>
@@ -767,7 +767,7 @@
                PRINT_TM              AS "startTime",
                END_TM                AS "endTime"
         FROM hpbus.system_audit_50001_newdate
-        WHERE SYS_UNIQUE_CODE = like '%'||#{codeRequirementId}||'%'
+        WHERE SYS_UNIQUE_CODE LIKE '%'||#{codeRequirementId}||'%'
         order by statis_ym  desc
             limit 1
     </select>

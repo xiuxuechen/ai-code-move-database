@@ -32,17 +32,17 @@
     <select id="selectAuditFindDataBase" resultMap="AuditFindDataBaseMap">
         <include refid="AuditFindDataBaseVo"/>
         <where>
-            <if test="id != null ">and id = like CONCAT('%', #{id}, '%')</if>
+            <if test="id != null ">and id like CONCAT('%', #{id}, '%')</if>
             <if test="problemSummary != null "> and problem_summary like CONCAT('%', #{problemSummary}, '%'), '%')</if>
             <if test="problemDescription != null  and problemDescription != ''"> and problem_description like CONCAT('%', #{problemDescription}, '%'), '%')</if>
-            <if test="auditTime != null  and auditTime != ''"> and audit_time = like CONCAT('%', #{auditTime}, '%')</if>
+            <if test="auditTime != null  and auditTime != ''"> and audit_time like CONCAT('%', #{auditTime}, '%')</if>
             <if test="auditInvolved != null  and auditInvolved != ''"> and audit_involved like CONCAT('%', #{auditInvolved}, '%'), '%')</if>
-            <if test="auditProject != null "> and audit_project = like CONCAT('%', #{auditProject}, '%')</if>
-            <if test="auditModelNumber != null "> and audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')</if>
-            <if test="createPerson != null "> and create_person = like CONCAT('%', #{createPerson}, '%')</if>
-            <if test="createTime != null "> and create_time = like CONCAT('%', #{createTime}, '%')</if>
-            <if test="updatePerson != null "> and update_person = like CONCAT('%', #{updatePerson}, '%')</if>
-            <if test="updateTime != null "> and update_time = like CONCAT('%', #{updateTime}, '%')</if>
+            <if test="auditProject != null "> and audit_project like CONCAT('%', #{auditProject}, '%')</if>
+            <if test="auditModelNumber != null "> and audit_model_number like CONCAT('%', #{auditModelNumber}, '%')</if>
+            <if test="createPerson != null "> and create_person like CONCAT('%', #{createPerson}, '%')</if>
+            <if test="createTime != null "> and create_time like CONCAT('%', #{createTime}, '%')</if>
+            <if test="updatePerson != null "> and update_person like CONCAT('%', #{updatePerson}, '%')</if>
+            <if test="updateTime != null "> and update_time like CONCAT('%', #{updateTime}, '%')</if>
              and isdel =1
         </where>
     </select>
@@ -87,27 +87,27 @@
     <update id="updateAuditFindDataBase">
         UPDATE audit_elements_find_database
         <trim prefix="SET" suffixOverrides=",">
-            <if test="problemSummary != null ">problem_summary=like CONCAT('%', #{problemSummary}, '%'),</if>
-            <if test="problemDescription != null  and problemDescription != ''">problem_description=like CONCAT('%', #{problemDescription}, '%'),</if>
-            <if test="auditTime != null  and auditTime != ''">audit_time=like CONCAT('%', #{auditTime}, '%'),</if>
-            <if test="auditInvolved != null  and auditInvolved != ''">audit_involved=like CONCAT('%', #{auditInvolved}, '%'),</if>
-            <if test="auditProject != null">audit_project=like CONCAT('%', #{auditProject}, '%'),</if>
-            <if test="auditModelNumber != null">audit_model_number=like CONCAT('%', #{auditModelNumber}, '%'),</if>
-            <if test="createPerson != null  and createPerson != ''">create_person=like CONCAT('%', #{createPerson}, '%'),</if>
-            <if test="createTime != null  and createTime != ''">create_time=like CONCAT('%', #{createTime}, '%'),</if>
+            <if test="problemSummary != null ">problem_summary like CONCAT('%', #{problemSummary}, '%'),</if>
+            <if test="problemDescription != null  and problemDescription != ''">problem_description like CONCAT('%', #{problemDescription}, '%'),</if>
+            <if test="auditTime != null  and auditTime != ''">audit_time like CONCAT('%', #{auditTime}, '%'),</if>
+            <if test="auditInvolved != null  and auditInvolved != ''">audit_involved like CONCAT('%', #{auditInvolved}, '%'),</if>
+            <if test="auditProject != null">audit_project like CONCAT('%', #{auditProject}, '%'),</if>
+            <if test="auditModelNumber != null">audit_model_number like CONCAT('%', #{auditModelNumber}, '%'),</if>
+            <if test="createPerson != null  and createPerson != ''">create_person like CONCAT('%', #{createPerson}, '%'),</if>
+            <if test="createTime != null  and createTime != ''">create_time like CONCAT('%', #{createTime}, '%'),</if>
             <if test="updatePerson != null  and updatePerson != ''">update_person,</if>
-            <if test="updateTime != null  and updateTime != ''">update_time=like CONCAT('%', #{updateTime}, '%'),</if>
-            <if test="isdel != null  and isdel != ''">isdel=like CONCAT('%', #{isdel}, '%')</if>
+            <if test="updateTime != null  and updateTime != ''">update_time like CONCAT('%', #{updateTime}, '%'),</if>
+            <if test="isdel != null  and isdel != ''">isdel like CONCAT('%', #{isdel}, '%')</if>
         </trim>
-        where audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+        where audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
     </update>
 
         <!--删除-->
         <update id="deleteByAuditModelNumber">
-            UPDATE audit_elements_find_database SET isdel=0  where audit_model_number = like CONCAT('%', #{auditModelNumber}, '%')
+            UPDATE audit_elements_find_database SET isdel=0  where audit_model_number like CONCAT('%', #{auditModelNumber}, '%')
         </update>
     <select id="selectByAuditModelNumber" parameterType="java.lang.String" resultMap="AuditFindDataBaseMap">
-        select * from audit_elements_find_database   where audit_model_number = like CONCAT('%', #{auditModelNumber}, '%') AND isdel=1;
+        select * from audit_elements_find_database   where audit_model_number like CONCAT('%', #{auditModelNumber}, '%') AND isdel=1;
     </select>
 
 

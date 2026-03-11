@@ -7,25 +7,23 @@
 
     <!--更新审计点超市数据-->
     <update id="insertMaintenMsg" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
-        UPDATE
-            "xbpj_operation_flow" a
-        SET "bonc_audit_point"=like CONCAT('%', #{auditCode}, '%'),
-            cmwa_export_path  = like CONCAT('%', #{cmwaExportPath}, '%'),
-            cmca_file_type    = like CONCAT('%', #{cmcaFileType}, '%'),
-            cmca_subject_id   = like CONCAT('%', #{cmcaSubjectId}, '%'),
-            source_code       = like CONCAT('%', #{sourceCode}, '%'),
-            belong_cmwa       = like CONCAT('%', #{belongCmwa}, '%'),
-            "version"         = like CONCAT('%', #{version}, '%'),
-            allow_down        = like CONCAT('%', #{allowDown}, '%')
-        WHERE ModelNo = like CONCAT('%', #{auditModelNumber}, '%')
+        UPDATE `xbpj_operation_flow` a
+        SET `bonc_audit_point` like CONCAT('%', #{auditCode}, '%'),
+            cmwa_export_path  like CONCAT('%', #{cmwaExportPath}, '%'),
+            cmca_file_type    like CONCAT('%', #{cmcaFileType}, '%'),
+            cmca_subject_id   like CONCAT('%', #{cmcaSubjectId}, '%'),
+            source_code       like CONCAT('%', #{sourceCode}, '%'),
+            belong_cmwa       like CONCAT('%', #{belongCmwa}, '%'), `version`         like CONCAT('%', #{version}, '%'),
+            allow_down        like CONCAT('%', #{allowDown}, '%')
+        WHERE ModelNo like CONCAT('%', #{auditModelNumber}, '%')
     </update>
 
 
     <select id="selectAuditCodeCount" resultType="java.lang.Integer" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
         SELECT COUNT(*)
-        FROM "xbpj_operation_flow" a
-        WHERE a."ModelNo"!=like CONCAT('%', #{auditModelNumber}, '%')
-          AND a.bonc_audit_point=like CONCAT('%', #{auditCode}, '%')
+        FROM `xbpj_operation_flow` a
+        WHERE a.`ModelNo` !=  CONCAT('%', #{auditModelNumber}, '%')
+          AND a.bonc_audit_point like CONCAT('%', #{auditCode}, '%')
 
     </select>
 
@@ -33,8 +31,8 @@
     <select id="selectModelNumberCount" resultType="java.lang.Integer"
             parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
         SELECT COUNT(*)
-        FROM "xbpj_operation_flow" a
-        WHERE a."ModelNo" = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `xbpj_operation_flow` a
+        WHERE a.`ModelNo` like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
@@ -61,8 +59,7 @@
                                                   data_source,
                                                   datastart_time,
                                                   modelrunning_frequency,
-                                                  is_cured,
-                                                  "order",
+                                                  is_cured, `order`,
                                                   cmwa_export_path,
                                                   cmca_file_type,
                                                   cmca_subject_id,
@@ -82,92 +79,90 @@
 
 
     <update id="updateModelChaoshi" parameterType="java.util.Map">
-        UPDATE "xbpj_operation_flow"
-        SET business1              = like CONCAT('%', #{business1}, '%'),
-            business2              = like CONCAT('%', #{business2}, '%'),
-            source                 = like CONCAT('%', #{source}, '%'),
-            business_area          = like CONCAT('%', #{businessArea}, '%'),
-            "field"                = like CONCAT('%', #{field}, '%'),
-            AuditpointNo           = like CONCAT('%', #{auditPointNo}, '%'),
-            AuditpointName         = like CONCAT('%', #{auditPointName}, '%'),
-            ModelName              = like CONCAT('%', #{modelName}, '%'),
-            model_type             = like CONCAT('%', #{model_type}, '%'),
-            bonc_audit_point       = like CONCAT('%', #{auditCode}, '%'),
-            source_domain          = like CONCAT('%', #{sourceDomain}, '%'),
-            model_online_time      = like CONCAT('%', #{model_online_time}, '%'),
-            audit_scope            = like CONCAT('%', #{audit_scope}, '%'),
-            model_url              = like CONCAT('%', #{model_url}, '%'),
-            model_OnlineJi_Time    = like CONCAT('%', #{model_OnlineJi_Time}, '%'),
-            model_logic            = like CONCAT('%', #{model_logic}, '%'),
-            home_system            = like CONCAT('%', #{home_system}, '%'),
-            data_source            = like CONCAT('%', #{data_source}, '%'),
-            datastart_time         = like CONCAT('%', #{datastart_time}, '%'),
-            modelrunning_frequency = like CONCAT('%', #{modelrunning_frequency}, '%'),
-            is_cured               = like CONCAT('%', #{is_cured}, '%'),
-            "order"                = like CONCAT('%', #{order}, '%'),
-            cmwa_export_path       = like CONCAT('%', #{cmwaExportPath}, '%'),
-            cmca_file_type         = like CONCAT('%', #{cmcaFileType}, '%'),
-            cmca_subject_id        = like CONCAT('%', #{cmcaSubjectId}, '%'),
-            source_code            = like CONCAT('%', #{sourceCode}, '%'),
-            belong_cmwa            = like CONCAT('%', #{belongCmwa}, '%'),
-            version                = like CONCAT('%', #{version}, '%'),
-            allow_down             = like CONCAT('%', #{allowDown}, '%'),
-            secondary_field        = like CONCAT('%', #{secondaryField}, '%')
-        WHERE ModelNo = like CONCAT('%', #{modelNo}, '%')
+        UPDATE `xbpj_operation_flow`
+        SET business1              like CONCAT('%', #{business1}, '%'),
+            business2              like CONCAT('%', #{business2}, '%'),
+            source                 like CONCAT('%', #{source}, '%'),
+            business_area          like CONCAT('%', #{businessArea}, '%'), `field`                like CONCAT('%', #{field}, '%'),
+            AuditpointNo           like CONCAT('%', #{auditPointNo}, '%'),
+            AuditpointName         like CONCAT('%', #{auditPointName}, '%'),
+            ModelName              like CONCAT('%', #{modelName}, '%'),
+            model_type             like CONCAT('%', #{model_type}, '%'),
+            bonc_audit_point       like CONCAT('%', #{auditCode}, '%'),
+            source_domain          like CONCAT('%', #{sourceDomain}, '%'),
+            model_online_time      like CONCAT('%', #{model_online_time}, '%'),
+            audit_scope            like CONCAT('%', #{audit_scope}, '%'),
+            model_url              like CONCAT('%', #{model_url}, '%'),
+            model_OnlineJi_Time    like CONCAT('%', #{model_OnlineJi_Time}, '%'),
+            model_logic            like CONCAT('%', #{model_logic}, '%'),
+            home_system            like CONCAT('%', #{home_system}, '%'),
+            data_source            like CONCAT('%', #{data_source}, '%'),
+            datastart_time         like CONCAT('%', #{datastart_time}, '%'),
+            modelrunning_frequency like CONCAT('%', #{modelrunning_frequency}, '%'),
+            is_cured               like CONCAT('%', #{is_cured}, '%'), `order`                like CONCAT('%', #{order}, '%'),
+            cmwa_export_path       like CONCAT('%', #{cmwaExportPath}, '%'),
+            cmca_file_type         like CONCAT('%', #{cmcaFileType}, '%'),
+            cmca_subject_id        like CONCAT('%', #{cmcaSubjectId}, '%'),
+            source_code            like CONCAT('%', #{sourceCode}, '%'),
+            belong_cmwa            like CONCAT('%', #{belongCmwa}, '%'),
+            version                like CONCAT('%', #{version}, '%'),
+            allow_down             like CONCAT('%', #{allowDown}, '%'),
+            secondary_field        like CONCAT('%', #{secondaryField}, '%')
+        WHERE ModelNo like CONCAT('%', #{modelNo}, '%')
     </update>
 
 
     <select id="selectMaintenNoTxMsgByModelNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(*) AS noTxmodelCount
-        FROM "spl_mainten_db" a
-        WHERE a."is_tx" = '0'
-          AND a."model_no" = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `spl_mainten_db` a
+        WHERE a.`is_tx` = '0'
+          AND a.`model_no` like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
     <!--更新审计点超市数据-->
     <update id="updateDbType" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
-        UPDATE "spl_mainten_db" a
-        SET a."is_tx"='1'
-        WHERE A."model_no" = like CONCAT('%', #{auditModelNumber}, '%')
+        UPDATE `spl_mainten_db` a
+        SET a.`is_tx`='1'
+        WHERE A.`model_no` like CONCAT('%', #{auditModelNumber}, '%')
     </update>
 
 
     <delete id="delBoncMenuMsg" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
         DELETE
-        FROM "xbpj_bonc_model"
-        WHERE model_no = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `xbpj_bonc_model`
+        WHERE model_no like CONCAT('%', #{auditModelNumber}, '%')
     </delete>
 
 
     <insert id="insertBoncMenuMsg" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
-        INSERT INTO "xbpj_bonc_model"
+        INSERT INTO `xbpj_bonc_model`
         VALUES (like CONCAT('%', #{menuId}, '%'), like CONCAT('%', #{menuName}, '%'), like CONCAT('%', #{auditCode}, '%'), like CONCAT('%', #{auditModelNumber}, '%'))
     </insert>
 
 
     <select id="selectMaintenMsg" resultType="com.cxsj.mxzd.pojo.MaintenMsgParam" parameterType="java.lang.String">
         SELECT 'Y'                    AS isOnlineSup,
-               a."model_url"          AS onlineSupUrl,
-               a."business_area"      AS businessAre,
-               a."source_domain"      AS sourceDomain,
-               a."secondary_field"    AS secondaryField,
+               a.`model_url`          AS onlineSupUrl,
+               a.`business_area`      AS businessAre,
+               a.`source_domain`      AS sourceDomain,
+               a.`secondary_field`    AS secondaryField,
                c.source_plat_form     AS sourcePlatForm,
                c.three_group_result   AS threeGroupResult,
                c.subject_second_class AS subjectSecondClass,
-               a."bonc_audit_point"      auditCode,
-               a."cmwa_export_path"      cmwaExportPath,
-               a."cmca_file_type"        cmcaFileType,
-               a."cmca_subject_id"       cmcaSubjectId,
-               a."source_code"           sourceCode,
+               a.`bonc_audit_point`      auditCode,
+               a.`cmwa_export_path`      cmwaExportPath,
+               a.`cmca_file_type`        cmcaFileType,
+               a.`cmca_subject_id`       cmcaSubjectId,
+               a.`source_code`           sourceCode,
                a.belong_cmwa             belongCmwa,
-               a."version"               "version",
+               a.`version`               "version",
                a.allow_down              allowDown,
-               a."ModelNo"            AS auditModelNumber
-        FROM "xbpj_operation_flow" a
-                 LEFT JOIN "xbpj_model_statistics" c
-                           ON a."ModelNo" = c.model_no
-        WHERE a."ModelNo" = like CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
+               a.`ModelNo`            AS auditModelNumber
+        FROM `xbpj_operation_flow` a
+                 LEFT JOIN `xbpj_model_statistics` c
+                           ON a.`ModelNo` = c.model_no
+        WHERE a.`ModelNo` like CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
     </select>
 
 
@@ -251,15 +246,15 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
              ORDER BY busiUnitCode)
         ) cc
                            ON a.share_unit = cc.id
-        WHERE a.audit_model_number = like CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
+        WHERE a.audit_model_number like CONCAT('%', #{auditModelNumber}, '%') LIMIT 1
     </select>
 
 
     <select id="selectStatisticsTableModelCount" resultType="java.lang.Integer"
             parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
         SELECT COUNT(*) AS modelCount
-        FROM "xbpj_model_statistics" a
-        WHERE a."model_no" = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `xbpj_model_statistics` a
+        WHERE a.`model_no` like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
@@ -293,18 +288,18 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
 
 
     <update id="updateStatisticsTableModel" parameterType="java.util.Map">
-        UPDATE "xbpj_model_statistics"
-        SET zr_person                           = like CONCAT('%', #{modelOwner}, '%'),
-            model_name                          = like CONCAT('%', #{modelName}, '%'),
-            source_plat_form                    = like CONCAT('%', #{sourcePlatForm}, '%'),
-            three_group_result                  = like CONCAT('%', #{threeGroupResult}, '%'),
-            subject_second_class                = like CONCAT('%', #{subjectSecondClass}, '%'),
-            running_mode                        = like CONCAT('%', #{runningMode}, '%'),
-            model_source                        = like CONCAT('%', #{model_source}, '%'),
-            example_problem_discovery           = like CONCAT('%', #{example_problem_discovery}, '%'),
-            example_clue_extension_verification = like CONCAT('%', #{example_clue_extension_verification}, '%'),
-            institutional_basis                 = like CONCAT('%', #{institutional_basis}, '%')
-        WHERE model_no = like CONCAT('%', #{modelNo}, '%')
+        UPDATE `xbpj_model_statistics`
+        SET zr_person                           like CONCAT('%', #{modelOwner}, '%'),
+            model_name                          like CONCAT('%', #{modelName}, '%'),
+            source_plat_form                    like CONCAT('%', #{sourcePlatForm}, '%'),
+            three_group_result                  like CONCAT('%', #{threeGroupResult}, '%'),
+            subject_second_class                like CONCAT('%', #{subjectSecondClass}, '%'),
+            running_mode                        like CONCAT('%', #{runningMode}, '%'),
+            model_source                        like CONCAT('%', #{model_source}, '%'),
+            example_problem_discovery           like CONCAT('%', #{example_problem_discovery}, '%'),
+            example_clue_extension_verification like CONCAT('%', #{example_clue_extension_verification}, '%'),
+            institutional_basis                 like CONCAT('%', #{institutional_basis}, '%')
+        WHERE model_no like CONCAT('%', #{modelNo}, '%')
     </update>
 
 
@@ -313,15 +308,15 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
 
     <delete id="deleteModelChaoshiMsg" parameterType="java.lang.String">
         DELETE
-        FROM "xbpj_operation_flow"
-        WHERE ModelNo = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `xbpj_operation_flow`
+        WHERE ModelNo like CONCAT('%', #{auditModelNumber}, '%')
     </delete>
 
 
     <delete id="deleteSupStatisticsMsg" parameterType="java.lang.String">
         DELETE
-        FROM "xbpj_model_statistics"
-        WHERE model_no = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `xbpj_model_statistics`
+        WHERE model_no like CONCAT('%', #{auditModelNumber}, '%')
     </delete>
 
 
@@ -532,14 +527,14 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
 
     <delete id="deleteCompanyModelMsgByModelNumber" parameterType="java.lang.String">
         DELETE
-        FROM "xbpj_company_model"
-        WHERE ModelNo = like CONCAT('%', #{modelNo}, '%')
+        FROM `xbpj_company_model`
+        WHERE ModelNo like CONCAT('%', #{modelNo}, '%')
     </delete>
 
     <delete id="deleteCompanyModelStaMsgByModelNumber" parameterType="java.lang.String">
         DELETE
-        FROM "xbpj_company_model_statistics"
-        WHERE model_number = like CONCAT('%', #{modelNo}, '%')
+        FROM `xbpj_company_model_statistics`
+        WHERE model_number like CONCAT('%', #{modelNo}, '%')
     </delete>
 
 
@@ -553,43 +548,41 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
 
     <!--更改模型字典模型的状态为已下线-->
     <update id="updateMxzdModelStep" parameterType="java.lang.String">
-        UPDATE
-            "audit_elements_model_evaluation" a
-        SET a."model_state" = '完成开发'
-        WHERE a."audit_model_number" = like CONCAT('%', #{mxzdModelNumber}, '%')
-          AND a."is_deleted" = '0'
+        UPDATE `audit_elements_model_evaluation` a
+        SET a.`model_state` = '完成开发'
+        WHERE a.`audit_model_number` like CONCAT('%', #{mxzdModelNumber}, '%')
+          AND a.`is_deleted` = '0'
     </update>
 
 
     <update id="updateAuditElementInfo" parameterType="com.cxsj.mxzd.pojo.pro.ModelBasisFacade">
         UPDATE
             audit_elements_info a
-        SET a.audit_point_name      = like CONCAT('%', #{autoPointName}, '%')
-          , a.audit_model_name      = like CONCAT('%', #{autoModelName}, '%')
-          , a.audit_business_logic  = like CONCAT('%', #{auditModelBusinessLogic}, '%')
-          , a.execution_logic       = like CONCAT('%', #{executionLogic}, '%')
-          , a.subordinate_to_system = like CONCAT('%', #{dataToSystem}, '%')
-          , a.expected_risks        = like CONCAT('%', #{expectedAuditFind}, '%')
-          , a."model_code"          = like CONCAT('%', #{modelCode}, '%')
-          , a."business_area"       = like CONCAT('%', #{businessArea}, '%')
-          , a."source_domain"       = like CONCAT('%', #{sourceDomain}, '%')
-        WHERE a."audit_model_number" = like CONCAT('%', #{modelNumber}, '%')
+        SET a.audit_point_name      like CONCAT('%', #{autoPointName}, '%')
+          , a.audit_model_name      like CONCAT('%', #{autoModelName}, '%')
+          , a.audit_business_logic  like CONCAT('%', #{auditModelBusinessLogic}, '%')
+          , a.execution_logic       like CONCAT('%', #{executionLogic}, '%')
+          , a.subordinate_to_system like CONCAT('%', #{dataToSystem}, '%')
+          , a.expected_risks        like CONCAT('%', #{expectedAuditFind}, '%')
+          , a.`model_code`          like CONCAT('%', #{modelCode}, '%')
+          , a.`business_area`       like CONCAT('%', #{businessArea}, '%')
+          , a.`source_domain`       like CONCAT('%', #{sourceDomain}, '%')
+        WHERE a.`audit_model_number` like CONCAT('%', #{modelNumber}, '%')
     </update>
 
 
     <update id="updateAuditModelType" parameterType="java.lang.String">
-        UPDATE
-            "spl_model_type" a
+        UPDATE `spl_model_type` a
         SET a.audit_model_type = '12'
-        WHERE a."audit_model_number" = like CONCAT('%', #{modelNumber}, '%')
+        WHERE a.`audit_model_number` like CONCAT('%', #{modelNumber}, '%')
     </update>
 
 
     <select id="selectMaintenTbaleMsgCount" resultType="java.lang.Integer"
             parameterType="java.lang.String">
         SELECT COUNT(*)
-        FROM "spl_mainten_msg" a
-        WHERE a."audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+        FROM `spl_mainten_msg` a
+        WHERE a.`audit_model_number` like CONCAT('%', #{auditModelNumber}, '%')
     </select>
 
 
@@ -637,71 +630,71 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
 
 
     <update id="updateMaintenTbaleMsg" parameterType="com.cxsj.mxzd.pojo.MaintenMsgParam">
-        UPDATE "spl_mainten_msg"
+        UPDATE `spl_mainten_msg`
         <set>
             <if test="isOnlineSup != null and isOnlineSup != ''">
-                "is_online_sup" = like CONCAT('%', #{isOnlineSup}, '%'),
+                "is_online_sup" like CONCAT('%', #{isOnlineSup}, '%'),
             </if>
             <if test="onlineSupUrl != null and onlineSupUrl != ''">
-                "online_sup_url" = like CONCAT('%', #{onlineSupUrl}, '%'),
+                "online_sup_url" like CONCAT('%', #{onlineSupUrl}, '%'),
             </if>
             <if test="businessAre != null and businessAre != ''">
-                "business_area" = like CONCAT('%', #{businessAre}, '%'),
+                "business_area" like CONCAT('%', #{businessAre}, '%'),
             </if>
             <if test="sourceDomain != null and sourceDomain != ''">
-                "source_domain" = like CONCAT('%', #{sourceDomain}, '%'),
+                "source_domain" like CONCAT('%', #{sourceDomain}, '%'),
             </if>
             <if test="secondaryField != null and secondaryField != ''">
-                "secondary_field" = like CONCAT('%', #{secondaryField}, '%'),
+                "secondary_field" like CONCAT('%', #{secondaryField}, '%'),
             </if>
             <if test="menuId != null and menuId != ''">
-                "menu_id" = like CONCAT('%', #{menuId}, '%'),
+                "menu_id" like CONCAT('%', #{menuId}, '%'),
             </if>
             <if test="menuName != null and menuName != ''">
-                "menu_name" = like CONCAT('%', #{menuName}, '%'),
+                "menu_name" like CONCAT('%', #{menuName}, '%'),
             </if>
             <if test="auditCode != null and auditCode != ''">
-                "audit_code" = like CONCAT('%', #{auditCode}, '%'),
+                "audit_code" like CONCAT('%', #{auditCode}, '%'),
             </if>
             <if test="cmwaExportPath != null and cmwaExportPath != ''">
-                "cmwa_export_path" = like CONCAT('%', #{cmwaExportPath}, '%'),
+                "cmwa_export_path" like CONCAT('%', #{cmwaExportPath}, '%'),
             </if>
             <if test="cmcaFileType != null and cmcaFileType != ''">
-                "cmca_file_type" = like CONCAT('%', #{cmcaFileType}, '%'),
+                "cmca_file_type" like CONCAT('%', #{cmcaFileType}, '%'),
             </if>
             <if test="cmcaSubjectId != null and cmcaSubjectId != ''">
-                "cmca_subject_id" = like CONCAT('%', #{cmcaSubjectId}, '%'),
+                "cmca_subject_id" like CONCAT('%', #{cmcaSubjectId}, '%'),
             </if>
             <if test="sourceCode != null and sourceCode != ''">
-                "source_code" = like CONCAT('%', #{sourceCode}, '%'),
+                "source_code" like CONCAT('%', #{sourceCode}, '%'),
             </if>
             <if test="version != null and version != ''">
-                "version" = like CONCAT('%', #{version}, '%'),
+                "version" like CONCAT('%', #{version}, '%'),
             </if>
             <if test="belongCmwa != null and belongCmwa != ''">
-                "belong_cmwa" = like CONCAT('%', #{belongCmwa}, '%'),
+                "belong_cmwa" like CONCAT('%', #{belongCmwa}, '%'),
             </if>
             <if test="allowDown != null and allowDown != ''">
-                "allow_down" = like CONCAT('%', #{allowDown}, '%'),
+                "allow_down" like CONCAT('%', #{allowDown}, '%'),
             </if>
             <if test="sourcePlatForm != null and sourcePlatForm != ''">
-                "source_plat_form" = like CONCAT('%', #{sourcePlatForm}, '%'),
+                "source_plat_form" like CONCAT('%', #{sourcePlatForm}, '%'),
             </if>
             <if test="threeGroupResult != null and threeGroupResult != ''">
-                "three_group_result" = like CONCAT('%', #{threeGroupResult}, '%'),
+                "three_group_result" like CONCAT('%', #{threeGroupResult}, '%'),
             </if>
             <if test="subjectSecondClass != null and subjectSecondClass != ''">
-                "subject_second_class" = like CONCAT('%', #{subjectSecondClass}, '%'),
+                "subject_second_class" like CONCAT('%', #{subjectSecondClass}, '%'),
             </if>
         </set>
-        WHERE "audit_model_number" = like CONCAT('%', #{auditModelNumber}, '%')
+        WHERE `audit_model_number` like CONCAT('%', #{auditModelNumber}, '%')
     </update>
 
     <!-- 更新维护信息状态 -->
     <update id="updateMaintenMsgStatus" parameterType="java.lang.String">
         UPDATE spl_mainten_msg
         SET status =0
-        WHERE audit_model_number = like CONCAT('%', #{modelNumber}, '%')
+        WHERE audit_model_number like CONCAT('%', #{modelNumber}, '%')
     </update>
 
     <!-- 定义resultMap -->
@@ -750,31 +743,31 @@ SELECT COALESCE(a.primary_business_process, '')   AS business1,
                subject_second_class
         FROM spl_mainten_msg
         where status = 1
-          and audit_model_number = like CONCAT('%', #{auditModelNumer}, '%')
+          and audit_model_number like CONCAT('%', #{auditModelNumer}, '%')
     </select>
 
 
     <select id="selectMaintenMsgBySupTable" parameterType="java.lang.String" resultMap="maintenMsgResultMap">
-        SELECT a."ModelNo"                 audit_model_number,
-               a."model_url"               online_sup_url,
-               a."business_area"        AS business_area,
-               a."source_domain"        AS source_domain,
-               a."secondary_field"      AS secondary_field,
-               a."bonc_audit_point"     AS audit_code,
-               a."cmwa_export_path"        cmwa_export_path,
-               a."cmca_file_type"          cmca_file_type,
-               a."cmca_subject_id"         cmca_subject_id,
-               a."source_code"          AS source_code,
-               a."version"              AS "version",
-               a."belong_cmwa"          AS belong_cmwa,
-               b."source_plat_form"     AS source_plat_form,
-               a."allow_down"           AS allow_down,
-               b."three_group_result"   AS three_group_result,
-               b."subject_second_class" AS subject_second_class
-        FROM "xbpj_operation_flow" a
-                 LEFT JOIN "xbpj_model_statistics" b
-                           ON a."ModelNo" = b."model_no"
-        WHERE a."ModelNo" = like CONCAT('%', #{auditModelNumer}, '%')
+        SELECT a.`ModelNo`                 audit_model_number,
+               a.`model_url`               online_sup_url,
+               a.`business_area`        AS business_area,
+               a.`source_domain`        AS source_domain,
+               a.`secondary_field`      AS secondary_field,
+               a.`bonc_audit_point`     AS audit_code,
+               a.`cmwa_export_path`        cmwa_export_path,
+               a.`cmca_file_type`          cmca_file_type,
+               a.`cmca_subject_id`         cmca_subject_id,
+               a.`source_code`          AS source_code,
+               a.`version`              AS `version`,
+               a.`belong_cmwa`          AS belong_cmwa,
+               b.`source_plat_form`     AS source_plat_form,
+               a.`allow_down`           AS allow_down,
+               b.`three_group_result`   AS three_group_result,
+               b.`subject_second_class` AS subject_second_class
+        FROM `xbpj_operation_flow` a
+                 LEFT JOIN `xbpj_model_statistics` b
+                           ON a.`ModelNo` = b.`model_no`
+        WHERE a.`ModelNo` like CONCAT('%', #{auditModelNumer}, '%')
     </select>
 
 

@@ -31,7 +31,7 @@
         hpeapm.audit_elements_data_cut_in
         WHERE 1=1
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            AND audit_model_number=like '%'||#{auditModelNumber}||'%'
+            AND audit_model_number=#{auditModelNumber}
         </if>
         AND isdel=1
     </select>
@@ -44,7 +44,7 @@
             hpeapm.audit_elements_data_cut_in
             WHERE 1=1
             <if test="auditModelNumber != null and auditModelNumber !=''">
-                AND audit_model_number=like '%'||#{auditModelNumber}||'%'
+                AND audit_model_number=#{auditModelNumber}
             </if>
             AND isdel=1 AND remark is not null and  remark !=''  limit 1
         </select>-->
@@ -55,17 +55,17 @@
         UPDATE hpeapm.audit_elements_data_cut_in
         <trim prefix="SET" suffixOverrides=",">
             <if test="dataContentDescriptionXq != null  and dataContentDescriptionXq != ''">
-                data_content_description_xq=like '%'||#{dataContentDescriptionXq}||'%',
+                data_content_description_xq=#{dataContentDescriptionXq},
             </if>
-            <if test="involvedSystem != null  and involvedSystem != ''">involved_system=like '%'||#{involvedSystem}||'%',</if>
-            <if test="scopeOfDataXq != null  and scopeOfDataXq != ''">scope_of_data_xq=like '%'||#{scopeOfDataXq}||'%',</if>
+            <if test="involvedSystem != null  and involvedSystem != ''">involved_system=#{involvedSystem},</if>
+            <if test="scopeOfDataXq != null  and scopeOfDataXq != ''">scope_of_data_xq=#{scopeOfDataXq},</if>
             <if test="isdel != null  and isdel != ''">isdel,</if>
         </trim>
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+            WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
         <if test="id != null and id !=''">
-            AND id=like '%'||#{id}||'%'
+            AND id=#{id}
         </if>
     </update>
 
@@ -78,11 +78,11 @@
         audit_model_number,
         scope_of_data_xq,
         isdel)
-        VALUE
-        (like '%'||#{dataContentDescriptionXq}||'%',
-        like '%'||#{involvedSystem}||'%',
-        like '%'||#{auditModelNumber}||'%',
-        like '%'||#{scopeOfDataXq}||'%',
+        VALUES
+        (#{dataContentDescriptionXq},
+        #{involvedSystem},
+        #{auditModelNumber},
+        #{scopeOfDataXq},
         1);
     </insert>
 
@@ -91,7 +91,7 @@
     <update id="updateAuditCutInDeleteStatus" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
         UPDATE hpeapm.audit_elements_data_cut_in set isdel=0
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+            WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
     </update>
 
@@ -99,16 +99,16 @@
     <!--新增，修改，或者删除审计支撑的时候先将审计支撑所有数据状态置位0-->
     <delete id="deleteAuditSuppInCut" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
         <if test="auditModelNumber != null and auditModelNumber !=''">
-   delete from  hpeapm.audit_supp_in_cut     WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+   delete from  hpeapm.audit_supp_in_cut     WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
     </delete>
 
 
     <!--根据模型编号修改数据能力支撑数据资产管理-->
     <!--  <update id="updateCutInRamk" parameterType="com.cxsj.mxzd.pojo.AuditElementsParam">
-          UPDATE hpeapm.audit_elements_data_cut_in set  remark=like '%'||#{remark}||'%',existing_data_of_model=like '%'||#{existingDataOfModelId}||'%'
+          UPDATE hpeapm.audit_elements_data_cut_in set  remark=#{remark},existing_data_of_model=#{existingDataOfModelId}
           <if test="auditModelNumber != null and auditModelNumber !=''">
-              WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+              WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
           </if>
         AND isdel=1
       </update>-->
@@ -124,13 +124,13 @@
             existing_data_of_model,
             remark,
             isdel)
-            VALUE
-            (like '%'||#{dataContentDescriptionXq}||'%',
-            like '%'||#{involvedSystem}||'%',
-            like '%'||#{auditModelNumber}||'%',
-            like '%'||#{scopeOfDataXq}||'%',
-            like '%'||#{existingDataOfModelId}||'%',
-            like '%'||#{remark}||'%',1);
+            VALUES
+            (#{dataContentDescriptionXq},
+            #{involvedSystem},
+            #{auditModelNumber},
+            #{scopeOfDataXq},
+            #{existingDataOfModelId},
+            #{remark},1);
         </insert>-->
 
 
@@ -143,20 +143,20 @@
             <if test="cutId != null  and cutId != ''">cut_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="suppId != null and suppId !=''">like '%'||#{suppId}||'%',</if>
-            <if test="auditModelNumber != null  and auditModelNumber != ''">like '%'||#{auditModelNumber}||'%',</if>
-            <if test="cutId != null and cutId !=''">like '%'||#{cutId}||'%',</if>
+            <if test="suppId != null and suppId !=''">#{suppId},</if>
+            <if test="auditModelNumber != null  and auditModelNumber != ''">#{auditModelNumber},</if>
+            <if test="cutId != null and cutId !=''">#{cutId},</if>
         </trim>
     </insert>
 
 
     <update id="updateSupportInCut" parameterType="com.cxsj.mxzd.pojo.DataCutInfo">
-        UPDATE hpeapm.audit_supp_in_cut set cut_id=like '%'||#{cutId}||'%'
+        UPDATE hpeapm.audit_supp_in_cut set cut_id=#{cutId}
         <if test="auditModelNumber != null and auditModelNumber !=''">
-            WHERE audit_model_number = like '%'||#{auditModelNumber}||'%'
+            WHERE audit_model_number LIKE '%'||#{auditModelNumber}||'%'
         </if>
         <if test="suppId != null and suppId !=''">
-            and supp_id = like '%'||#{suppId}||'%'
+            and supp_id LIKE '%'||#{suppId}||'%'
         </if>
     </update>
 

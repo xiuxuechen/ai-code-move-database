@@ -91,7 +91,7 @@ public class AuditHandoverModelMapperTest {
 
         System.out.println("\n=== 测试 insertAuditHandoverModel ===");
 
-        com.cxsj.mxzd.pojo.AuditFindDataBase entity = new com.cxsj.mxzd.pojo.AuditFindDataBase();
+        com.cxsj.mxzd.pojo.AuditHandoverModel entity = new com.cxsj.mxzd.pojo.AuditHandoverModel();
         entity.setAuditModelNumber("TEST_HANDOVER_INSERT_001");
 
         int pgResult = pgMapper.insertAuditHandoverModel(entity);

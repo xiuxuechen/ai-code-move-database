@@ -93,21 +93,21 @@
                info.model_code               modelCode,
                info.is_online          AS    is_online,
                COALESCE(
-                       model."model_owner",
+                       model.`model_owner`,
                        model.dock_people
                    )                   AS    model_owner,
                COALESCE(
-                       model."model_owner_depy",
+                       model.`model_owner_depy`,
                        model.dock_deputy
                    )                   AS    model_owner_depy,
                info.quality_rating,
                info.model_code_file_id,
-               info."running_mode",
-               info."off_model_library"      offModelLibrary,
-               info."is_share"               isShare
+               info.`running_mode`,
+               info.`off_model_library`      offModelLibrary,
+               info.`is_share`               isShare
         FROM audit_elements_info AS info
-                 LEFT JOIN "spl_model_type" model
-                           ON info."audit_model_number" = model."audit_model_number"
+                 LEFT JOIN `spl_model_type` model
+                           ON info.`audit_model_number` = model.`audit_model_number`
                  LEFT JOIN
              (SELECT audit_model_number,
                      STRING_AGG(c.name, ',') data_content_description
@@ -168,7 +168,7 @@
         _abc.typeOfInformation,
         _abc.detailedTime,
         _abc.runningMode,
-        CASE WHEN kk."type" IS NULL AND _abc.isOnline IS NOT NULL AND _abc.isOnline='0' THEN '1' ELSE '0' END AS canSubmit
+        CASE WHEN kk.`type` IS NULL AND _abc.isOnline IS NOT NULL AND _abc.isOnline='0' THEN '1' ELSE '0' END AS canSubmit
         FROM
         (
         SELECT
@@ -209,9 +209,9 @@
             AND dock_department like like CONCAT('%', #{dockDepartment}, '%')
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like CONCAT('%', #{informationType}, '%')
+            AND information_type  like CONCAT('%', #{informationType}, '%')
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND `is_import` = CONCAT('%', #{isImport}, '%')</if>
         ) a
         JOIN (
         SELECT
@@ -229,8 +229,7 @@
         model_code_file_id,
         quality_rating,
         running_mode
-        FROM
-        "audit_elements_info"
+        FROM `audit_elements_info`
         WHERE
         1 = 1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
@@ -294,10 +293,9 @@
         ) mo ON ba.audit_model_number = mo.audit_model_number
         LEFT JOIN
         (SELECT
-        examine_type AS "type",
+        examine_type AS `type`,
         audit_model_number AS audit_model_number
-        FROM
-        "spl_business_examine"
+        FROM `spl_business_examine`
         WHERE is_complete = '0') kk
         ON _abc.auditModelNumber = kk.audit_model_number
         ) a
@@ -364,9 +362,9 @@
             AND dock_department like like CONCAT('%', #{dockDepartment}, '%')
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like CONCAT('%', #{informationType}, '%')
+            AND information_type  like CONCAT('%', #{informationType}, '%')
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND `is_import` = CONCAT('%', #{isImport}, '%')</if>
         )a
         JOIN(
         SELECT
@@ -381,8 +379,7 @@
         audit_model_name,
         existing_data_of_model,
         support_remark
-        FROM
-        "audit_elements_info"
+        FROM `audit_elements_info`
         where 1=1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
             and offline!='1'
@@ -426,8 +423,7 @@
         sources_audit_practice sourcesAuditPractice,
         ascription_special ascriptionSpecial,
         online_remarks onlineRemarks
-        FROM
-        "audit_elements_online_model"
+        FROM `audit_elements_online_model`
         WHERE
         is_deleted = 0
         )me ON _abc.auditModelNumber = me.audit_model_number
@@ -480,37 +476,37 @@
         UPDATE audit_elements_online_model
         <set>
             <if test="serviceOwnershipSystem != null">
-                service_ownership_system=like CONCAT('%', #{serviceOwnershipSystem}, '%'),
+                service_ownership_system like CONCAT('%', #{serviceOwnershipSystem}, '%'),
             </if>
             <if test="modelRunningFrequency != null">
-                model_running_frequency=like CONCAT('%', #{modelRunningFrequency}, '%'),
+                model_running_frequency like CONCAT('%', #{modelRunningFrequency}, '%'),
             </if>
             <if test="numberUnitsCovered != null">
-                number_units_covered=like CONCAT('%', #{numberUnitsCovered}, '%'),
+                number_units_covered like CONCAT('%', #{numberUnitsCovered}, '%'),
             </if>
             <if test="numberOfProvincial != null">
-                number_of_provincial=like CONCAT('%', #{numberOfProvincial}, '%'),
+                number_of_provincial like CONCAT('%', #{numberOfProvincial}, '%'),
             </if>
             <if test="numberProfessionalInstitutions != null">
-                number_professional_institutions=like CONCAT('%', #{numberProfessionalInstitutions}, '%'),
+                number_professional_institutions like CONCAT('%', #{numberProfessionalInstitutions}, '%'),
             </if>
             <if test="whetherCuredSystem != null">
-                whether_cured_system=like CONCAT('%', #{whetherCuredSystem}, '%'),
+                whether_cured_system like CONCAT('%', #{whetherCuredSystem}, '%'),
             </if>
             <if test="modelOnlineTime != null">
-                model_online_time=like CONCAT('%', #{modelOnlineTime}, '%'),
+                model_online_time like CONCAT('%', #{modelOnlineTime}, '%'),
             </if>
             <if test="sourcesAuditPractice != null">
-                sources_audit_practice=like CONCAT('%', #{sourcesAuditPractice}, '%'),
+                sources_audit_practice like CONCAT('%', #{sourcesAuditPractice}, '%'),
             </if>
             <if test="ascriptionSpecial != null">
-                ascription_special=like CONCAT('%', #{ascriptionSpecial}, '%'),
+                ascription_special like CONCAT('%', #{ascriptionSpecial}, '%'),
             </if>
             <if test="onlineRemarks != null">
-                online_remarks=like CONCAT('%', #{onlineRemarks}, '%'),
+                online_remarks like CONCAT('%', #{onlineRemarks}, '%'),
             </if>
             <if test="isDeleted != null">
-                is_deleted=like CONCAT('%', #{isDeleted}, '%')
+                is_deleted like CONCAT('%', #{isDeleted}, '%')
             </if>
         </set>
         where audit_model_number = CONCAT('%', #{auditModelNumber}, '%')
@@ -601,9 +597,9 @@
             AND dock_department like like CONCAT('%', #{dockDepartment}, '%')
         </if>
         <if test="informationType != null and informationType!=''">
-            AND information_type =like CONCAT('%', #{informationType}, '%')
+            AND information_type  like CONCAT('%', #{informationType}, '%')
         </if>
-        <if test="isImport!= null and isImport !='' ">AND "is_import" = CONCAT('%', #{isImport}, '%')</if>
+        <if test="isImport!= null and isImport !='' ">AND `is_import` = CONCAT('%', #{isImport}, '%')</if>
         ) a
         JOIN (
         SELECT distinct
@@ -619,8 +615,7 @@
         model_code,
         running_mode,
         quality_rating
-        FROM
-        "audit_elements_info"
+        FROM `audit_elements_info`
         WHERE
         1 = 1
         <if test="prvdCode!= null and prvdCode == 'HQ0' ">
@@ -703,12 +698,10 @@
         audit_period AS auditPeriodSj,
         involved_unit AS involvedUnitSj,
         audit_project AS auditProjectSj
-        FROM
-        "audit_element_case" a
-        WHERE a."type" = '1'
+        FROM `audit_element_case` a
+        WHERE a.`type` = '1'
         and a.is_del=0
-        ORDER BY a."type",
-        "order"
+        ORDER BY a.`type`, `order`
         ) c
         on a.auditModelNumber=c.audit_model_number
         left join
@@ -720,12 +713,10 @@
         audit_period AS auditPeriodYs,
         involved_unit AS involvedUnitYs,
         audit_project AS auditProjectYs
-        FROM
-        "audit_element_case" a
-        WHERE a."type" = '2'
+        FROM `audit_element_case` a
+        WHERE a.`type` = '2'
         and a.is_del=0
-        ORDER BY a."type",
-        "order"
+        ORDER BY a.`type`, `order`
         ) d
         on a.auditModelNumber=d.audit_model_number
         WHERE
@@ -751,7 +742,7 @@
         SELECT
         *
         FROM
-        "hpeapm"."audit_element_case"
+        `hpeapm`.`audit_element_case`
         WHERE 1 = 1
         and is_del=0
         AND audit_model_number IN
@@ -764,12 +755,11 @@
 
 
     <update id="updateOnlineModelCaseDateType" parameterType="java.util.Map">
-        UPDATE
-        "audit_element_case" a
-        SET a."is_del" = '1'
-        WHERE a."audit_model_number" = CONCAT('%', #{auditModelNumber}, '%')
+        UPDATE `audit_element_case` a
+        SET a.`is_del` = '1'
+        WHERE a.`audit_model_number` = CONCAT('%', #{auditModelNumber}, '%')
         <if test="type != null">
-            and a."type" = CONCAT('%', #{type}, '%')
+            and a.`type` = CONCAT('%', #{type}, '%')
         </if>
     </update>
 
@@ -777,7 +767,7 @@
     <insert id="insertOnlineModelCase" parameterType="java.util.Map">
         insert into
         audit_element_case(problem_detail_description, problem_summary, audit_period, involved_unit,
-        audit_project, type, "order", audit_model_number)
+        audit_project, type, `order`, audit_model_number)
         values
         <foreach collection="caseDates" item="case" index="index" open="(" separator="), (" close=")">
             like CONCAT('%', #{case.problemDetailDescription}, '%'),

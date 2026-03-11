@@ -15,7 +15,7 @@
         <result column="data_domain" property="dataDomain"/>
         <result column="data_access_source" property="dataAccessSource"/>
         <result column="data_attribution_system" property="dataAttributionSystem"/>
-        <result column="data_access_time" property="dataAccessTime"/>
+        <result column="data_data_access_time" property="dataAccessTime"/>
         <result column="data_retention_cycle" property="dataRetentionCycle"/>
         <result column="structured_data_not" property="structuredDataNot"/>
         <result column="existing_data_of_model" property="existingDataOfModel"/>
@@ -63,7 +63,7 @@
         <result column="data_domain" property="dataDomain"/>
         <result column="data_access_source" property="dataAccessSource"/>
         <result column="data_attribution_system" property="dataAttributionSystem"/>
-        <result column="access_time" property="accessTime"/>
+        <result column="data_access_time" property="accessTime"/>
         <result column="data_retention_cycle" property="dataRetentionCycle"/>
         <result column="structured_data_not" property="structuredDataNot"/>
         <result column="existing_data_of_model" property="existingDataOfModel"/>
@@ -110,7 +110,7 @@
        dock_phone,dock_people,write_time,dock_department,information_type,code_requirement,file_name,specification_requirement,reference_number,
        dispatch_time,start_time,end_time,audit_point,audit_prospective_point,audit_system_name,audit_system_content,audit_confirmation_findings,
        audit_model_name_send,audit_model_logic,problem_summary,problem_description,audit_time,audit_involved,audit_project,data_content_description,
-       scope_of_data,data_domain,data_access_source,data_attribution_system,access_time,data_retention_cycle,structured_data_not,
+       scope_of_data,data_domain,data_access_source,data_attribution_system,data_access_time,data_retention_cycle,structured_data_not,
        existing_data_of_model,remark,data_content_description_xq,involved_system,scope_of_data_xq,assessment_result,model_assessment_remarks,
        model_development_logic,stay_development_content,progress_the_development,expected_completion_time,conditions_still_lacking,
        model_development_remarks,model_state,service_ownership_system,data_source_used_model,data_start_time,
@@ -119,34 +119,34 @@
        model_online_time,sources_audit_practice,ascription_special,
        online_remarks,operation_log,create_person,create_date,organ,phone,audit_model_business_logic
        ) VALUES (
-       like '%'||#{auditPointNumber}||'%',like '%'||#{auditPointName}||'%',like '%'||#{auditModelNumber}||'%',
-       like '%'||#{auditModelName}||'%',like '%'||#{auditModelDescribe}||'%',like '%'||#{informationSupplement}||'%',
-       like '%'||#{informationSources}||'%',like '%'||#{findRemark}||'%',
-       like '%'||#{auditBusinessLogic}||'%',like '%'||#{primaryBusinessProcess}||'%',
-       like '%'||#{expectedRisks}||'%',like '%'||#{expectedDataRequirements}||'%',like '%'||#{expectedDataCoversUnitDemand}||'%',
-       like '%'||#{requirementsInvolveTheSystem}||'%',like '%'||#{subordinateToSystem}||'%',
-       like '%'||#{modelCode}||'%',like '%'||#{secondaryBusinessProcess}||'%',
-       like '%'||#{dockPhone}||'%',like '%'||#{dockPeople}||'%',
-       like '%'||#{writeTime}||'%',like '%'||#{dockDepartment}||'%',like '%'||#{informationType}||'%',
-       like '%'||#{codeRequirement}||'%',like '%'||#{fileName}||'%',like '%'||#{specificationRequirement}||'%',
-       like '%'||#{referenceNumber}||'%',like '%'||#{dispatchTime}||'%',like '%'||#{startTime}||'%',
-       like '%'||#{endTime}||'%',like '%'||#{auditPoint}||'%',like '%'||#{auditProspectivePoint}||'%',like '%'||#{auditSystemName}||'%',
-       like '%'||#{auditSystemContent}||'%',like '%'||#{auditConfirmationFindings}||'%',like '%'||#{auditModelNameSend}||'%',
-       like '%'||#{auditModelLogic}||'%',like '%'||#{problemSummary}||'%',like '%'||#{problemDescription}||'%',
-       like '%'||#{auditTime}||'%',like '%'||#{auditInvolved}||'%',
-       like '%'||#{auditProject}||'%',like '%'||#{dataContentDescription}||'%',
-       like '%'||#{scopeOfData}||'%',like '%'||#{dataDomain}||'%',like '%'||#{dataAccessSource}||'%',like '%'||#{dataAttributionSystem}||'%',
-       like '%'||#{accessTime}||'%',like '%'||#{dataRetentionCycle}||'%',
-       like '%'||#{structuredDataNot}||'%',like '%'||#{existingDataOfModel}||'%',like '%'||#{remark}||'%',
-       like '%'||#{dataContentDescriptionXq}||'%',like '%'||#{involvedSystem}||'%',
-       like '%'||#{scopeOfDataXq}||'%',like '%'||#{assessmentResult}||'%',like '%'||#{modelAssessmentRemarks}||'%',like '%'||#{modelDevelopmentLogic}||'%',
-       like '%'||#{stayDevelopmentContent}||'%',like '%'||#{progressTheDevelopment}||'%',like '%'||#{expectedCompletionTime}||'%',
-       like '%'||#{conditionsStillLacking}||'%',like '%'||#{modelDevelopmentRemarks}||'%',like '%'||#{modelState}||'%',
-       like '%'||#{serviceOwnershipSystem}||'%',like '%'||#{dataSourceUsedModel}||'%',like '%'||#{dataStartTime}||'%',
-       like '%'||#{modelRunningFrequency}||'%',like '%'||#{numberUnitsCovered}||'%',like '%'||#{numberOfProvincial}||'%',
-       like '%'||#{numberProfessionalInstitutions}||'%',like '%'||#{whetherCuredSystem}||'%',
-       like '%'||#{modelOnlineTime}||'%',like '%'||#{sourcesAuditPractice}||'%',like '%'||#{ascriptionSpecial}||'%',
-       like '%'||#{onlineRemarks}||'%',like '%'||#{operationLog}||'%',like '%'||#{createPerson}||'%',CURRENT_TIMESTAMP,like '%'||#{organ}||'%',like '%'||#{phone}||'%',like '%'||#{auditModelBusinessLogic}||'%'
+       #{auditPointNumber},#{auditPointName},#{auditModelNumber},
+       #{auditModelName},#{auditModelDescribe},#{informationSupplement},
+       #{informationSources},#{findRemark},
+       #{auditBusinessLogic},#{primaryBusinessProcess},
+       #{expectedRisks},#{expectedDataRequirements},#{expectedDataCoversUnitDemand},
+       #{requirementsInvolveTheSystem},#{subordinateToSystem},
+       #{modelCode},#{secondaryBusinessProcess},
+       #{dockPhone},#{dockPeople},
+       #{writeTime},#{dockDepartment},#{informationType},
+       #{codeRequirement},#{fileName},#{specificationRequirement},
+       #{referenceNumber},#{dispatchTime},#{startTime},
+       #{endTime},#{auditPoint},#{auditProspectivePoint},#{auditSystemName},
+       #{auditSystemContent},#{auditConfirmationFindings},#{auditModelNameSend},
+       #{auditModelLogic},#{problemSummary},#{problemDescription},
+       #{auditTime},#{auditInvolved},
+       #{auditProject},#{dataContentDescription},
+       #{scopeOfData},#{dataDomain},#{dataAccessSource},#{dataAttributionSystem},
+       #{accessTime},#{dataRetentionCycle},
+       #{structuredDataNot},#{existingDataOfModel},#{remark},
+       #{dataContentDescriptionXq},#{involvedSystem},
+       #{scopeOfDataXq},#{assessmentResult},#{modelAssessmentRemarks},#{modelDevelopmentLogic},
+       #{stayDevelopmentContent},#{progressTheDevelopment},#{expectedCompletionTime},
+       #{conditionsStillLacking},#{modelDevelopmentRemarks},#{modelState},
+       #{serviceOwnershipSystem},#{dataSourceUsedModel},#{dataStartTime},
+       #{modelRunningFrequency},#{numberUnitsCovered},#{numberOfProvincial},
+       #{numberProfessionalInstitutions},#{whetherCuredSystem},
+       #{modelOnlineTime},#{sourcesAuditPractice},#{ascriptionSpecial},
+       #{onlineRemarks},#{operationLog},#{createPerson},CURRENT_TIMESTAMP,#{organ},#{phone},#{auditModelBusinessLogic}
        )
    </insert>
 

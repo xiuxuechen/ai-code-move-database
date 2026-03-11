@@ -259,27 +259,27 @@
         SELECT
             _abc.*,
             cc."name" AS "shareUnitName",
-            bb."ModelName" AS "secondModelName"
+            bb."modelname" AS "secondModelName"
         FROM
             hpeapm.audit_elements_info _abc
             LEFT JOIN hpeapm."xbpj_company_model" bb
-        ON _abc."second_model_number"= bb."ModelNo"
+        ON _abc."second_model_number"= bb."modelno"
             LEFT JOIN (
             (SELECT DISTINCT
-            CONCAT(busiUnitCode, orgCode) AS id,
-            CONCAT(provinceName, '-', orgName) AS "name"
+            CONCAT("busiunitcode", orgcode) AS id,
+            CONCAT(provincename, '-', orgname) AS "name"
             FROM
             hpmgr."bonc_union_orginfos"
-            WHERE "busiUnitCode" = 'CM000')
+            WHERE busiunitcode = 'CM000')
             UNION
             ALL
             (SELECT DISTINCT
-            "busiUnitCode" AS id,
-            "provinceName" AS "name"
+            busiunitcode AS id,
+            "provincename" AS "name"
             FROM
             hpmgr."bonc_union_orginfos"
-            WHERE "busiUnitCode" != 'CM000'
-            ORDER BY "busiUnitCode")
+            WHERE busiunitcode != 'CM000'
+            ORDER BY busiunitcode)
             ) cc
             ON _abc.share_unit = cc."id"
         WHERE audit_model_number = #{auditModelNumber};
@@ -288,8 +288,8 @@
         SELECT write_time
         FROM hpeapm.audit_elements_operation_steps
         WHERE audit_model_number = #{auditModelNumber}
-          AND status = 2
-          and delete_status = 1
+          AND status = '2'
+          and delete_status = '1'
     </select>
 
     <update id="updateModelEvaluationInfo">
@@ -303,8 +303,8 @@
         UPDATE hpeapm.audit_elements_operation_steps
         set dock_phone=#{dockPhone}
         where audit_model_number = #{auditModelNumber}
-          AND status = 2
-          and delete_status = 1
+          AND status = '2'
+          and delete_status = '1'
     </update>
 
 
@@ -312,8 +312,8 @@
         SELECT dock_phone AS "dockPhone"
         FROM hpeapm.audit_elements_operation_steps
         WHERE audit_model_number = #{auditModelNumber}
-          AND status = 2
-          AND delete_status = 1
+          AND status = '2'
+          AND delete_status = '1'
     </select>
 
 

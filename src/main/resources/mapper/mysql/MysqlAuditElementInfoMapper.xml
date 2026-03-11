@@ -258,30 +258,29 @@
     <select id="selectByAuditModelNumber" parameterType="java.lang.String" resultMap="AuditElementInfoMap">
         SELECT
             _abc.*,
-            cc."name" AS "shareUnitName",
-            bb."ModelName" AS "secondModelName"
+            cc.`name` AS `shareUnitName`,
+            bb.`ModelName` AS `secondModelName`
         FROM
             audit_elements_info _abc
-            LEFT JOIN "xbpj_company_model" bb
-        ON _abc."second_model_number"= bb."ModelNo"
+            LEFT JOIN `xbpj_company_model` bb
+        ON _abc.`second_model_number`= bb.`ModelNo`
             LEFT JOIN (
             (SELECT DISTINCT
             CONCAT(busiUnitCode, orgCode) AS id,
-            CONCAT(provinceName, '-', orgName) AS "name"
+            CONCAT(provinceName, '-', orgName) AS `name`
             FROM
-            hpmgr."bonc_union_orginfos"
-            WHERE "busiUnitCode" = 'CM000')
+            hpmgr.`bonc_union_orginfos`
+            WHERE `busiUnitCode` = 'CM000')
             UNION
             ALL
             (SELECT DISTINCT
-            "busiUnitCode" AS id,
-            "provinceName" AS "name"
+            "busiUnitCode" AS id, `provinceName` AS `name`
             FROM
-            hpmgr."bonc_union_orginfos"
-            WHERE "busiUnitCode" != 'CM000'
+            hpmgr.`bonc_union_orginfos`
+            WHERE `busiUnitCode` != 'CM000'
             ORDER BY "busiUnitCode")
             ) cc
-            ON _abc.share_unit = cc."id"
+            ON _abc.share_unit = cc.`id`
         WHERE audit_model_number = #{auditModelNumber};
     </select>
     <select id="selectWriteTime" parameterType="java.lang.String" resultType="java.lang.String">
@@ -309,7 +308,7 @@
 
 
     <select id="selectDockerPhoneByAuditNumnber" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT dock_phone AS "dockPhone"
+        SELECT dock_phone AS `dockPhone`
         FROM audit_elements_operation_steps
         WHERE audit_model_number = #{auditModelNumber}
           AND status = 2
@@ -319,21 +318,19 @@
 
     <!--根据模型编号修改step表当中的审计模型名称以及审计点名称-->
     <update id="updateModelStepTableModelMsgByModelNumber" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
-        UPDATE
-            "audit_elements_operation_steps" a
-        SET a."audit_point_name" = #{auditPointName},
-            a."audit_model_name" = #{auditModelName}
-        WHERE a."audit_model_number" = #{auditModelNumber}
+        UPDATE `audit_elements_operation_steps` a
+        SET a.`audit_point_name` = #{auditPointName},
+            a.`audit_model_name` = #{auditModelName}
+        WHERE a.`audit_model_number` = #{auditModelNumber}
     </update>
 
 
     <!--根据模型编号修改model_type表当中的审计模型名称以及审计点名称-->
     <update id="updateModelTypeTableByModelNumber" parameterType="com.cxsj.mxzd.pojo.AuditElementInfo">
-        UPDATE
-            "spl_model_type" a
-        SET a."audit_point_name" = #{auditPointName},
-            a."audit_model_name" = #{auditModelName}
-        WHERE a."audit_model_number" = #{auditModelNumber}
+        UPDATE `spl_model_type` a
+        SET a.`audit_point_name` = #{auditPointName},
+            a.`audit_model_name` = #{auditModelName}
+        WHERE a.`audit_model_number` = #{auditModelNumber}
     </update>
 
 
